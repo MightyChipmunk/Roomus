@@ -45,7 +45,7 @@ public class Deco_ChangeView : MonoBehaviour
                 // 터치한 곳으로 Ray를 쏴서 그곳으로 배치
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 1000f))
+                if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Floor")))
                 {
                     FirstPos = hit.transform.position;
                 }
