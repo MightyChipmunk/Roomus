@@ -94,13 +94,14 @@ public class Deco_Camera : MonoBehaviour
     float my;
     void First_Cam()
     {
+        // WASD로 위치 이동
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 dir = h * transform.right + v * transform.forward;
         dir.y = 0;
         dir.Normalize();
         transform.position += dir * Time.deltaTime * speed;
-
+        // 마우스 위치에 따른 각도 조절
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
         mx += mh * rotSpeed * Time.deltaTime;
