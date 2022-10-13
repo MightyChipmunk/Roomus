@@ -76,6 +76,7 @@ public class Deco_Camera : MonoBehaviour
         float v = Input.GetAxisRaw("Vertical");
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
+        float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
         dir = h * transform.right + v * transform.up;
         // 마우스 좌클릭으로 캠 위치 이동
         if (Input.GetMouseButton(0))
@@ -85,6 +86,8 @@ public class Deco_Camera : MonoBehaviour
         Vector3 rotDir = new Vector3(-mv, mh, 0);
         if (Input.GetMouseButton(1))
             thirdCamPos.eulerAngles += rotDir * rotSpeed * 5 * Time.deltaTime;
+        // 스크롤로 확대
+        thirdCamPos.position += scrollWheel * thirdCamPos.forward * speed * 50 * Time.deltaTime;
 
         transform.position = Vector3.Lerp(transform.position, thirdCamPos.position, Time.deltaTime * 8.0f);
         transform.rotation = Quaternion.Slerp(transform.rotation, thirdCamPos.rotation, Time.deltaTime * 8.0f);

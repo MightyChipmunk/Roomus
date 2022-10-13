@@ -166,7 +166,7 @@ GameObject:
   - component: {fileID: 559737878}
   - component: {fileID: 559737877}
   - component: {fileID: 559737876}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 770990131}
   - component: {fileID: 770990130}
   - component: {fileID: 770990129}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -967,7 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe5de4c178fb0484d80ff5d1a5c063d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objFactory: {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d,
+  objFactory: {fileID: 2221272363813988884, guid: 78f6104b514bed54a8c48cafa79a651d,
     type: 3}
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
@@ -1473,7 +1473,7 @@ GameObject:
   - component: {fileID: 1689095271}
   - component: {fileID: 1689095270}
   - component: {fileID: 1689095269}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1808,7 +1808,7 @@ GameObject:
   - component: {fileID: 1954157277}
   - component: {fileID: 1954157276}
   - component: {fileID: 1954157275}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1937,7 +1937,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2055336290}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}

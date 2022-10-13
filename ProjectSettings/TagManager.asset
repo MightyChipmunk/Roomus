@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - WallObj
+  - FloorObj
   layers:
   - Default
   - TransparentFX
@@ -35,7 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Wall
   - Floor
   m_SortingLayers:
   - name: Default
