@@ -954,7 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  rotSpeed: 80
+  rotSpeed: 160
 --- !u!114 &1344668300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,7 +967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe5de4c178fb0484d80ff5d1a5c063d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objFactory: {fileID: 2221272363813988884, guid: 78f6104b514bed54a8c48cafa79a651d,
+  objFactory: {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d,
     type: 3}
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
