@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Deco_ChangeView : MonoBehaviour
 {
+    Transform room;
+    Transform thirdCamPos;
+
     public static Deco_ChangeView Instance { get; private set; }
 
     public enum ViewState
@@ -11,6 +14,7 @@ public class Deco_ChangeView : MonoBehaviour
         Second_Demen,
         Third_Demen,
         First,
+        Third_First
     }
     [SerializeField]
     ViewState _viewState;
@@ -31,27 +35,15 @@ public class Deco_ChangeView : MonoBehaviour
             Destroy(gameObject);
 
         viewState = ViewState.Third_Demen;
+
+        room = GameObject.Find("Room").transform;
+        thirdCamPos = GameObject.Find("ThirdCamPos").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Ended)
-            {
-                Debug.Log(touch.position);
-                // 터치한 곳으로 Ray를 쏴서 그곳으로 배치
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("Floor")))
-                {
-                    FirstPos = hit.transform.position;
-                }
-            }
-        }
-        
+
     }
 
     public void On2DClicked()
@@ -74,35 +66,41 @@ public class Deco_ChangeView : MonoBehaviour
         else if (viewState == ViewState.Second_Demen)
         {
             viewState = ViewState.Third_Demen;
-            Camera.main.transform.eulerAngles = new Vector3(90, 0, 0);
-            transform.position = new Vector3(transform.position.x, 15.0f, transform.position.z);
+            thirdCamPos.eulerAngles = new Vector3(90, 0, 0);
+            thirdCamPos.position = new Vector3(room.position.x, 15.0f, room.position.z);
         }
         else if (viewState == ViewState.Third_Demen)
+        {
+            thirdCamPos.eulerAngles = new Vector3(90, 0, 0);
+            thirdCamPos.position = new Vector3(room.position.x, 15.0f, room.position.z);
             StartCoroutine("OnPosClick");
+        }
     }
 
     IEnumerator OnPosClick()
     {
         while (true)
         {
-            if (Input.touchCount > 0)
+            if (Input.GetMouseButtonDown(0))
             {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Ended)
+                // 터치한 곳으로 Ray를 쏴서 그곳으로 배치
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 30f, LayerMask.GetMask("Floor"))) 
                 {
-                    Debug.Log(touch.position);
-                    // 터치한 곳으로 Ray를 쏴서 그곳으로 배치
-                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 30f, LayerMask.NameToLayer("Floor"))) 
-                    {
-                        FirstPos = hit.transform.position;
-                    }
-                    viewState = ViewState.First;
+                    FirstPos = hit.point;
                     break;
                 }
             }
             yield return null;
         }
+        viewState = ViewState.Third_First;
+        while (Vector3.Distance(Camera.main.transform.position, FirstPos + Vector3.up * 1.7f) > 0.1f)
+        {
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, FirstPos + Vector3.up * 1.7f, Time.deltaTime * 8.0f);
+            Camera.main.transform.rotation = Quaternion.Slerp(Camera.main.transform.rotation, Quaternion.identity, Time.deltaTime * 8.0f);
+            yield return null;  
+        }
+        viewState = ViewState.First;
     }
 }
