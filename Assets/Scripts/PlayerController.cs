@@ -10,11 +10,17 @@ public class PlayerController : MonoBehaviour
     float speed = 5f;
     [SerializeField]
     float rotSpeed = 10f;
+    [SerializeField]
+    float gravity = -9.81f;
+    [SerializeField]
+    float jumpPower = 10;
+
+    float yVelocity = 0;
     // Start is called before the first frame update
     void Start()
     {
         cc = GetComponent<CharacterController>(); 
-        anim = GetComponentInChildren<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -35,5 +41,36 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsMove", false);
 
         cc.Move(speed * dir * Time.deltaTime);
+
+        if (IsGround())
+        {
+            anim.SetBool("Falling", false);
+            yVelocity = 0;
+        }
+        else
+        {
+            anim.SetBool("Falling", true);
+            yVelocity += gravity * Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && IsGround())
+        {
+            anim.SetTrigger("Jump");
+            yVelocity = jumpPower;
+        }
+
+        cc.Move(yVelocity * Vector3.up * Time.deltaTime);
+    }
+
+    bool IsGround()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, 0.05f)) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

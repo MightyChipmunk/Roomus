@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2137471662142323358}
   - component: {fileID: 2137471662142323359}
   - component: {fileID: 2137471662142323352}
+  - component: {fileID: 4797765468676483742}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -48,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rotSpeed: 10
+  gravity: -9.81
+  jumpPower: 5
 --- !u!143 &2137471662142323352
 CharacterController:
   m_ObjectHideFlags: 0
@@ -59,13 +62,33 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.35
+  m_Height: 1.3949804
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.7, z: 0}
+  m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!95 &4797765468676483742
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2137471662142323357}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: aac35cd47794ec742aa27695e2b82315, type: 3}
+  m_Controller: {fileID: 9100000, guid: 66e693ad80969934eb21c4cded1e7477, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2137471661905138335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,17 +124,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: aac35cd47794ec742aa27695e2b82315,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aac35cd47794ec742aa27695e2b82315,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aac35cd47794ec742aa27695e2b82315,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aac35cd47794ec742aa27695e2b82315,
         type: 3}
@@ -133,62 +156,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ch46_nonPBR
       objectReference: {fileID: 0}
-    - target: {fileID: 1285705782834317151, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3135921509060577837, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5465940246521907071, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866666021909216657, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5866666021909216657, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 66e693ad80969934eb21c4cded1e7477, type: 2}
-    - target: {fileID: 5866666021909216657, guid: aac35cd47794ec742aa27695e2b82315,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: aac35cd47794ec742aa27695e2b82315, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: aac35cd47794ec742aa27695e2b82315, type: 3}
 --- !u!4 &1883466011129984372 stripped
 Transform:
