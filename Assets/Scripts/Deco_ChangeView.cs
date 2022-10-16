@@ -35,7 +35,10 @@ public class Deco_ChangeView : MonoBehaviour
             Destroy(gameObject);
 
         viewState = ViewState.Third_Demen;
+    }
 
+    void Start()
+    {
         room = GameObject.Find("Room").transform;
         thirdCamPos = GameObject.Find("ThirdCamPos").transform;
     }

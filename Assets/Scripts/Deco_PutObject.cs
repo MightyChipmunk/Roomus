@@ -38,6 +38,15 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
+    public void delObj()
+    {
+        if (obj)
+        {
+            Destroy(obj);
+            obj = null;
+        }
+    }
+
     void SecondPut()
     {
         // 키를 누르면 오브젝트 미리보기 생성
@@ -55,7 +64,7 @@ public class Deco_PutObject : MonoBehaviour
             }
         }
         // 누르고 있는 동안 오브젝트 이동
-        else if (Input.GetKey(KeyCode.G))
+        else if (Input.GetKey(KeyCode.G) && obj)
         {
             canPut = !objCol.IsCollide;
 
@@ -79,7 +88,7 @@ public class Deco_PutObject : MonoBehaviour
                 obj.transform.Rotate(0, 100f * Time.deltaTime, 0);
         }
         // 배치 가능할 시 키를 떼면 생성
-        else if (Input.GetKeyUp(KeyCode.G) && canPut)
+        else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             objRenderer.material = origMat;
             obj.GetComponentInChildren<Collider>().isTrigger = false;
@@ -88,7 +97,7 @@ public class Deco_PutObject : MonoBehaviour
             obj = null;
         }
         // 배치 불가능 할 시 키를 떼면 제거
-        else if (Input.GetKeyUp(KeyCode.G) && !canPut)
+        else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
         {
             Destroy(obj);
             obj = null;
