@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4805133021007866792}
+  - component: {fileID: -1813703123528339277}
   m_Layer: 0
   m_Name: TestWall
   m_TagString: WallObj
@@ -32,6 +33,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-1813703123528339277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2221272363813988884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8be0701cf20a9bb4f8cef033fae954a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idx: 1
 --- !u!1 &9003003445663803547
 GameObject:
   m_ObjectHideFlags: 0

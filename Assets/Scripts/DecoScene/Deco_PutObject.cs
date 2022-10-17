@@ -90,6 +90,7 @@ public class Deco_PutObject : MonoBehaviour
         // 배치 가능할 시 키를 떼면 생성
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
+            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             objRenderer.material = origMat;
             obj.GetComponentInChildren<Collider>().isTrigger = false;
             obj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -167,9 +168,11 @@ public class Deco_PutObject : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
+            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             objRenderer.material = origMat;
             obj.GetComponentInChildren<Collider>().isTrigger = false;
-            obj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            if (objFactory.CompareTag("FloorObj"))
+                obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = room;
             obj = null;
         }
@@ -242,9 +245,11 @@ public class Deco_PutObject : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
+            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             objRenderer.material = origMat;
-            obj.GetComponentInChildren<Collider>().isTrigger = false;
-            obj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            obj.GetComponentInChildren<Collider>().isTrigger = false; 
+            if (objFactory.CompareTag("FloorObj"))
+                obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = room;
             obj = null;
         }
