@@ -41,11 +41,12 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsMove", false);
 
         cc.Move(speed * dir * Time.deltaTime);
-
-        if (IsGround())
+        cc.Move(yVelocity * Vector3.up * Time.deltaTime);
+        
+        if (cc.collisionFlags == CollisionFlags.Below)
         {
             anim.SetBool("Falling", false);
-            yVelocity = 0;
+            yVelocity = -1;
         }
         else
         {
@@ -53,24 +54,10 @@ public class PlayerController : MonoBehaviour
             yVelocity += gravity * Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGround())
+        if (Input.GetKeyDown(KeyCode.Space) && cc.collisionFlags == CollisionFlags.Below)
         {
             anim.SetTrigger("Jump");
             yVelocity = jumpPower;
-        }
-
-        cc.Move(yVelocity * Vector3.up * Time.deltaTime);
-    }
-
-    bool IsGround()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, 0.05f)) 
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 }
