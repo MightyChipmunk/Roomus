@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class WindowMesh : MonoBehaviour
 {
+    public float left;
+    public float right;
+    public float up;
+    public float down;
+
     Vector3[] verts = new Vector3[16];
 
     int[] tris = {
@@ -21,19 +26,19 @@ public class WindowMesh : MonoBehaviour
         verts[1] = + 0.5f * transform.right + 0.5f * transform.up;
         verts[2] = + 0.5f * transform.right - 0.5f * transform.up;
         verts[3] = - 0.5f * transform.right - 0.5f * transform.up;
-        verts[4] = - 0.25f * transform.right + 0.25f * transform.up;
-        verts[5] = + 0.25f * transform.right + 0.25f * transform.up;
-        verts[6] = + 0.25f * transform.right - 0.25f * transform.up;
-        verts[7] = - 0.25f * transform.right - 0.25f * transform.up;
+        verts[4] = left * transform.right + up * transform.up;
+        verts[5] = right * transform.right + up * transform.up;
+        verts[6] = right * transform.right + down * transform.up;
+        verts[7] = left * transform.right + down * transform.up;
 
         verts[8] = + 0.5f * transform.right + 0.5f * transform.up;
         verts[9] = - 0.5f * transform.right + 0.5f * transform.up;
         verts[10] = - 0.5f * transform.right - 0.5f * transform.up;
         verts[11] = + 0.5f * transform.right - 0.5f * transform.up;
-        verts[12] = +0.25f * transform.right + 0.25f * transform.up;
-        verts[13] = -0.25f * transform.right + 0.25f * transform.up;
-        verts[14] = -0.25f * transform.right - 0.25f * transform.up;
-        verts[15] = +0.25f * transform.right - 0.25f * transform.up;
+        verts[12] = right * transform.right + up * transform.up;
+        verts[13] = left * transform.right + up * transform.up;
+        verts[14] = left * transform.right + down * transform.up;
+        verts[15] = right * transform.right + down * transform.up;
 
         MeshFilter mF = gameObject.GetComponent<MeshFilter>(); // as MeshFilter;
         Mesh msh = new Mesh();
