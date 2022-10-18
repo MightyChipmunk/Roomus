@@ -23,8 +23,8 @@ public class WindowMesh : MonoBehaviour
         verts[3] = - 0.5f * transform.right - 0.5f * transform.up;
         verts[4] = - 0.25f * transform.right + 0.25f * transform.up;
         verts[5] = + 0.25f * transform.right + 0.25f * transform.up;
-        verts[6] = + 0.25f * transform.right - 0.25f * transform.up;
-        verts[7] = - 0.25f * transform.right - 0.25f * transform.up;
+        verts[6] = + 0.25f * transform.right - 0.5f * transform.up;
+        verts[7] = - 0.25f * transform.right - 0.5f * transform.up;
 
         MeshFilter mF = gameObject.GetComponent<MeshFilter>(); // as MeshFilter;
         Mesh msh = new Mesh();
