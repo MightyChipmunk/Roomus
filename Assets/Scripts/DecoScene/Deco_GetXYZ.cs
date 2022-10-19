@@ -12,6 +12,8 @@ public class Deco_GetXYZ : MonoBehaviour
     public InputField xField;
     public InputField yField;
     public InputField zField;
+    int balcony = 0;
+    public int Balcony { get { return balcony; } }
 
     float x = 10;
     float y = 10;
@@ -55,5 +57,10 @@ public class Deco_GetXYZ : MonoBehaviour
     void GetZ(string s)
     {
         z = Int32.Parse(s);
+    }
+
+    public void SetBalcony(int n)
+    {
+        balcony = n;
     }
 }

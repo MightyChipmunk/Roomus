@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Deco_RoomInit : MonoBehaviour
 {
-    public float xSize;
-    public float ySize;
-    public float zSize;
+    float xSize;
+    float ySize;
+    float zSize;
+    int balcony;
 
     Transform room;
 
@@ -15,15 +16,16 @@ public class Deco_RoomInit : MonoBehaviour
         xSize = Deco_GetXYZ.Instance.X;
         ySize = Deco_GetXYZ.Instance.Y;
         zSize = Deco_GetXYZ.Instance.Z;
+        balcony = Deco_GetXYZ.Instance.Balcony;
     }
 
     private void Start()
     {
         room = GameObject.Find("Room").transform;
-        MakeRoom(xSize, ySize, zSize);
+        MakeRoom(xSize, ySize, zSize, balcony);
     }
     
-    public void MakeRoom(float x, float y, float z)
+    public void MakeRoom(float x, float y, float z, int bal)
     {
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
         GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -69,5 +71,25 @@ public class Deco_RoomInit : MonoBehaviour
         celling.transform.localPosition = new Vector3(0, z, 0);
         celling.transform.localEulerAngles = new Vector3(-90, 0, 0);
         celling.transform.localScale = new Vector3(x, y, 1);
+
+        switch (bal)
+        {
+            case 1:
+                WindowMesh win1 = frontWall.AddComponent<WindowMesh>();
+                win1.MakeHole(-0.15f, 0.15f, 0.1f, -0.5f);
+                break;
+            case 2:
+                WindowMesh win2 = backWall.AddComponent<WindowMesh>();
+                win2.MakeHole(-0.15f, 0.15f, 0.1f, -0.5f);
+                break;
+            case 3:
+                WindowMesh win3 = rightWall.AddComponent<WindowMesh>();
+                win3.MakeHole(-0.15f, 0.15f, 0.1f, -0.5f);
+                break;
+            case 4:
+                WindowMesh win4 = leftWall.AddComponent<WindowMesh>();
+                win4.MakeHole(-0.15f, 0.15f, 0.1f, -0.5f);
+                break;
+        }
     }
 }

@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class WindowMesh : MonoBehaviour
 {
-    public float left;
-    public float right;
-    public float up;
-    public float down;
-
     Vector3[] verts = new Vector3[16];
 
     int[] tris = {
@@ -20,25 +15,35 @@ public class WindowMesh : MonoBehaviour
 
     void Start()
     {
+        MakeHole(-0.3f, -0.1f, 0.1f, -0.5f);
+    }
+
+    void Update()
+    {
+
+    }
+
+    public void MakeHole(float left, float right, float up, float down)
+    {
         Destroy(gameObject.GetComponent<MeshCollider>());
 
-        verts[0] = - 0.5f * transform.right + 0.5f * transform.up;
-        verts[1] = + 0.5f * transform.right + 0.5f * transform.up;
-        verts[2] = + 0.5f * transform.right - 0.5f * transform.up;
-        verts[3] = - 0.5f * transform.right - 0.5f * transform.up;
-        verts[4] = left * transform.right + up * transform.up;
-        verts[5] = right * transform.right + up * transform.up;
-        verts[6] = right * transform.right + down * transform.up;
-        verts[7] = left * transform.right + down * transform.up;
-
-        verts[8] = + 0.5f * transform.right + 0.5f * transform.up;
-        verts[9] = - 0.5f * transform.right + 0.5f * transform.up;
-        verts[10] = - 0.5f * transform.right - 0.5f * transform.up;
-        verts[11] = + 0.5f * transform.right - 0.5f * transform.up;
-        verts[12] = right * transform.right + up * transform.up;
-        verts[13] = left * transform.right + up * transform.up;
-        verts[14] = left * transform.right + down * transform.up;
-        verts[15] = right * transform.right + down * transform.up;
+        verts[0] = -0.5f * Vector3.right + 0.5f * Vector3.up;
+        verts[1] = +0.5f * Vector3.right + 0.5f * Vector3.up;
+        verts[2] = +0.5f * Vector3.right - 0.5f * Vector3.up;
+        verts[3] = -0.5f * Vector3.right - 0.5f * Vector3.up;
+        verts[4] = left * Vector3.right + up * Vector3.up;
+        verts[5] = right * Vector3.right + up * Vector3.up;
+        verts[6] = right * Vector3.right + down * Vector3.up;
+        verts[7] = left * Vector3.right + down * Vector3.up;
+        Debug.Log(verts[0]);
+        verts[8] = +0.5f * Vector3.right + 0.5f * Vector3.up;
+        verts[9] = -0.5f * Vector3.right + 0.5f * Vector3.up;
+        verts[10] = -0.5f * Vector3.right - 0.5f * Vector3.up;
+        verts[11] = +0.5f * Vector3.right - 0.5f * Vector3.up;
+        verts[12] = right * Vector3.right + up * Vector3.up;
+        verts[13] = left * Vector3.right + up * Vector3.up;
+        verts[14] = left * Vector3.right + down * Vector3.up;
+        verts[15] = right * Vector3.right + down * Vector3.up;
 
         MeshFilter mF = gameObject.GetComponent<MeshFilter>(); // as MeshFilter;
         Mesh msh = new Mesh();
@@ -46,12 +51,7 @@ public class WindowMesh : MonoBehaviour
         msh.triangles = tris;
         msh.RecalculateNormals();
         mF.mesh = msh;
-        
+
         gameObject.AddComponent<MeshCollider>();
-    }
-
-    void Update()
-    {
-
     }
 }
