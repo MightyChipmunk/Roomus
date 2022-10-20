@@ -25,7 +25,10 @@ public class Deco_ObjectCol : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.layer != LayerMask.NameToLayer("Floor"))
+        {
+            print(other.name);
             IsCollide = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
