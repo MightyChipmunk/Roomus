@@ -1,7 +1,0 @@
-{
-    "XSize": 20.0,
-    "YSize": 15.0,
-    "ZSize": 6.0,
-    "balcony": 4,
-    "datas": []
-}
