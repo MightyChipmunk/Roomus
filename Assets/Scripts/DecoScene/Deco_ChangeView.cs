@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Deco_ChangeView : MonoBehaviour
 {
-    Transform room;
     Transform thirdCamPos;
 
     public static Deco_ChangeView Instance { get; private set; }
@@ -39,7 +38,6 @@ public class Deco_ChangeView : MonoBehaviour
 
     void Start()
     {
-        room = GameObject.Find("Room").transform;
         thirdCamPos = GameObject.Find("ThirdCamPos").transform;
     }
 

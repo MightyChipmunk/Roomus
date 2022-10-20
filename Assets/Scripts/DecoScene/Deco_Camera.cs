@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Deco_Camera : MonoBehaviour
 {
-    Transform room;
     Transform thirdCamPos;
     Camera cam;
 
@@ -15,7 +14,6 @@ public class Deco_Camera : MonoBehaviour
 
     private void Start()
     {
-        room = GameObject.Find("Room").transform;
         thirdCamPos = GameObject.Find("ThirdCamPos").transform;
         cam = GetComponent<Camera>();
     }

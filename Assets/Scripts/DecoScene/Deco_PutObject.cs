@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Deco_PutObject : MonoBehaviour
 {
-    Transform room;
-
     public GameObject objFactory;
     GameObject obj;
     bool canPut = true;
@@ -18,7 +16,7 @@ public class Deco_PutObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        room = GameObject.Find("Room").transform;
+
     }
 
     // Update is called once per frame
@@ -94,7 +92,7 @@ public class Deco_PutObject : MonoBehaviour
             objRenderer.material = origMat;
             obj.GetComponentInChildren<Collider>().isTrigger = false;
             obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = room;
+            obj.transform.parent = GameObject.Find("Room").transform;
             obj = null;
         }
         // 배치 불가능 할 시 키를 떼면 제거
@@ -186,7 +184,8 @@ public class Deco_PutObject : MonoBehaviour
             obj.GetComponentInChildren<Collider>().isTrigger = false;
             if (objFactory.CompareTag("FloorObj"))
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = room;
+            obj.transform.parent = GameObject.Find("Room").transform;
+            ;
             obj = null;
         }
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
@@ -276,7 +275,7 @@ public class Deco_PutObject : MonoBehaviour
             obj.GetComponentInChildren<Collider>().isTrigger = false; 
             if (objFactory.CompareTag("FloorObj"))
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = room;
+            obj.transform.parent = GameObject.Find("Room").transform;
             obj = null;
         }
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
