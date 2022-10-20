@@ -12,6 +12,9 @@ public class Deco_RoomInit : MonoBehaviour
     float zSize;
     int balcony;
 
+
+    public Material testMat;
+
     private void Awake()
     {
         if (Instance == null)
@@ -34,11 +37,17 @@ public class Deco_RoomInit : MonoBehaviour
     public void MakeRoom(float x, float y, float z, int bal, Transform room)
     {
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        floor.GetComponent<Renderer>().material = testMat;
         GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        leftWall.GetComponent<Renderer>().material = testMat;
         GameObject rightWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        rightWall.GetComponent<Renderer>().material = testMat;
         GameObject frontWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        frontWall.GetComponent<Renderer>().material = testMat;
         GameObject backWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        backWall.GetComponent<Renderer>().material = testMat;       
         GameObject celling = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        celling.GetComponent<Renderer>().material = testMat;
         floor.transform.parent = room;
         floor.layer = LayerMask.NameToLayer("Floor");
         floor.name = "Floor";

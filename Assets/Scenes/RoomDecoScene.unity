@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   balconyFac: {fileID: 5017618855099804361, guid: ddd73aec97764b84bbb51413ec27663a,
     type: 3}
+  testMat: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
 --- !u!4 &67129365
 Transform:
   m_ObjectHideFlags: 0

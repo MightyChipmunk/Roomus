@@ -26,7 +26,6 @@ public class Deco_ObjectCol : MonoBehaviour
     {
         if (other.gameObject.layer != LayerMask.NameToLayer("Floor"))
         {
-            print(other.name);
             IsCollide = true;
         }
     }
