@@ -130,7 +130,6 @@ public class Deco_Json : MonoBehaviour
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {
             SaveJsonInfo info = arrayJson.datas[i];
-            Debug.Log(info.idx);
             LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
     }
