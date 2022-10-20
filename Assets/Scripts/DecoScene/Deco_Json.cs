@@ -116,18 +116,25 @@ public class Deco_Json : MonoBehaviour
         //ArrayJson의 데이터로 방 생성
         Destroy(GameObject.Find("Room"));
         GameObject newRoom = new GameObject("Room");
+        GameObject newWalls = new GameObject("Walls");
         newRoom.transform.position = Vector3.zero; 
         newRoom.transform.rotation = Quaternion.identity; 
         newRoom.transform.localScale = Vector3.one;
+        newWalls.transform.parent = newRoom.transform;
+        newWalls.transform.position = Vector3.zero;
+        newWalls.transform.rotation = Quaternion.identity;
+        newWalls.transform.localScale = Vector3.one;
         Deco_RoomInit.Instance.MakeRoom(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony, newRoom.transform);
+        SaveRoomInfo(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {
             SaveJsonInfo info = arrayJson.datas[i];
-            LoadObject(info.idx, info.position, info.eulerAngle, info.localScale);
+            Debug.Log(info.idx);
+            LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
     }
-    void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale)
+    void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
         //해당 위치에 BlueCube를 생성해서 놓는다.
         foreach (GameObject go in objects.datas)
@@ -135,10 +142,10 @@ public class Deco_Json : MonoBehaviour
             if (go.GetComponent<Deco_Idx>().Idx == idx)
             {
                 GameObject obj = Instantiate(go); 
-                obj.transform.position = position;
-                obj.transform.eulerAngles = eulerAngle;
+                obj.transform.localPosition = position;
+                obj.transform.localEulerAngles = eulerAngle;
                 obj.transform.localScale = localScale;
-                obj.transform.parent = GameObject.Find("Room").transform;
+                obj.transform.parent = room;
             }
         }
     }

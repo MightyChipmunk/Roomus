@@ -194,6 +194,19 @@ public class Deco_PutObject : MonoBehaviour
             Destroy(obj);
             obj = null;
         }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 50f))
+            {
+                if (hit.transform.parent.CompareTag("FloorObj") || hit.transform.parent.CompareTag("WallObj"))
+                {
+                    Deco_Json.Instance.DeleteJson(hit.transform.parent.gameObject);
+                    Destroy(hit.transform.parent.gameObject);
+                }
+            }
+        }
     }
 
     void FirstPut()
@@ -270,6 +283,18 @@ public class Deco_PutObject : MonoBehaviour
         {
             Destroy(obj);
             obj = null;
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f))
+            {
+                if (hit.transform.parent.CompareTag("FloorObj") || hit.transform.parent.CompareTag("WallObj"))
+                {
+                    Deco_Json.Instance.DeleteJson(hit.transform.parent.gameObject);
+                    Destroy(hit.transform.parent.gameObject);
+                }
+            }
         }
     }
 }
