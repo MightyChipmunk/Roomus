@@ -70,13 +70,13 @@ public class Deco_ChangeView : MonoBehaviour
         {
             viewState = ViewState.Third_Demen;
             thirdCamPos.eulerAngles = new Vector3(90, 0, 0);
-            thirdCamPos.position = new Vector3(room.position.x, 15.0f, room.position.z);
+            thirdCamPos.position = new Vector3(GameObject.Find("Room").transform.position.x, 15.0f, GameObject.Find("Room").transform.position.z);
             StartCoroutine("OnPosClick");
         }
         else if (viewState == ViewState.Third_Demen)
         {
             thirdCamPos.eulerAngles = new Vector3(90, 0, 0);
-            thirdCamPos.position = new Vector3(room.position.x, 15.0f, room.position.z);
+            thirdCamPos.position = new Vector3(GameObject.Find("Room").transform.position.x, 15.0f, GameObject.Find("Room").transform.position.z);
             StartCoroutine("OnPosClick");
         }
     }

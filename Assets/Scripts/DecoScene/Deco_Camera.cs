@@ -45,7 +45,7 @@ public class Deco_Camera : MonoBehaviour
             cam.orthographic = true;
             cam.orthographicSize = 7.0f;
 
-            transform.position = new Vector3(room.position.x, 15.0f, room.position.z);
+            transform.position = new Vector3(GameObject.Find("Room").transform.position.x, 15.0f, GameObject.Find("Room").transform.position.z);
         }
         // Ä· °¢µµ °íÁ¤
         transform.eulerAngles = new Vector3(90, 0, 0);
