@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Deco_RoomInit : MonoBehaviour
 {
+    public static Deco_RoomInit Instance;
+
     float xSize;
     float ySize;
     float zSize;
     int balcony;
 
-    Transform room;
-
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
         xSize = Deco_GetXYZ.Instance.X;
         ySize = Deco_GetXYZ.Instance.Y;
         zSize = Deco_GetXYZ.Instance.Z;
@@ -21,11 +26,11 @@ public class Deco_RoomInit : MonoBehaviour
 
     private void Start()
     {
-        room = GameObject.Find("Room").transform;
-        MakeRoom(xSize, ySize, zSize, balcony);
+        MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
+        Deco_Json.Instance.SaveRoomInfo(xSize, ySize, zSize, balcony);
     }
     
-    public void MakeRoom(float x, float y, float z, int bal)
+    public void MakeRoom(float x, float y, float z, int bal, Transform room)
     {
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
         GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Quad);

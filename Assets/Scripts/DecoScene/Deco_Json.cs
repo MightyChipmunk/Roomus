@@ -17,6 +17,10 @@ public class SaveJsonInfo
 [Serializable]
 public class ArrayJson
 {
+    public float XSize;
+    public float YSize;
+    public float ZSize;
+    public int balcony;
     public List<SaveJsonInfo> datas;
 }
 
@@ -44,15 +48,25 @@ public class Deco_Json : MonoBehaviour
         }
         else
             Destroy(gameObject);
-    }
 
-    private void Start()
-    {
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
 
         saveInputField.onSubmit.AddListener(SaveFile);
         loadInputField.onSubmit.AddListener(LoadFile);
+    }
+
+    private void Start()
+    {
+
+    }
+
+    public void SaveRoomInfo(float x, float y, float z, int bal)
+    {
+        arrayJson.XSize = x;
+        arrayJson.YSize = y;
+        arrayJson.ZSize = z;
+        arrayJson.balcony = bal;
     }
 
     public void SaveJson(GameObject go, int idx)
@@ -67,6 +81,18 @@ public class Deco_Json : MonoBehaviour
 
         //ArrayJson 의 datas 에 하나씩 추가
         arrayJson.datas.Add(info);
+    }
+
+    public void DeleteJson(GameObject go)
+    {
+        foreach (SaveJsonInfo info in arrayJson.datas)
+        {
+            if (info.position == go.transform.position)
+            {
+                arrayJson.datas.Remove(info);
+                return;
+            }
+        }
     }
 
     void SaveFile(string roomName)
@@ -87,6 +113,13 @@ public class Deco_Json : MonoBehaviour
         string jsonData = File.ReadAllText(Application.dataPath + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
+        //ArrayJson의 데이터로 방 생성
+        Destroy(GameObject.Find("Room"));
+        GameObject newRoom = new GameObject("Room");
+        newRoom.transform.position = Vector3.zero; 
+        newRoom.transform.rotation = Quaternion.identity; 
+        newRoom.transform.localScale = Vector3.one;
+        Deco_RoomInit.Instance.MakeRoom(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony, newRoom.transform);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {

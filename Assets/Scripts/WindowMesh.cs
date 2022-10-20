@@ -15,7 +15,7 @@ public class WindowMesh : MonoBehaviour
 
     void Start()
     {
-        MakeHole(-0.3f, -0.1f, 0.1f, -0.5f);
+        //MakeHole(-0.3f, -0.1f, 0.1f, -0.5f);
     }
 
     void Update()
@@ -35,7 +35,7 @@ public class WindowMesh : MonoBehaviour
         verts[5] = right * Vector3.right + up * Vector3.up;
         verts[6] = right * Vector3.right + down * Vector3.up;
         verts[7] = left * Vector3.right + down * Vector3.up;
-        Debug.Log(verts[0]);
+
         verts[8] = +0.5f * Vector3.right + 0.5f * Vector3.up;
         verts[9] = -0.5f * Vector3.right + 0.5f * Vector3.up;
         verts[10] = -0.5f * Vector3.right - 0.5f * Vector3.up;
