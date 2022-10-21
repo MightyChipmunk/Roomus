@@ -169,7 +169,6 @@ public class Deco_PutObject : MonoBehaviour
             if (objFactory.CompareTag("FloorObj"))
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = GameObject.Find("Room").transform;
-            ;
             obj = null;
         }
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
