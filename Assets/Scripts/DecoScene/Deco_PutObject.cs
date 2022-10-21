@@ -12,12 +12,6 @@ public class Deco_PutObject : MonoBehaviour
     List<Material> origMats = new List<Material>();
     Deco_ObjectCol objCol;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {

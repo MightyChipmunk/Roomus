@@ -11,7 +11,6 @@ public class Deco_Camera : MonoBehaviour
     float speed;
     [SerializeField]
     float rotSpeed;
-
     private void Start()
     {
         thirdCamPos = GameObject.Find("ThirdCamPos").transform;
@@ -75,10 +74,10 @@ public class Deco_Camera : MonoBehaviour
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
-        dir = h * transform.right + v * transform.up;
+        dir = h * transform.right + v * transform.forward;
         // 마우스 좌클릭으로 캠 위치 이동
         if (Input.GetMouseButton(0))
-            dir = -mh * transform.right + -mv * transform.up;
+            dir = (-mh * transform.right + -mv * transform.up) * 3;
         thirdCamPos.position += dir * speed * 5 * Time.deltaTime;
         // 마우스 우클릭으로 캠 각도 이동
         Vector3 rotDir = new Vector3(-mv, mh, 0);
