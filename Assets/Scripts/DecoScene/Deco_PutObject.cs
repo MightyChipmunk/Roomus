@@ -9,8 +9,7 @@ public class Deco_PutObject : MonoBehaviour
     bool canPut = true;
     public Material can;
     public Material cant;
-    Material origMat;
-    Renderer objRenderer;
+    List<Material> origMats = new List<Material>();
     Deco_ObjectCol objCol;
 
     // Start is called before the first frame update
@@ -55,10 +54,9 @@ public class Deco_PutObject : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 16f, LayerMask.GetMask("Floor")))
             {
                 obj = Instantiate(objFactory);
-                objRenderer = obj.GetComponentInChildren<Renderer>();
                 obj.transform.parent = transform;
                 objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
-                origMat = objRenderer.material;
+                AddOrigMats();
             }
         }
         // 누르고 있는 동안 오브젝트 이동
@@ -75,10 +73,7 @@ public class Deco_PutObject : MonoBehaviour
                 canPut = false;
             }
 
-            if (canPut)
-                objRenderer.material = can;
-            else
-                objRenderer.material = cant;
+            ChangeMat(canPut);
 
             if (Input.GetKey(KeyCode.Q))
                 obj.transform.Rotate(0, -100f * Time.deltaTime, 0);
@@ -89,7 +84,7 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            objRenderer.material = origMat;
+            ChangeToOrigMat();
             obj.GetComponentInChildren<Collider>().isTrigger = false;
             obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = GameObject.Find("Room").transform;
@@ -125,19 +120,17 @@ public class Deco_PutObject : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
             {
                 obj = Instantiate(objFactory);
-                objRenderer = obj.GetComponentInChildren<Renderer>();
                 obj.transform.parent = transform;
                 objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
-                origMat = objRenderer.material;
+                AddOrigMats();
             }
             else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
             {
                 obj = Instantiate(objFactory);
-                objRenderer = obj.GetComponentInChildren<Renderer>();
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
                 objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
-                origMat = objRenderer.material;
+                AddOrigMats();
             }
         }
         else if (Input.GetKey(KeyCode.G) && obj)
@@ -164,10 +157,7 @@ public class Deco_PutObject : MonoBehaviour
                 canPut = false;
             }
 
-            if (canPut)
-                objRenderer.material = can;
-            else
-                objRenderer.material = cant;
+            ChangeMat(canPut);
 
             if (objFactory.CompareTag("FloorObj"))
             {
@@ -180,7 +170,7 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            objRenderer.material = origMat;
+            ChangeToOrigMat();
             obj.GetComponentInChildren<Collider>().isTrigger = false;
             if (objFactory.CompareTag("FloorObj"))
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -216,20 +206,18 @@ public class Deco_PutObject : MonoBehaviour
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
             {
                 obj = Instantiate(objFactory);
-                objRenderer = obj.GetComponentInChildren<Renderer>();
                 obj.transform.parent = transform;
                 obj.transform.forward = -Camera.main.transform.forward;
                 objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
-                origMat = objRenderer.material;
+                AddOrigMats();
             }
             else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
             {
                 obj = Instantiate(objFactory);
-                objRenderer = obj.GetComponentInChildren<Renderer>();
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
                 objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
-                origMat = objRenderer.material;
+                AddOrigMats();
             }
         }
         else if (Input.GetKey(KeyCode.G) && obj)
@@ -255,10 +243,7 @@ public class Deco_PutObject : MonoBehaviour
                 canPut = false;
             }
 
-            if (canPut)
-                objRenderer.material = can;
-            else
-                objRenderer.material = cant;
+            ChangeMat(canPut);
 
             if (objFactory.CompareTag("FloorObj"))
             {
@@ -271,7 +256,7 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            objRenderer.material = origMat;
+            ChangeToOrigMat();
             obj.GetComponentInChildren<Collider>().isTrigger = false; 
             if (objFactory.CompareTag("FloorObj"))
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -294,6 +279,44 @@ public class Deco_PutObject : MonoBehaviour
                     Destroy(hit.transform.parent.gameObject);
                 }
             }
+        }
+    }
+
+    void ChangeMat(bool value)
+    {
+        Transform go = obj.transform.GetChild(0);
+        if (value)
+        {
+            for (int i = 0; i < go.childCount; i++)
+            {
+                go.GetChild(i).GetComponent<Renderer>().material = can;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < go.childCount; i++)
+            {
+                go.GetChild(i).GetComponent<Renderer>().material = cant;
+            }
+        }
+    }
+
+    void AddOrigMats()
+    {
+        origMats.Clear();
+        Transform go = obj.transform.GetChild(0);
+        for (int i = 0; i < go.childCount; i++)
+        {
+            origMats.Add(go.GetChild(i).GetComponent<Renderer>().material);
+        }
+    }
+
+    void ChangeToOrigMat()
+    {
+        Transform go = obj.transform.GetChild(0);
+        for (int i = 0; i < go.childCount; i++)
+        {
+            go.GetChild(i).GetComponent<Renderer>().material = origMats[i];
         }
     }
 }
