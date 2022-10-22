@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Deco_PutObject : MonoBehaviour
 {
+    public static Deco_PutObject Instance;
+
     public GameObject objFactory;
     GameObject obj;
     bool canPut = true;
@@ -11,6 +13,14 @@ public class Deco_PutObject : MonoBehaviour
     public Material cant;
     List<Material> origMats = new List<Material>();
     Deco_ObjectCol objCol;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     // Update is called once per frame
     void Update()
