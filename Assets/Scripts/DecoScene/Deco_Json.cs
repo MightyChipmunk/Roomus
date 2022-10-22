@@ -53,8 +53,10 @@ public class Deco_Json : MonoBehaviour
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
 
-        saveInputField.onSubmit.AddListener(SaveNewFile);
-        loadInputField.onSubmit.AddListener(LoadFile);
+        if (saveInputField != null)
+            saveInputField.onSubmit.AddListener(SaveNewFile);
+        if (loadInputField != null)
+            loadInputField.onSubmit.AddListener(LoadFile);
     }
 
     private void Start()

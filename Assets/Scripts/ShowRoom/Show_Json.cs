@@ -37,7 +37,7 @@ public class Show_Json : MonoBehaviour
         if (roomName.Length == 0)
             return;
         //mapData.txt를 불러오기
-        string jsonData = File.ReadAllText(Application.dataPath + "/" + roomName + ".txt");
+        string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
         //ArrayJson의 데이터로 방 생성

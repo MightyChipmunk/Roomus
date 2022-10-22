@@ -13,7 +13,7 @@ public class Deco_ObjectCol : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GetComponent<Collider>().isTrigger = true;
     }
 
     // Update is called once per frame

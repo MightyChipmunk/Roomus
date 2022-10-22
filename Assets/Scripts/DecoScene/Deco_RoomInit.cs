@@ -13,7 +13,6 @@ public class Deco_RoomInit : MonoBehaviour
     float zSize;
     int balcony;
 
-
     public Material testMat;
 
     private void Awake()
@@ -44,7 +43,7 @@ public class Deco_RoomInit : MonoBehaviour
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
         // 방을 불러왔을 때
-        else
+        else if (Deco_LoadRoomList.Instance != null)    
         {
             Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
