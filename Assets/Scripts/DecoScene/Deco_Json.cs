@@ -17,6 +17,7 @@ public class SaveJsonInfo
 [Serializable]
 public class ArrayJson
 {
+    public string roomName;
     public float XSize;
     public float YSize;
     public float ZSize;
@@ -52,17 +53,18 @@ public class Deco_Json : MonoBehaviour
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
 
-        saveInputField.onSubmit.AddListener(SaveFile);
+        saveInputField.onSubmit.AddListener(SaveNewFile);
         loadInputField.onSubmit.AddListener(LoadFile);
     }
 
     private void Start()
     {
-
+        Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
     }
 
-    public void SaveRoomInfo(float x, float y, float z, int bal)
+    public void SaveRoomInfo(string roomName, float x, float y, float z, int bal)
     {
+        arrayJson.roomName = roomName;
         arrayJson.XSize = x;
         arrayJson.YSize = y;
         arrayJson.ZSize = z;
@@ -95,22 +97,31 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    void SaveFile(string roomName)
+    void SaveNewFile(string roomName)
     {
         if (roomName.Length == 0)
             return;
+        //방 이름 변경
+        arrayJson.roomName = roomName;
         //arrayJson을 Json으로 변환
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         //jsonData를 파일로 저장
-        File.WriteAllText(Application.dataPath + "/" + roomName + ".txt", jsonData);
+        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
     }
 
-    void LoadFile(string roomName)
+    public void SaveFile()
+    {
+        string jsonData = JsonUtility.ToJson(arrayJson, true);
+        //jsonData를 파일로 저장
+        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+    }
+
+    public void LoadFile(string roomName)
     {
         if (roomName.Length == 0)
             return;
         //mapData.txt를 불러오기
-        string jsonData = File.ReadAllText(Application.dataPath + "/" + roomName + ".txt");
+        string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
         //ArrayJson의 데이터로 방 생성
@@ -125,7 +136,7 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
         Deco_RoomInit.Instance.MakeRoom(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony, newRoom.transform);
-        SaveRoomInfo(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony);
+        SaveRoomInfo(roomName, arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {

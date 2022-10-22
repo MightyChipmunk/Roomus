@@ -7,6 +7,7 @@ public class Deco_RoomInit : MonoBehaviour
     public static Deco_RoomInit Instance;
     public GameObject balconyFac;
 
+    string roomName;
     float xSize;
     float ySize;
     float zSize;
@@ -22,16 +23,32 @@ public class Deco_RoomInit : MonoBehaviour
         else
             Destroy(gameObject);
 
-        xSize = Deco_GetXYZ.Instance.X;
-        ySize = Deco_GetXYZ.Instance.Y;
-        zSize = Deco_GetXYZ.Instance.Z;
-        balcony = Deco_GetXYZ.Instance.Balcony;
+        // 새 방을 만들었을 때
+        if (Deco_GetXYZ.Instance != null)
+        {
+            roomName = Deco_GetXYZ.Instance.RoomName;
+            xSize = Deco_GetXYZ.Instance.X;
+            ySize = Deco_GetXYZ.Instance.Y;
+            zSize = Deco_GetXYZ.Instance.Z;
+            balcony = Deco_GetXYZ.Instance.Balcony;
+        }
     }
 
     private void Start()
     {
-        MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
-        Deco_Json.Instance.SaveRoomInfo(xSize, ySize, zSize, balcony);
+        // 새 방을 만들었을 때
+        if (Deco_GetXYZ.Instance != null)
+        {
+            MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
+            Deco_Json.Instance.SaveRoomInfo(roomName, xSize, ySize, zSize, balcony);
+            Destroy(Deco_GetXYZ.Instance.gameObject);
+        }
+        // 방을 불러왔을 때
+        else
+        {
+            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
+            Destroy(Deco_LoadRoomList.Instance.gameObject);
+        }
     }
     
     public void MakeRoom(float x, float y, float z, int bal, Transform room)
