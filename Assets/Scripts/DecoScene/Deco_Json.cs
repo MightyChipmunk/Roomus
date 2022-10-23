@@ -154,10 +154,10 @@ public class Deco_Json : MonoBehaviour
             if (go.GetComponent<Deco_Idx>().Idx == idx)
             {
                 GameObject obj = Instantiate(go); 
+                obj.transform.parent = room;
                 obj.transform.localPosition = position;
                 obj.transform.localEulerAngles = eulerAngle;
                 obj.transform.localScale = localScale;
-                obj.transform.parent = room;
             }
         }
     }

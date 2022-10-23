@@ -10,6 +10,8 @@ public class Show_Json : MonoBehaviour
     public InputField loadInputField; 
     public Objects objects;
     ArrayJson arrayJson;
+
+    Vector3 initPos = new Vector3(0, 0, 20);
     // Start is called before the first frame update
     void Awake()
     {
@@ -23,7 +25,37 @@ public class Show_Json : MonoBehaviour
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
 
-        loadInputField.onSubmit.AddListener(LoadFile);
+        //loadInputField.onSubmit.AddListener(LoadFile);
+    }
+
+    void Start()
+    {
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        foreach (FileInfo file in di.GetFiles())
+        {
+            if (file.Extension.ToLower().CompareTo(".txt") == 0)
+            {
+                string fileName = file.Name.Substring(0, file.Name.Length - 4);
+                //mapData.txt를 불러오기
+                string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
+                //ArrayJson 형태로 Json을 변환
+                ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
+                initPos -= (arrayJson.XSize / 2 + 3) * Vector3.right;
+            }
+        }
+        foreach (FileInfo file in di.GetFiles())
+        {
+            if (file.Extension.ToLower().CompareTo(".txt") == 0)
+            {
+                string fileName = file.Name.Substring(0, file.Name.Length - 4);
+                //mapData.txt를 불러오기
+                string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
+                //ArrayJson 형태로 Json을 변환
+                ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
+                initPos += (arrayJson.XSize + 3) * Vector3.right;
+                LoadFile(fileName, initPos);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -32,7 +64,7 @@ public class Show_Json : MonoBehaviour
 
     }
 
-    void LoadFile(string roomName)
+    void LoadFile(string roomName, Vector3 pos)
     {
         if (roomName.Length == 0)
             return;
@@ -44,11 +76,11 @@ public class Show_Json : MonoBehaviour
         Destroy(GameObject.Find("Room"));
         GameObject newRoom = new GameObject("Room");
         GameObject newWalls = new GameObject("Walls");
-        newRoom.transform.position = Vector3.zero;
+        newRoom.transform.position = pos;
         newRoom.transform.rotation = Quaternion.identity;
         newRoom.transform.localScale = Vector3.one;
         newWalls.transform.parent = newRoom.transform;
-        newWalls.transform.position = Vector3.zero;
+        newWalls.transform.localPosition = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
         Deco_RoomInit.Instance.MakeRoom(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony, newRoom.transform);
@@ -67,10 +99,10 @@ public class Show_Json : MonoBehaviour
             if (go.GetComponent<Deco_Idx>().Idx == idx)
             {
                 GameObject obj = Instantiate(go);
+                obj.transform.parent = room;
                 obj.transform.localPosition = position;
                 obj.transform.localEulerAngles = eulerAngle;
                 obj.transform.localScale = localScale;
-                obj.transform.parent = room;
             }
         }
     }
