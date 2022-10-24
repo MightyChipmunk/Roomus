@@ -46,7 +46,8 @@ public class Show_Json : MonoBehaviourPun
                 string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
                 //ArrayJson 형태로 Json을 변환
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
-                initPos -= (arrayJson.XSize / 2 + 3) * Vector3.right;
+                if (arrayJson.access)
+                    initPos -= (arrayJson.XSize / 2 + 3) * Vector3.right;
             }
         }
         foreach (FileInfo file in di.GetFiles())
@@ -58,8 +59,11 @@ public class Show_Json : MonoBehaviourPun
                 string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
                 //ArrayJson 형태로 Json을 변환
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
-                initPos += (arrayJson.XSize + 3) * Vector3.right;
-                LoadFile(fileName, initPos);
+                if (arrayJson.access)
+                {
+                    initPos += (arrayJson.XSize + 3) * Vector3.right;
+                    LoadFile(fileName, initPos);
+                }
             }
         }
     }
@@ -95,6 +99,13 @@ public class Show_Json : MonoBehaviourPun
             SaveJsonInfo info = arrayJson.datas[i];
             LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
+
+        newRoom.AddComponent<PhotonView>();
+        Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+        infoUI.x = arrayJson.XSize;
+        infoUI.y = arrayJson.YSize;
+        infoUI.category = arrayJson.category;
+        infoUI.description = arrayJson.description;
     }
     void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
@@ -108,6 +119,11 @@ public class Show_Json : MonoBehaviourPun
                 obj.transform.localPosition = position;
                 obj.transform.localEulerAngles = eulerAngle;
                 obj.transform.localScale = localScale;
+
+                //Show_FurnitInfoUI furnitUi = obj.transform.GetChild(0).gameObject.AddComponent<Show_FurnitInfoUI>();
+                //furnitUi.furnitName = obj.GetComponent<Deco_Idx>().Name;
+                //furnitUi.price = obj.GetComponent<Deco_Idx>().Price;
+                //furnitUi.category = obj.GetComponent<Deco_Idx>().Category;
             }
         }
     }

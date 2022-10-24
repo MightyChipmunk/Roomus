@@ -60,29 +60,29 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             if (dir.magnitude > 0.1f)
             {
-                anim.SetBool("IsMove", true);
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "IsMove", true);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotSpeed);
             }
             else
-                anim.SetBool("IsMove", false);
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "IsMove", false);
 
             cc.Move(speed * dir * Time.deltaTime);
             cc.Move(yVelocity * Vector3.up * Time.deltaTime);
 
             if (cc.collisionFlags == CollisionFlags.Below)
             {
-                anim.SetBool("Falling", false);
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "Falling", false);
                 yVelocity = -1;
             }
             else
             {
-                anim.SetBool("Falling", true);
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "Falling", true);
                 yVelocity += gravity * Time.deltaTime;
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && cc.collisionFlags == CollisionFlags.Below)
             {
-                anim.SetTrigger("Jump");
+                photonView.RPC("RPCAnimSetTrigger", RpcTarget.All, "Jump");
                 yVelocity = jumpPower;
             }
         }
@@ -91,5 +91,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             transform.position = Vector3.Lerp(transform.position, receivePos, 15 * Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, 15 * Time.deltaTime);
         }
+    }
+
+    [PunRPC]
+    void RPCAnimSetBool(string s, bool value)
+    {
+        if (anim != null)
+            anim.SetBool(s, value);
+    }
+
+    [PunRPC]
+    void RPCAnimSetTrigger(string s)
+    {
+        anim.SetTrigger(s);
     }
 }

@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idx: 1
+  furnitName: TestWall
+  price: 20000
+  category: Shelf
 --- !u!1001 &8927247792252665050
 PrefabInstance:
   m_ObjectHideFlags: 0

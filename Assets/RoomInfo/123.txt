@@ -1,8 +1,11 @@
 {
     "roomName": "123",
+    "access": false,
+    "category": "",
+    "description": "",
     "XSize": 12.0,
-    "YSize": 12.0,
-    "ZSize": 5.0,
-    "balcony": 1,
+    "YSize": 11.0,
+    "ZSize": 4.0,
+    "balcony": 2,
     "datas": []
 }
