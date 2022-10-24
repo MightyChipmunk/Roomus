@@ -73,8 +73,7 @@ public class Show_Json : MonoBehaviour
         //ArrayJson 형태로 Json을 변환
         ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
         //ArrayJson의 데이터로 방 생성
-        Destroy(GameObject.Find("Room"));
-        GameObject newRoom = new GameObject("Room");
+        GameObject newRoom = new GameObject(roomName);
         GameObject newWalls = new GameObject("Walls");
         newRoom.transform.position = pos;
         newRoom.transform.rotation = Quaternion.identity;

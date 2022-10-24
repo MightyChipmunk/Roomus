@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviourPun
 {
     [SerializeField]
     float rotSpeed = 100f;
@@ -12,6 +13,10 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player");
+        if (!photonView.IsMine)
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
     }
     float mx;
     float my;
