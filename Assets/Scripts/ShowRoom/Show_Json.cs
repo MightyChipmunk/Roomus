@@ -27,6 +27,15 @@ public class Show_Json : MonoBehaviourPun
         arrayJson.datas = new List<SaveJsonInfo>();
 
         //loadInputField.onSubmit.AddListener(LoadFile);
+
+
+        GameObject go = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        go.name = PhotonNetwork.NickName;
+        PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
+    }
+
+    void Start()
+    {
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
         foreach (FileInfo file in di.GetFiles())
         {
@@ -53,15 +62,6 @@ public class Show_Json : MonoBehaviourPun
                 LoadFile(fileName, initPos);
             }
         }
-
-        GameObject go = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        go.name = PhotonNetwork.NickName;
-        PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
-    }
-
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
