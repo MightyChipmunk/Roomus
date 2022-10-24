@@ -9,3 +9,4 @@ public class Deco_Idx : MonoBehaviour
 
     public int Idx { get { return idx; } }
 }
+
