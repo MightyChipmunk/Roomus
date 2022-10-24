@@ -1,8 +1,8 @@
 {
     "roomName": "123",
-    "XSize": 10.0,
-    "YSize": 10.0,
+    "XSize": 12.0,
+    "YSize": 12.0,
     "ZSize": 5.0,
-    "balcony": 0,
+    "balcony": 1,
     "datas": []
 }

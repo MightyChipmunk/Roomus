@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SignInManager : MonoBehaviour
 {
     // ID
-    public InputField id;
+    public InputField idInput;
     // PW
-    public InputField pw;
+    public InputField pwInput;
 
-    string idInput;
-    string pwInput;
+    string id;
+    string pw;
 
     // Start is called before the first frame update
     void Start()
     {
-        id.onSubmit.AddListener(SubmitID);    
+        idInput.onEndEdit.AddListener(UpdateID);
+        pwInput.onEndEdit.AddListener(UpdatePW);
     }
 
     // Update is called once per frame
@@ -25,18 +27,26 @@ public class SignInManager : MonoBehaviour
         
     }
 
-    void typeID(string input)
+    void UpdateID(string input)
     {
-        idInput = input;
+        id = input;
     }
 
-    void SubmitID(string idInput)
+    void UpdatePW(string input)
     {
-
+        pw = input;
     }
 
-    void SubmitPW(string pwInput)
+    public void OnSignInClick()
     {
-
+        SceneManager.LoadScene("Main");
     }
+
+    public void OnSignUpClick()
+    {
+        SceneManager.LoadScene("SignUp");
+    }
+
+    
+    
 }
