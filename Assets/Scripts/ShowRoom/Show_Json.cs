@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class Show_Json : MonoBehaviour
+public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
     public InputField loadInputField; 
@@ -26,10 +27,6 @@ public class Show_Json : MonoBehaviour
         arrayJson.datas = new List<SaveJsonInfo>();
 
         //loadInputField.onSubmit.AddListener(LoadFile);
-    }
-
-    void Start()
-    {
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
         foreach (FileInfo file in di.GetFiles())
         {
@@ -56,6 +53,15 @@ public class Show_Json : MonoBehaviour
                 LoadFile(fileName, initPos);
             }
         }
+
+        GameObject go = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        go.name = PhotonNetwork.NickName;
+        PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
+    }
+
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -73,8 +79,7 @@ public class Show_Json : MonoBehaviour
         //ArrayJson 형태로 Json을 변환
         ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
         //ArrayJson의 데이터로 방 생성
-        Destroy(GameObject.Find("Room"));
-        GameObject newRoom = new GameObject("Room");
+        GameObject newRoom = new GameObject(roomName);
         GameObject newWalls = new GameObject("Walls");
         newRoom.transform.position = pos;
         newRoom.transform.rotation = Quaternion.identity;
