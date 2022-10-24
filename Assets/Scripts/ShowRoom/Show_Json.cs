@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class Show_Json : MonoBehaviour
+public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
     public InputField loadInputField; 
@@ -26,10 +27,6 @@ public class Show_Json : MonoBehaviour
         arrayJson.datas = new List<SaveJsonInfo>();
 
         //loadInputField.onSubmit.AddListener(LoadFile);
-    }
-
-    void Start()
-    {
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
         foreach (FileInfo file in di.GetFiles())
         {
@@ -56,6 +53,15 @@ public class Show_Json : MonoBehaviour
                 LoadFile(fileName, initPos);
             }
         }
+
+        GameObject go = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        go.name = PhotonNetwork.NickName;
+        PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
+    }
+
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

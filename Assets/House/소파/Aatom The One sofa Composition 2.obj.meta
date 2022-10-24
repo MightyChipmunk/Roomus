@@ -3,7 +3,32 @@ guid: 29a17d90da0b51d4ead151a36d420b5d
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: back__0_003Mat
+    second: {fileID: 2100000, guid: bf7e48d0c3b25f54da5c4fdc5f7c1dc9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: left_007Mat
+    second: {fileID: 2100000, guid: 4d46e64029d5ee24caca673471503429, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pillows001Mat
+    second: {fileID: 2100000, guid: 1b669afc608b2184f81ee7de53eb00d7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: seat_4_019Mat
+    second: {fileID: 2100000, guid: 87c56f81d96ad654a9762f231e7ed2cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: seat_4_020Mat
+    second: {fileID: 2100000, guid: 1b1ea65e1ff3e3d409d141d9e844a82c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

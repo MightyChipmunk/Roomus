@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.Find(PhotonNetwork.NickName);
         if (!photonView.IsMine)
         {
             transform.GetChild(0).gameObject.SetActive(false);
