@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SignUpManager : MonoBehaviour
+public class MainScreenManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +15,10 @@ public class SignUpManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnClickRoomCustom()
+    {
+        SceneManager.LoadScene("RoomCustom_Main");
     }
 }
