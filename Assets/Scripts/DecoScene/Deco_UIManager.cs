@@ -38,7 +38,7 @@ public class Deco_UIManager : MonoBehaviour
 
         foreach (GameObject go in Deco_Json.Instance.objects.datas)
         {
-            AddContent(go.GetComponent<Deco_Idx>().Idx);
+            AddContent(go.GetComponent<Deco_Idx>().Name);
         }
 
         library.SetActive(false);
@@ -50,17 +50,17 @@ public class Deco_UIManager : MonoBehaviour
         privateToggle.onValueChanged.AddListener(OnPrivateChanged);
     }
 
-    void OnPublicChanged(bool b)
+    void OnPublicChanged(bool value)
     {
-        if (b) 
+        if (value) 
             privateToggle.isOn = false;
         else
             privateToggle.isOn = true;
     }
 
-    void OnPrivateChanged(bool b)
+    void OnPrivateChanged(bool value)
     {
-        if (b)
+        if (value)
             publicToggle.isOn = false;
         else
             publicToggle.isOn = true;
@@ -74,11 +74,11 @@ public class Deco_UIManager : MonoBehaviour
             library.SetActive(true);    
     }
 
-    void AddContent(int id)
+    void AddContent(string contentName)
     {
         GameObject item = Instantiate(furnitItem, trContent);
-        item.name = id.ToString();
-        item.GetComponentInChildren<Text>().text = id.ToString();
+        item.name = contentName;
+        item.GetComponentInChildren<Text>().text = contentName;
     }
 
     public void OnPostClicked()
