@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     CharacterController cc;
     Animator anim;
@@ -16,6 +17,29 @@ public class PlayerController : MonoBehaviour
     float jumpPower = 10;
 
     float yVelocity = 0;
+
+    //도착 위치
+    Vector3 receivePos;
+    //회전되야 하는 값
+    Quaternion receiveRot;
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        //데이터 보내기
+        if (stream.IsWriting) // isMine == true
+        {
+            //position, rotation
+            stream.SendNext(transform.rotation);
+            stream.SendNext(transform.position);
+        }
+        //데이터 받기
+        else if (stream.IsReading) // ismMine == false
+        {
+            receiveRot = (Quaternion)stream.ReceiveNext();
+            receivePos = (Vector3)stream.ReceiveNext();
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,38 +50,59 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        Vector3 dir = h * Camera.main.transform.right + v * Camera.main.transform.forward;
-        dir.y = 0;
-        dir.Normalize();
-
-        if (dir.magnitude > 0.1f)
+        if (photonView.IsMine)
         {
-            anim.SetBool("IsMove", true);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotSpeed);
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            Vector3 dir = h * Camera.main.transform.right + v * Camera.main.transform.forward;
+            dir.y = 0;
+            dir.Normalize();
+
+            if (dir.magnitude > 0.1f)
+            {
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "IsMove", true);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotSpeed);
+            }
+            else
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "IsMove", false);
+
+            cc.Move(speed * dir * Time.deltaTime);
+            cc.Move(yVelocity * Vector3.up * Time.deltaTime);
+
+            if (cc.collisionFlags == CollisionFlags.Below)
+            {
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "Falling", false);
+                yVelocity = -1;
+            }
+            else
+            {
+                photonView.RPC("RPCAnimSetBool", RpcTarget.All, "Falling", true);
+                yVelocity += gravity * Time.deltaTime;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && cc.collisionFlags == CollisionFlags.Below)
+            {
+                photonView.RPC("RPCAnimSetTrigger", RpcTarget.All, "Jump");
+                yVelocity = jumpPower;
+            }
         }
         else
-            anim.SetBool("IsMove", false);
+        {
+            transform.position = Vector3.Lerp(transform.position, receivePos, 15 * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, 15 * Time.deltaTime);
+        }
+    }
 
-        cc.Move(speed * dir * Time.deltaTime);
-        cc.Move(yVelocity * Vector3.up * Time.deltaTime);
-        
-        if (cc.collisionFlags == CollisionFlags.Below)
-        {
-            anim.SetBool("Falling", false);
-            yVelocity = -1;
-        }
-        else
-        {
-            anim.SetBool("Falling", true);
-            yVelocity += gravity * Time.deltaTime;
-        }
+    [PunRPC]
+    void RPCAnimSetBool(string s, bool value)
+    {
+        if (anim != null)
+            anim.SetBool(s, value);
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) && cc.collisionFlags == CollisionFlags.Below)
-        {
-            anim.SetTrigger("Jump");
-            yVelocity = jumpPower;
-        }
+    [PunRPC]
+    void RPCAnimSetTrigger(string s)
+    {
+        anim.SetTrigger(s);
     }
 }

@@ -3,7 +3,42 @@ guid: 6566dffed44950d41b6fc13532a29803
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #344
+    second: {fileID: 2100000, guid: 89ac127c85a40cc4981d31ead6a8c2dd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #345
+    second: {fileID: 2100000, guid: 4e605687aa88eab4984b1bcf9a492c4b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: base
+    second: {fileID: 2100000, guid: a0a2f12163405f846933423c9447adba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blanket
+    second: {fileID: 2100000, guid: 0013b7cf0268f3f48a30ade3d5cae71c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: legs
+    second: {fileID: 2100000, guid: 644bfc5550647a146b4c673298f156c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plaid
+    second: {fileID: 2100000, guid: 6d9952d2621ce144485dcd9b0539c6f3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shildik
+    second: {fileID: 2100000, guid: 020f6397b92c31c409ef3eeb7c600b8c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

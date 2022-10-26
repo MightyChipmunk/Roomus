@@ -18,6 +18,9 @@ public class SaveJsonInfo
 public class ArrayJson
 {
     public string roomName;
+    public bool access;
+    public string category;
+    public string description;
     public float XSize;
     public float YSize;
     public float ZSize;
@@ -116,6 +119,35 @@ public class Deco_Json : MonoBehaviour
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         //jsonData를 파일로 저장
         File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+    }
+
+    public void PostFile(string roomName, bool access, int category, string desc)
+    {
+        arrayJson.access = access;
+        switch (category)
+        {
+            case 0:
+                arrayJson.category = "Living Room";
+                break;
+            case 1:
+                arrayJson.category = "Bedroom";
+                break;
+            case 2:
+                arrayJson.category = "Bathroom";
+                break;
+            case 3:
+                arrayJson.category = "Kitchen";
+                break;
+            case 4:
+                arrayJson.category = "Library";
+                break;
+            case 5:
+                arrayJson.category = "Entire House";
+                break;
+        }
+        arrayJson.description = desc;
+
+        SaveNewFile(roomName);
     }
 
     public void LoadFile(string roomName)

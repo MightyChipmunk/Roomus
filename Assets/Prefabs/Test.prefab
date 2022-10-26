@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idx: 0
+  furnitName: Test
+  price: 10000
+  category: Lighting
 --- !u!1001 &1340445859766775018
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,8 +1,0 @@
-{
-    "roomName": "Test3",
-    "XSize": 15.0,
-    "YSize": 15.0,
-    "ZSize": 5.0,
-    "balcony": 3,
-    "datas": []
-}
