@@ -59,7 +59,6 @@ public class FBXUpLoad : MonoBehaviour
     {
         if(fileName != null)
         {
-            idx++;
             SetOpenImageFileDialog();
             m_FilePaths = FileOpen(m_OpenFileDialog);
 
@@ -110,6 +109,8 @@ public class FBXUpLoad : MonoBehaviour
 
     public void OpenImageFile()
     {
+        if (obj.transform.childCount <= idx)
+            return;
         string path = UnityEngine.Application.streamingAssetsPath + "/" + fileName + "Tex" + idx.ToString() + ".jpg";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
 
@@ -123,8 +124,7 @@ public class FBXUpLoad : MonoBehaviour
 
     void ChangeMat(Transform obj, Texture texture)
     {
-        if (obj.GetChild(idx))
-            obj.GetChild(idx).GetComponent<Renderer>().material.mainTexture = texture;
+       obj.GetChild(idx).GetComponent<Renderer>().material.mainTexture = texture;
     }
 
     IEnumerator WaitForFile(string path)
@@ -145,12 +145,13 @@ public class FBXUpLoad : MonoBehaviour
     {
         while (true)
         {
-            if (Resources.Load(fileName))
+            if (Resources.Load(fileName + "Tex" + idx.ToString()))
                 break;
 
             yield return null;
         }
 
         ChangeMat(GameObject.Find(fileName).transform, Resources.Load(fileName + "Tex" + idx.ToString()) as Texture);
+        idx++;
     }
 }
