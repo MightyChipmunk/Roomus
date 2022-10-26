@@ -12,7 +12,6 @@ public class WindowMesh : MonoBehaviour
          8,9,12, 9,13,12, 9,10,13, 10,14,13,
          10,11,14, 11,15,14, 11,8,15, 8,12,15
      };
-
     void Start()
     {
         //MakeHole(-0.3f, -0.1f, 0.1f, -0.5f);
