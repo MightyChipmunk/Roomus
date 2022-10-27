@@ -12,6 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/SignUp.unity
     guid: b5fc9b6a1e6344dc5a732a8490e3b33e
   - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: 9e3bf210187134e089983e53c4e4f36c
+  - enabled: 1
+    path: Assets/Scenes/Shopping.unity
+    guid: 62a152229a699425588a47dbf0ffaec0
+  - enabled: 1
     path: Assets/Scenes/RoomCustom_Main.unity
     guid: 95b3679d2cb954c75840b1b3e5e1c43e
   - enabled: 1

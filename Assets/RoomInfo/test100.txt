@@ -1,0 +1,8 @@
+{
+    "roomName": "test100",
+    "XSize": 20.0,
+    "YSize": 10.0,
+    "ZSize": 5.0,
+    "balcony": 3,
+    "datas": []
+}
