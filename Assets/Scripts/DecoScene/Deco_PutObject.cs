@@ -65,17 +65,19 @@ public class Deco_PutObject : MonoBehaviour
                 //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
                 //AddOrigMats();
 
-                obj = new GameObject(fbxJson.furnitName); 
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 GameObject go = Instantiate(objFactory);
                 go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
                 BoxCollider col = go.AddComponent<BoxCollider>();
                 objCol = go.AddComponent<Deco_ObjectCol>();
                 col.center = new Vector3(0, fbxJson.ySize / 2, 0);
                 col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
                 Rigidbody rb = go.AddComponent<Rigidbody>();
                 rb.useGravity = false;
-                go.transform.localPosition = Vector3.zero;
                 Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
                 decoIdx.Name = fbxJson.furnitName;
                 decoIdx.Price = fbxJson.price;
@@ -158,16 +160,18 @@ public class Deco_PutObject : MonoBehaviour
                 //AddOrigMats();
 
                 obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 GameObject go = Instantiate(objFactory);
                 go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
                 BoxCollider col = go.AddComponent<BoxCollider>();
                 objCol = go.AddComponent<Deco_ObjectCol>();
                 col.center = new Vector3(0, fbxJson.ySize / 2, 0);
                 col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
                 Rigidbody rb = go.AddComponent<Rigidbody>();
                 rb.useGravity = false;
-                go.transform.localPosition = Vector3.zero;
                 Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
                 decoIdx.Name = fbxJson.furnitName;
                 decoIdx.Price = fbxJson.price;
@@ -184,10 +188,38 @@ public class Deco_PutObject : MonoBehaviour
             }
             else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location)
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //obj.transform.forward = hit.normal;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();obj = new GameObject(fbxJson.furnitName);
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f); 
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                }
+
                 AddOrigMats();
             }
         }
@@ -270,17 +302,19 @@ public class Deco_PutObject : MonoBehaviour
                 //AddOrigMats();
 
                 obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = -Camera.main.transform.forward;
                 GameObject go = Instantiate(objFactory);
                 go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
                 BoxCollider col = go.AddComponent<BoxCollider>();
                 objCol = go.AddComponent<Deco_ObjectCol>();
                 col.center = new Vector3(0, fbxJson.ySize / 2, 0);
                 col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
                 Rigidbody rb = go.AddComponent<Rigidbody>();
                 rb.useGravity = false;
-                go.transform.localPosition = Vector3.zero;
                 Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
                 decoIdx.Name = fbxJson.furnitName;
                 decoIdx.Price = fbxJson.price;
@@ -304,17 +338,19 @@ public class Deco_PutObject : MonoBehaviour
                 //AddOrigMats();
 
                 obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
                 GameObject go = Instantiate(objFactory);
                 go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
                 BoxCollider col = go.AddComponent<BoxCollider>();
                 objCol = go.AddComponent<Deco_ObjectCol>();
                 col.center = new Vector3(0, fbxJson.ySize / 2, 0);
                 col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
                 Rigidbody rb = go.AddComponent<Rigidbody>();
                 rb.useGravity = false;
-                go.transform.localPosition = Vector3.zero;
                 Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
                 decoIdx.Name = fbxJson.furnitName;
                 decoIdx.Price = fbxJson.price;
@@ -367,7 +403,7 @@ public class Deco_PutObject : MonoBehaviour
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             ChangeToOrigMat();
-            obj.GetComponentInChildren<Collider>().isTrigger = false; 
+            obj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = GameObject.Find("Room").transform;

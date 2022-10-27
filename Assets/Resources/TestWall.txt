@@ -1,0 +1,11 @@
+{
+    "id": 8296,
+    "furnitName": "TestWall",
+    "location": false,
+    "category": "Sofa",
+    "information": "asdfasdf",
+    "xSize": 0.5,
+    "ySize": 0.5,
+    "zSize": 0.5,
+    "price": 123123
+}

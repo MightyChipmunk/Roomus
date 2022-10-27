@@ -141,5 +141,6 @@ public class FBXUIManager : MonoBehaviour
         File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);
+        fbx.gameObject.SetActive(true);
     }
 }
