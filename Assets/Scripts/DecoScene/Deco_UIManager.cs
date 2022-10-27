@@ -37,14 +37,14 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath);
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
         {
             string type = file.Name.Substring(file.Name.Length - 3, 3);
             if (type == "txt")
             {
                 FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-                AddContent(fbxJson.furnitName);
+                AddContent(fbxJson);
             }
         }
 
@@ -81,12 +81,12 @@ public class Deco_UIManager : MonoBehaviour
             library.SetActive(true);    
     }
 
-    void AddContent(string contentName)
+    void AddContent(FBXJson fbxJson)
     {
         GameObject item = Instantiate(furnitItem, trContent);
-        item.name = contentName;
-        //item.GetComponent<Deco_FurnitItem>().Id = id;
-        item.GetComponentInChildren<Text>().text = contentName;
+        item.name = fbxJson.furnitName;
+        item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
+        item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
 
     public void OnPostClicked()

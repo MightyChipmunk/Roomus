@@ -8,6 +8,7 @@ using UnityEngine.UI;
 [Serializable]
 public class FBXJson
 {
+    public int id;
     public string furnitName;
     public bool location;
     public string category;
@@ -53,16 +54,16 @@ public class FBXUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void OnNameChanged(string s) 
+    void OnNameChanged(string s)
     {
         fbxJson.furnitName = s;
         FBXUpLoad.Instance.FileName = s;
-    }    
-    
-    void OnPriceChanged(string s) 
+    }
+
+    void OnPriceChanged(string s)
     {
         fbxJson.price = Int32.Parse(s);
     }
@@ -104,7 +105,7 @@ public class FBXUIManager : MonoBehaviour
     public void OnNextButtonClicked()
     {
         fbxJson.location = floorToggle.isOn;
-        switch (categoryUI.value) 
+        switch (categoryUI.value)
         {
             case 0:
                 fbxJson.category = "Bed";
@@ -134,11 +135,11 @@ public class FBXUIManager : MonoBehaviour
                 fbxJson.category = "Kitchen";
                 break;
         }
+        fbxJson.id = UnityEngine.Random.Range(0, 10000);
         string jsonData = JsonUtility.ToJson(fbxJson, true);
-        string path = Application.streamingAssetsPath + "/" + fbxJson.furnitName + ".txt";
+        string path = Application.dataPath + "/LocalServer/" + "/" + fbxJson.furnitName + ".txt";
         File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);
-        fbx.gameObject.SetActive(true);
     }
 }
