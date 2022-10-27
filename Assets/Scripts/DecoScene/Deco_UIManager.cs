@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System.IO;
 
 public class Deco_UIManager : MonoBehaviour
 {
@@ -36,9 +37,15 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        foreach (GameObject go in Deco_Json.Instance.objects.datas)
+        DirectoryInfo di = new DirectoryInfo(Application.streamingAssetsPath);
+        foreach (FileInfo file in di.GetFiles())
         {
-            AddContent(go.GetComponent<Deco_Idx>().Name);
+            string type = file.Name.Substring(file.Name.Length - 3, 3);
+            if (type == "txt")
+            {
+                FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
+                AddContent(fbxJson.furnitName);
+            }
         }
 
         library.SetActive(false);
@@ -78,6 +85,7 @@ public class Deco_UIManager : MonoBehaviour
     {
         GameObject item = Instantiate(furnitItem, trContent);
         item.name = contentName;
+        //item.GetComponent<Deco_FurnitItem>().Id = id;
         item.GetComponentInChildren<Text>().text = contentName;
     }
 

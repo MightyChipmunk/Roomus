@@ -2043,9 +2043,7 @@ MonoBehaviour:
   saveInputField: {fileID: 292187781}
   loadInputField: {fileID: 915089673}
   objects:
-    datas:
-    - {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d, type: 3}
-    - {fileID: 2221272363813988884, guid: 78f6104b514bed54a8c48cafa79a651d, type: 3}
+    datas: []
 --- !u!1 &713630796
 GameObject:
   m_ObjectHideFlags: 0

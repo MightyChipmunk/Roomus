@@ -54,17 +54,17 @@ public class Deco_GetXYZ : MonoBehaviour
 
     void GetX(string s)
     {
-        x = Int32.Parse(s);
+        x = float.Parse(s);
     }
 
     void GetY(string s)
     {
-        y = Int32.Parse(s);
+        y = float.Parse(s);
     }
 
     void GetZ(string s)
     {
-        z = Int32.Parse(s);
+        z = float.Parse(s);
     }
 
     public void SetBalcony(int n)
