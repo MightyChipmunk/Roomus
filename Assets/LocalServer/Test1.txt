@@ -1,0 +1,11 @@
+{
+    "id": 7818,
+    "furnitName": "Test1",
+    "location": true,
+    "category": "Bed",
+    "information": "asdfasd",
+    "xSize": 0.5,
+    "ySize": 0.5,
+    "zSize": 0.5,
+    "price": 1232
+}
