@@ -27,7 +27,7 @@ public class Deco_FurnitItem : MonoBehaviour
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
         {
-            if (file.Name.Contains(fbxJson.furnitName))
+            if (file.Name.Contains(fbxJson.furnitName) && !file.Name.Contains("txt"))
             {
                 byte[] data = File.ReadAllBytes(file.FullName);
                 string path = Application.dataPath + "/Resources/" + file.Name;

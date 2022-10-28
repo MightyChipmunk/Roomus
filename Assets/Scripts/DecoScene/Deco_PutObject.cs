@@ -155,7 +155,7 @@ public class Deco_PutObject : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location)
+            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location && objFactory)
             {
                 //obj = Instantiate(objFactory);
                 //obj.transform.parent = transform;
@@ -192,7 +192,7 @@ public class Deco_PutObject : MonoBehaviour
 
                 AddOrigMats();
             }
-            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location)
+            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location && objFactory)
             {
                 //obj = Instantiate(objFactory);
                 //obj.transform.parent = transform;
