@@ -86,8 +86,11 @@ public class Deco_PutObject : MonoBehaviour
 
                 for (int i = 0; i < go.transform.childCount; i++)
                 {
-                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
-                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString()))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
                 }
 
                 AddOrigMats();
@@ -216,8 +219,11 @@ public class Deco_PutObject : MonoBehaviour
 
                 for (int i = 0; i < go.transform.childCount; i++)
                 {
-                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
-                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString()))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
                 }
 
                 AddOrigMats();
@@ -323,8 +329,11 @@ public class Deco_PutObject : MonoBehaviour
 
                 for (int i = 0; i < go.transform.childCount; i++)
                 {
-                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
-                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString()))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
                 }
 
                 AddOrigMats();
@@ -359,8 +368,11 @@ public class Deco_PutObject : MonoBehaviour
 
                 for (int i = 0; i < go.transform.childCount; i++)
                 {
-                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
-                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString()))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
                 }
 
                 AddOrigMats();
