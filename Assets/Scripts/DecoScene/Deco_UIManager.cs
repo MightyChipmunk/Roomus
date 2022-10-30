@@ -8,7 +8,8 @@ public class Deco_UIManager : MonoBehaviour
 {
     public static Deco_UIManager Instance;
 
-    public JM_ScreenManager screenManager;
+    public GameObject screenManager;
+    JM_ScreenManager screenCode;
 
     public InputField nameField;
     public Toggle publicToggle;
@@ -57,6 +58,9 @@ public class Deco_UIManager : MonoBehaviour
 
         publicToggle.onValueChanged.AddListener(OnPublicChanged);
         privateToggle.onValueChanged.AddListener(OnPrivateChanged);
+
+        // Screen (Jaemin)
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
     }
 
     void OnPublicChanged(bool value)
@@ -98,9 +102,12 @@ public class Deco_UIManager : MonoBehaviour
         else
         {
             posting.SetActive(true);
-            screenManager.isDark = true;
-            screenManager.isStart = true;
+            screenCode.screen.SetActive(true);
+            screenCode.isDark = true;
+            screenCode.isStart = true;
+            screenCode.alpha = 1;
         }
+        
     }
 
     public void OnUploadClicked()
