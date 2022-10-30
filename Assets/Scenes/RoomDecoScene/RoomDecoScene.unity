@@ -2386,6 +2386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 199f33c319763f24f9f6e269caa0e374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenManager: {fileID: 700323562}
   nameField: {fileID: 399697890}
   publicToggle: {fileID: 1014441184}
   privateToggle: {fileID: 1720184664}
@@ -2441,6 +2442,18 @@ MonoBehaviour:
   loadInputField: {fileID: 915089673}
   objects:
     datas: []
+--- !u!114 &700323562 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4909364703720408367, guid: 0635a58f3714746e8af83d70311ffb83,
+    type: 3}
+  m_PrefabInstance: {fileID: 583652315}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c0708f1fb7b48209435736eb31b087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &713630796
 GameObject:
   m_ObjectHideFlags: 0

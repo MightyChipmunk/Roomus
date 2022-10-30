@@ -8,6 +8,8 @@ public class Deco_UIManager : MonoBehaviour
 {
     public static Deco_UIManager Instance;
 
+    public JM_ScreenManager screenManager;
+
     public InputField nameField;
     public Toggle publicToggle;
     public Toggle privateToggle;
@@ -94,7 +96,11 @@ public class Deco_UIManager : MonoBehaviour
         if (posting.activeSelf)
             posting.SetActive(false);
         else
+        {
             posting.SetActive(true);
+            screenManager.isDark = true;
+            screenManager.isStart = true;
+        }
     }
 
     public void OnUploadClicked()
