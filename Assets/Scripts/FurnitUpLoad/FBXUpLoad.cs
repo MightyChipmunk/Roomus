@@ -153,7 +153,6 @@ public class FBXUpLoad : MonoBehaviour
         {
             if (Resources.Load(fileName))
                 break;
-            Debug.Log("Loading " + fileName);
             yield return null;
         }
 

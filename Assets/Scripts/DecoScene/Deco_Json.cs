@@ -252,6 +252,8 @@ public class Deco_Json : MonoBehaviour
                         Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
                 }
             }
+
+            SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
         }
     }
 }
