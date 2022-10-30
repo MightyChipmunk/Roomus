@@ -7,6 +7,8 @@ public class JM_ToolBar : MonoBehaviour
 {
     public GameObject toolBar;
 
+    bool isHome;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +26,7 @@ public class JM_ToolBar : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Alpha0))
         {
             DeactivateToolBar();
-        }      
+        }
     }
 
     void ActivateToolBar()
