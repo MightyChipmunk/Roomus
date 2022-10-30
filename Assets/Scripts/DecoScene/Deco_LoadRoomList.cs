@@ -35,6 +35,7 @@ public class Deco_LoadRoomList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
         foreach (FileInfo File in di.GetFiles())
         {

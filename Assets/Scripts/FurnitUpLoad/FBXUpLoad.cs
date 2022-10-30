@@ -33,7 +33,9 @@ public class FBXUpLoad : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
-            Destroy(gameObject);    
+            Destroy(gameObject);
+
+        Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer");
     }
 
     void Update()
@@ -151,7 +153,7 @@ public class FBXUpLoad : MonoBehaviour
         {
             if (Resources.Load(fileName))
                 break;
-
+            Debug.Log("Loading " + fileName);
             yield return null;
         }
 

@@ -5,16 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SignIn.unity
     guid: f333fcb90094c48ffbb75e43ef4f6703
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SignUp.unity
     guid: b5fc9b6a1e6344dc5a732a8490e3b33e
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 9e3bf210187134e089983e53c4e4f36c
   - enabled: 1
+    path: Assets/Scenes/FBXLoadTest.unity
+    guid: c2847a135f79274498398aab39c5c2ae
+  - enabled: 0
     path: Assets/Scenes/MyPage.unity
     guid: 5276307b2c64447fbbaeda0f62f3a0a2
   - enabled: 1
@@ -38,7 +41,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ShowRoom/Test_Lobby.unity
     guid: 25d3ef9bcd6a1f14abd5b2d02e4b8d75
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Shopping.unity
     guid: 62a152229a699425588a47dbf0ffaec0
   m_configObjects: {}

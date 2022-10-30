@@ -12,17 +12,6 @@ public class Deco_FurnitItem : MonoBehaviour
     void Start()
     {
         GetComponent<Button>().onClick.AddListener(OnClicked);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void OnClicked()
-    {
-        //Deco_PutObject.objFactory = obj;
 
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
@@ -32,9 +21,28 @@ public class Deco_FurnitItem : MonoBehaviour
                 byte[] data = File.ReadAllBytes(file.FullName);
                 string path = Application.dataPath + "/Resources/" + file.Name;
                 File.WriteAllBytes(path, data);
-
-                StartCoroutine(WaitForUpload(file));
             }
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Resources.Load<Texture2D>(fbxJson.furnitName + "ScreenShot"))
+        {
+            Texture2D tex = Resources.Load<Texture2D>(fbxJson.furnitName + "ScreenShot");
+            Rect rect = new Rect(0, 0, tex.width, tex.height);
+            GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
+        }
+    }
+
+    public void OnClicked()
+    {
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        foreach (FileInfo file in di.GetFiles())
+        {
+            if (file.Name.Contains(fbxJson.furnitName) && !file.Name.Contains("txt"))
+                StartCoroutine(WaitForUpload(file));
         }
 
         Deco_PutObject.Instance.fbxJson = fbxJson;
@@ -43,10 +51,6 @@ public class Deco_FurnitItem : MonoBehaviour
     IEnumerator WaitForUpload(FileInfo file)
     {
         string path = file.Name.Substring(0, file.Name.Length - 4);
-        //GameObject parent = new GameObject(path);
-        //parent.transform.position = Vector3.zero;
-        //parent.transform.rotation = Quaternion.identity;
-        //parent.transform.localScale = Vector3.one;
 
         while (true)
         {
@@ -60,25 +64,5 @@ public class Deco_FurnitItem : MonoBehaviour
         {
             Deco_PutObject.Instance.objFactory = Resources.Load<GameObject>(path);
         }
-
-        if (path == fbxJson.furnitName + "ScreenShot")
-        {
-            Texture2D tex = Resources.Load<Texture2D>(path);
-            Rect rect = new Rect(0, 0, tex.width, tex.height);
-            GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-        }
-
-        //GameObject go = Instantiate(Resources.Load<GameObject>(path));
-        //go.transform.parent = parent.transform;
-        //BoxCollider col = go.AddComponent<BoxCollider>();
-        //col.center = new Vector3(0, fbxJson.ySize / 2, 0);
-        //col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
-        //Rigidbody rb = go.AddComponent<Rigidbody>();
-        //rb.useGravity = false;
-        //go.transform.localPosition = Vector3.zero;
-        //Deco_Idx decoIdx = parent.AddComponent<Deco_Idx>();
-        //decoIdx.Name = fbxJson.furnitName;
-        //decoIdx.Price = fbxJson.price;
-        //decoIdx.Category = fbxJson.category;
     }
 }

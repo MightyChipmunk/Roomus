@@ -34,12 +34,12 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickUpload()
     {
-
+        SceneManager.LoadScene("FBXLoadTest");
     }
 
     public void OnClickTravel()
     {
-
+        SceneManager.LoadScene("Test_Connect");
     }
 
     public void OnClickShop()
