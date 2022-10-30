@@ -1,5 +1,5 @@
 {
-    "id": 1582,
+    "id": 6328,
     "furnitName": "",
     "location": true,
     "category": "Bed",

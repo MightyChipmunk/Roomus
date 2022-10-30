@@ -23,6 +23,8 @@ public class FBXUIManager : MonoBehaviour
 {
     FBXJson fbxJson = new FBXJson();
 
+    public JM_ScreenManager screenCode;
+
     public GameObject infos;
     public GameObject fbx;
 
@@ -142,6 +144,11 @@ public class FBXUIManager : MonoBehaviour
 
         infos.gameObject.SetActive(false);
         fbx.gameObject.SetActive(true);
+
+        screenCode.screen.SetActive(true);
+        screenCode.isDark = true;
+        screenCode.isStart = true;
+        screenCode.alpha = 1;
     }
 
     public void OnEndClicked()
