@@ -137,10 +137,30 @@ public class FBXUIManager : MonoBehaviour
         }
         fbxJson.id = UnityEngine.Random.Range(0, 10000);
         string jsonData = JsonUtility.ToJson(fbxJson, true);
-        string path = Application.dataPath + "/LocalServer/" + "/" + fbxJson.furnitName + ".txt";
+        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
         File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);
         fbx.gameObject.SetActive(true);
+    }
+
+    public void OnEndClicked()
+    {
+        StartCoroutine("capture");
+    }
+
+    IEnumerator capture()
+    {
+        yield return new WaitForEndOfFrame();
+
+        byte[] imgBytes;
+        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "ScreenShot" + ".png";
+
+        Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
+        texture.Apply();
+
+        imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(path, imgBytes);
     }
 }

@@ -61,6 +61,13 @@ public class Deco_FurnitItem : MonoBehaviour
             Deco_PutObject.Instance.objFactory = Resources.Load<GameObject>(path);
         }
 
+        if (path == fbxJson.furnitName + "ScreenShot")
+        {
+            Texture2D tex = Resources.Load<Texture2D>(path);
+            Rect rect = new Rect(0, 0, tex.width, tex.height);
+            GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
+        }
+
         //GameObject go = Instantiate(Resources.Load<GameObject>(path));
         //go.transform.parent = parent.transform;
         //BoxCollider col = go.AddComponent<BoxCollider>();

@@ -3513,6 +3513,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe5de4c178fb0484d80ff5d1a5c063d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fbxJson:
+    id: 0
+    furnitName: 
+    location: 0
+    category: 
+    information: 
+    xSize: 0
+    ySize: 0
+    zSize: 0
+    price: 0
   objFactory: {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d,
     type: 3}
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
