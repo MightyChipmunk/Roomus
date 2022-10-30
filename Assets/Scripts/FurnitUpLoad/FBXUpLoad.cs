@@ -15,11 +15,26 @@ public class FBXUpLoad : MonoBehaviour
 
     int idx = 0;
     string fileName;
+    public string FileName
+    {
+        get { return fileName; }
+        set { fileName = value; }
+    }
     GameObject obj;
 
     Texture currentTex;
 
     public List<Button> buttons = new List<Button>();
+
+    public static FBXUpLoad Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);    
+    }
 
     void Update()
     {
@@ -94,8 +109,8 @@ public class FBXUpLoad : MonoBehaviour
 
     public void OpenFBXFile()
     {
-        fileName = Path.GetFileName(m_FilePaths[0]).Substring(0, Path.GetFileName(m_FilePaths[0]).Length - 4);
-        string path = UnityEngine.Application.streamingAssetsPath + "/" + fileName + ".fbx";
+        //fileName = Path.GetFileName(m_FilePaths[0]).Substring(0, Path.GetFileName(m_FilePaths[0]).Length - 4);
+        string path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + ".fbx";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
 
         File.WriteAllBytes(path, data);
@@ -110,12 +125,14 @@ public class FBXUpLoad : MonoBehaviour
     {
         //if (obj.transform.childCount <= idx)
         //    return;
-        //string path = UnityEngine.Application.streamingAssetsPath + "/" + fileName + "Pallet" + buttonIdx.ToString() + ".jpg";
+        //string path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + "Pallet" + buttonIdx.ToString() + ".jpg";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
+        //string path = UnityEngine.Application.dataPath + "/Resources/" + Path.GetFileName(m_FilePaths[0]);
         string path = UnityEngine.Application.dataPath + "/Resources/" + "Pallet" + buttonIdx.ToString() + ".jpg";
+
         File.WriteAllBytes(path, data);
 
-        StartCoroutine(WaitForImage(path, buttonIdx)); 
+        StartCoroutine(WaitForImage(path, buttonIdx));
     }
 
     void ChangeMat(Transform obj, Texture texture)
@@ -124,7 +141,7 @@ public class FBXUpLoad : MonoBehaviour
         string path = UnityEngine.Application.dataPath + "/Resources/" + "Pallet" + idx.ToString() + ".jpg";
         byte[] data = File.ReadAllBytes(path);
         int objIdx = obj.GetSiblingIndex();
-        path = UnityEngine.Application.streamingAssetsPath + "/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
+        path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
         File.WriteAllBytes(path, data);
     }
 

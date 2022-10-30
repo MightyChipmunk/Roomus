@@ -1,0 +1,30 @@
+{
+    "roomName": "MyRoom1",
+    "access": true,
+    "category": "Living Room",
+    "description": "MyRoom ",
+    "XSize": 15.0,
+    "YSize": 12.0,
+    "ZSize": 6.0,
+    "balcony": 1,
+    "datas": [
+        {
+            "idx": 5393,
+            "position": {
+                "x": 1.1322648525238038,
+                "y": -4.76837158203125e-7,
+                "z": -2.280959129333496
+            },
+            "eulerAngle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "localScale": {
+                "x": 1.0,
+                "y": 1.0000001192092896,
+                "z": 1.0000001192092896
+            }
+        }
+    ]
+}

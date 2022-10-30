@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Deco_PutObject : MonoBehaviour
 {
     public static Deco_PutObject Instance;
+
+    public FBXJson fbxJson = new FBXJson();
 
     public GameObject objFactory;
     GameObject obj;
@@ -25,7 +28,7 @@ public class Deco_PutObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && objFactory.CompareTag("FloorObj"))
+        if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
         {
             SecondPut();
         }
@@ -57,9 +60,39 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 16f, LayerMask.GetMask("Floor")))
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
+                }
+
                 AddOrigMats();
             }
         }
@@ -106,7 +139,8 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 16f))
             {
-                if (hit.transform.parent.CompareTag("FloorObj") || hit.transform.parent.CompareTag("WallObj"))
+                Deco_Idx deco_Idx;
+                if (hit.transform.parent.TryGetComponent<Deco_Idx>(out deco_Idx))
                 {
                     Deco_Json.Instance.DeleteJson(hit.transform.parent.gameObject);
                     Destroy(hit.transform.parent.gameObject);
@@ -121,19 +155,80 @@ public class Deco_PutObject : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
+            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location && objFactory)
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for(int i = 0; i < go.transform.childCount; i++)
+                {
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
+                }
+
                 AddOrigMats();
             }
-            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
+            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location && objFactory)
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //obj.transform.forward = hit.normal;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();obj = new GameObject(fbxJson.furnitName);
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f); 
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
+                }
+
                 AddOrigMats();
             }
         }
@@ -143,7 +238,7 @@ public class Deco_PutObject : MonoBehaviour
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
+            if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location)
             {
                 obj.transform.position = hit.point;
                 Vector3 angle = obj.transform.eulerAngles;
@@ -151,7 +246,7 @@ public class Deco_PutObject : MonoBehaviour
                 angle.x = hit.normal.x;
                 obj.transform.eulerAngles = angle;
             }
-            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
+            else if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location)
             {
                 obj.transform.position = hit.point;
                 obj.transform.forward = hit.normal;
@@ -163,7 +258,7 @@ public class Deco_PutObject : MonoBehaviour
 
             ChangeMat(canPut);
 
-            if (objFactory.CompareTag("FloorObj"))
+            if (fbxJson.location)
             {
                 if (Input.GetKey(KeyCode.Q))
                     obj.transform.Rotate(0, -100f * Time.deltaTime, 0);
@@ -176,7 +271,7 @@ public class Deco_PutObject : MonoBehaviour
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             ChangeToOrigMat();
             obj.GetComponentInChildren<Collider>().isTrigger = false;
-            if (objFactory.CompareTag("FloorObj"))
+            if (fbxJson.location)
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = GameObject.Find("Room").transform;
             obj = null;
@@ -192,7 +287,8 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 50f))
             {
-                if (hit.transform.parent.CompareTag("FloorObj") || hit.transform.parent.CompareTag("WallObj"))
+                Deco_Idx deco_Idx;
+                if (hit.transform.parent.TryGetComponent<Deco_Idx>(out deco_Idx))
                 {
                     Deco_Json.Instance.DeleteJson(hit.transform.parent.gameObject);
                     Destroy(hit.transform.parent.gameObject);
@@ -206,20 +302,82 @@ public class Deco_PutObject : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location)
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //obj.transform.forward = -Camera.main.transform.forward;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = -Camera.main.transform.forward;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero;
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
+                }
+
                 AddOrigMats();
             }
-            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location)
             {
-                obj = Instantiate(objFactory);
+                //obj = Instantiate(objFactory);
+                //obj.transform.parent = transform;
+                //obj.transform.forward = hit.normal;
+                //objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                //AddOrigMats();
+
+                obj = new GameObject(fbxJson.furnitName);
+                obj.transform.position = hit.point;
                 obj.transform.parent = transform;
                 obj.transform.forward = hit.normal;
-                objCol = obj.transform.GetChild(0).gameObject.AddComponent<Deco_ObjectCol>();
+                GameObject go = Instantiate(objFactory);
+                go.transform.parent = obj.transform;
+                go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+                go.transform.localEulerAngles = objFactory.transform.eulerAngles;
+                BoxCollider col = go.AddComponent<BoxCollider>();
+                objCol = go.AddComponent<Deco_ObjectCol>();
+                col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+                col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+                Rigidbody rb = go.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+                decoIdx.Name = fbxJson.furnitName;
+                decoIdx.Price = fbxJson.price;
+                decoIdx.Category = fbxJson.category;
+                decoIdx.Idx = fbxJson.id;
+
+                for (int i = 0; i < go.transform.childCount; i++)
+                {
+                    if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                    {
+                        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                            Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                    }
+                }
+
                 AddOrigMats();
             }
         }
@@ -228,7 +386,7 @@ public class Deco_PutObject : MonoBehaviour
             canPut = !objCol.IsCollide;
 
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor")) && objFactory.CompareTag("FloorObj"))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor")) && fbxJson.location)
             {
                 obj.transform.position = hit.point;
                 Vector3 angle = obj.transform.eulerAngles;
@@ -236,7 +394,7 @@ public class Deco_PutObject : MonoBehaviour
                 angle.x = hit.normal.x;
                 obj.transform.eulerAngles = angle;
             }
-            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Wall")) && objFactory.CompareTag("WallObj"))
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Wall")) && !fbxJson.location)
             {
                 obj.transform.position = hit.point;
                 obj.transform.forward = hit.normal;
@@ -248,7 +406,7 @@ public class Deco_PutObject : MonoBehaviour
 
             ChangeMat(canPut);
 
-            if (objFactory.CompareTag("FloorObj"))
+            if (fbxJson.location)
             {
                 if (Input.GetKey(KeyCode.Q))
                     obj.transform.Rotate(0, -100f * Time.deltaTime, 0);
@@ -260,8 +418,8 @@ public class Deco_PutObject : MonoBehaviour
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             ChangeToOrigMat();
-            obj.GetComponentInChildren<Collider>().isTrigger = false; 
-            if (objFactory.CompareTag("FloorObj"))
+            obj.GetComponentInChildren<Collider>().isTrigger = false;
+            if (fbxJson.location)
                 obj.GetComponentInChildren<Rigidbody>().useGravity = true;
             obj.transform.parent = GameObject.Find("Room").transform;
             obj = null;
@@ -276,7 +434,8 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f))
             {
-                if (hit.transform.parent.CompareTag("FloorObj") || hit.transform.parent.CompareTag("WallObj"))
+                Deco_Idx deco_Idx;
+                if (hit.transform.parent.TryGetComponent<Deco_Idx>(out deco_Idx))
                 {
                     Deco_Json.Instance.DeleteJson(hit.transform.parent.gameObject);
                     Destroy(hit.transform.parent.gameObject);

@@ -56,6 +56,8 @@ public class Deco_Json : MonoBehaviour
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
 
+        //ObjectAdd();
+
         if (saveInputField != null)
             saveInputField.onSubmit.AddListener(SaveNewFile);
         if (loadInputField != null)
@@ -180,17 +182,77 @@ public class Deco_Json : MonoBehaviour
     }
     void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        //해당 위치에 BlueCube를 생성해서 놓는다.
-        foreach (GameObject go in objects.datas)
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        foreach (FileInfo file in di.GetFiles())
         {
-            if (go.GetComponent<Deco_Idx>().Idx == idx)
+            if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
             {
-                GameObject obj = Instantiate(go); 
-                obj.transform.parent = room;
-                obj.transform.localPosition = position;
-                obj.transform.localEulerAngles = eulerAngle;
-                obj.transform.localScale = localScale;
+                FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
+                if (fbxJson.id == idx)
+                {
+                    foreach (FileInfo info in di.GetFiles())
+                    {
+                        if (info.Name.Contains(fbxJson.furnitName) && !info.Name.Contains("meta") && !info.Name.Contains("txt"))
+                        {
+                            byte[] data = File.ReadAllBytes(info.FullName);
+                            string path = Application.dataPath + "/Resources/" + info.Name;
+                            File.WriteAllBytes(path, data);
+
+                            StartCoroutine(WaitForUpload(info, fbxJson, idx, position, eulerAngle, localScale, room));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    IEnumerator WaitForUpload(FileInfo file, FBXJson fbxJson, int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
+    {
+        string path = file.Name.Substring(0, file.Name.Length - 4);
+
+        while (true)
+        {
+            if (Resources.Load<GameObject>(path))
+                break;
+
+            yield return null;
+        }
+
+        if (path == fbxJson.furnitName)
+        {
+            GameObject obj = new GameObject(fbxJson.furnitName);
+            obj.transform.parent = room;
+            obj.transform.localPosition = position;
+            obj.transform.localEulerAngles = eulerAngle;
+            obj.transform.localScale = localScale;
+            GameObject go = Instantiate(Resources.Load<GameObject>(fbxJson.furnitName));
+            BoxCollider col = go.AddComponent<BoxCollider>();
+            col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+            col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+            Rigidbody rb = go.AddComponent<Rigidbody>();
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+            go.transform.parent = obj.transform;
+            if (fbxJson.location)
+                go.transform.localPosition = Vector3.zero + Vector3.forward;
+            else if (!fbxJson.location)
+                go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+            go.transform.localEulerAngles = Resources.Load<GameObject>(fbxJson.furnitName).transform.eulerAngles;
+            Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+            decoIdx.Name = fbxJson.furnitName;
+            decoIdx.Price = fbxJson.price;
+            decoIdx.Category = fbxJson.category;
+            decoIdx.Idx = fbxJson.id;
+
+            for (int i = 0; i < go.transform.childCount; i++)
+            {
+                if (File.Exists(Application.dataPath + "/Resources/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+                {
+                    go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture =
+                        Resources.Load<Texture>(fbxJson.furnitName + "Tex" + i.ToString());
+                }
             }
         }
     }
 }
+

@@ -3,15 +3,14 @@ using System.Windows.Forms;
 using Ookii.Dialogs;
 using System.IO;
 using UnityEngine.UI;
+using Screen = UnityEngine.Screen;
+using System.Collections;
 
 public class ImageLoad : MonoBehaviour
 {
-    private VistaOpenFileDialog m_OpenFileDialog
-        = new VistaOpenFileDialog();
+    private VistaOpenFileDialog m_OpenFileDialog = new VistaOpenFileDialog();
 
-    [SerializeField]
     private string[] m_FilePaths; // 파일 패스
-
 
     Texture2D texture;
     public Image image;
@@ -19,14 +18,16 @@ public class ImageLoad : MonoBehaviour
 
     public void Update()
     {
-        if (m_FilePaths.Length > 0)
-            OpenFile();
+
     }
 
     public void OnButtonOpenFile() // 버튼에 추가할 메서드
     {
         SetOpenFileDialog();
         m_FilePaths = FileOpen(m_OpenFileDialog);
+
+        if (m_FilePaths.Length > 0)
+            OpenFile();
     }
 
     string[] FileOpen(VistaOpenFileDialog openFileDialog)
@@ -42,13 +43,9 @@ public class ImageLoad : MonoBehaviour
     void SetOpenFileDialog()
     {
         m_OpenFileDialog.Title = "파일 열기";
-        m_OpenFileDialog.Filter
-            = "사진 파일 |*.png; *.jpg" +
-            "|오디오 파일 |*.mp3; *.wav" +
-            "|비디오 파일 |*.mp4; *.avi" +
-            "|모든 파일|*.*";
+        m_OpenFileDialog.Filter = "Image 파일| *.jpg";
         m_OpenFileDialog.FilterIndex = 1;
-        m_OpenFileDialog.Multiselect = true;
+        m_OpenFileDialog.Multiselect = false;
     }
 
     public void OpenFile()
@@ -62,5 +59,20 @@ public class ImageLoad : MonoBehaviour
 
         sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         image.sprite = sprite;
+    }
+
+    IEnumerator capture()
+    {
+        yield return new WaitForEndOfFrame();
+
+        byte[] imgBytes;
+        string path = UnityEngine.Application.dataPath + "/ImageServer/";
+
+        Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0, false);
+        texture.Apply();
+
+        imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(path, imgBytes);
     }
 }

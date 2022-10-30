@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Deco_FurnitItem : MonoBehaviour
 {
+    public FBXJson fbxJson;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +22,63 @@ public class Deco_FurnitItem : MonoBehaviour
 
     public void OnClicked()
     {
-        foreach (GameObject go in Deco_Json.Instance.objects.datas)
+        //Deco_PutObject.objFactory = obj;
+
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        foreach (FileInfo file in di.GetFiles())
         {
-            if (go.GetComponent<Deco_Idx>().Idx == Int32.Parse(gameObject.name))
+            if (file.Name.Contains(fbxJson.furnitName) && !file.Name.Contains("txt"))
             {
-                Deco_PutObject.Instance.objFactory = go;
+                byte[] data = File.ReadAllBytes(file.FullName);
+                string path = Application.dataPath + "/Resources/" + file.Name;
+                File.WriteAllBytes(path, data);
+
+                StartCoroutine(WaitForUpload(file));
             }
         }
+
+        Deco_PutObject.Instance.fbxJson = fbxJson;
+    }
+
+    IEnumerator WaitForUpload(FileInfo file)
+    {
+        string path = file.Name.Substring(0, file.Name.Length - 4);
+        //GameObject parent = new GameObject(path);
+        //parent.transform.position = Vector3.zero;
+        //parent.transform.rotation = Quaternion.identity;
+        //parent.transform.localScale = Vector3.one;
+
+        while (true)
+        {
+            if (Resources.Load<GameObject>(path))
+                break;
+
+            yield return null;
+        }
+
+        if (path == fbxJson.furnitName)
+        {
+            Deco_PutObject.Instance.objFactory = Resources.Load<GameObject>(path);
+        }
+
+        if (path == fbxJson.furnitName + "ScreenShot")
+        {
+            Texture2D tex = Resources.Load<Texture2D>(path);
+            Rect rect = new Rect(0, 0, tex.width, tex.height);
+            GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
+        }
+
+        //GameObject go = Instantiate(Resources.Load<GameObject>(path));
+        //go.transform.parent = parent.transform;
+        //BoxCollider col = go.AddComponent<BoxCollider>();
+        //col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+        //col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        //Rigidbody rb = go.AddComponent<Rigidbody>();
+        //rb.useGravity = false;
+        //go.transform.localPosition = Vector3.zero;
+        //Deco_Idx decoIdx = parent.AddComponent<Deco_Idx>();
+        //decoIdx.Name = fbxJson.furnitName;
+        //decoIdx.Price = fbxJson.price;
+        //decoIdx.Category = fbxJson.category;
     }
 }
