@@ -191,7 +191,7 @@ public class FBXUpLoad : MonoBehaviour
     {
         Debug.Log("Materials loaded. Model fully loaded.");
         obj = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
-        //obj.transform.parent = null;
+        obj.transform.parent = null;
         //Destroy(assetLoaderContext.RootGameObject);
         for (int i = 0; i < obj.transform.childCount; i++)
         {

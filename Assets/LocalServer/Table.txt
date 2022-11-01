@@ -1,0 +1,11 @@
+{
+    "id": 2308,
+    "furnitName": "Table",
+    "location": true,
+    "category": "Table",
+    "information": "",
+    "xSize": 1.0,
+    "ySize": 1.0,
+    "zSize": 1.0,
+    "price": 1
+}
