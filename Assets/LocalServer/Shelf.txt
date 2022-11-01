@@ -1,0 +1,11 @@
+{
+    "id": 9872,
+    "furnitName": "Shelf",
+    "location": false,
+    "category": "Shelf",
+    "information": "Wood Shelf",
+    "xSize": 0.5,
+    "ySize": 0.5,
+    "zSize": 0.5,
+    "price": 10000
+}

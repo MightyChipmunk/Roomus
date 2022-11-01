@@ -27,6 +27,9 @@ public class SignUpManager : MonoBehaviour
 
     public AllUserInfo alluserInfo;
 
+    public GameObject screenManager;
+    JM_ScreenManager screenCode;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +40,8 @@ public class SignUpManager : MonoBehaviour
         emailInput.onEndEdit.AddListener(UpdateEmail);
         idInput.onEndEdit.AddListener(UpdateID);
         pwInput.onEndEdit.AddListener(UpdatePW);
+
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
     }
 
     // Update is called once per frame
@@ -102,30 +107,54 @@ public class SignUpManager : MonoBehaviour
 
         signUp.SetActive(false);
         signUpCompl.SetActive(true);
+
+        // screen dark --> bright
+        screenCode.isDark = true;
+        screenCode.isStart = true;
+        screenCode.alpha = 1;
+        screenCode.screen.SetActive(true);
     }
 
     public void OnSignInNextClick()
     {
         signUpCompl.SetActive(false);
         avatarCustom.SetActive(true);
+
+        // screen dark --> bright
+        screenCode.isDark = true;
+        screenCode.isStart = true;
+        screenCode.alpha = 1;
+        screenCode.screen.SetActive(true);
     }
 
     public void OnAvatarSkipClick()
     {
         avatarCustom.SetActive(false);
         mannequinCustom.SetActive(true);
+
+        // screen dark --> bright
+        screenCode.isDark = true;
+        screenCode.isStart = true;
+        screenCode.alpha = 1;
+        screenCode.screen.SetActive(true);
     }
 
     public void OnMannequinSkipClick()
     {
         mannequinCustom.SetActive(false);
-        done.SetActive(true);       
+        done.SetActive(true);
+
+        // screen dark --> bright
+        screenCode.isDark = true;
+        screenCode.isStart = true;
+        screenCode.alpha = 1;
+        screenCode.screen.SetActive(true);
     }
 
     public void OnDoneSkipClick()
     {
-        done.SetActive(false);
         SceneManager.LoadScene("Main");
+        //done.SetActive(false);
     }
 }
 
