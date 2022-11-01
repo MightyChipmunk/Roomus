@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TriLibCore;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -201,6 +202,9 @@ public class Deco_Json : MonoBehaviour
                             StartCoroutine(WaitForUpload(info, fbxJson, idx, position, eulerAngle, localScale, room));
                         }
                     }
+
+                    //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                    //AssetLoader.LoadModelFromFile(file.FullName, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
                 }
             }
         }

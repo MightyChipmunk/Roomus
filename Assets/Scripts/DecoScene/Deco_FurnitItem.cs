@@ -13,16 +13,10 @@ public class Deco_FurnitItem : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(OnClicked);
 
+        //get
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
         {
-            //if (file.Name.Contains(fbxJson.furnitName) && !file.Name.Contains("txt"))
-            //{
-            //    byte[] data = File.ReadAllBytes(file.FullName);
-            //    string path = Application.dataPath + "/Resources/" + file.Name;
-            //    File.WriteAllBytes(path, data);
-            //}
-
             // 추후에 이름이 아닌 ID를 받는 방식으로 대체해야됨
             if (file.Name == fbxJson.furnitName + "ScreenShot.png")
             {
@@ -38,28 +32,11 @@ public class Deco_FurnitItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Resources.Load<Texture2D>(fbxJson.furnitName + "ScreenShot"))
-        //{
-        //    Texture2D tex = Resources.Load<Texture2D>(fbxJson.furnitName + "ScreenShot");
-        //    Rect rect = new Rect(0, 0, tex.width, tex.height);
-        //    GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-        //}
+       
     }
 
     public void OnClicked()
     {
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        //foreach (FileInfo file in di.GetFiles())
-        //{
-        //    //if (file.Name.Contains(fbxJson.furnitName) && !file.Name.Contains("txt"))
-        //    //    StartCoroutine(WaitForUpload(file));
-
-        //    if (file.Name == fbxJson.furnitName + ".fbx")
-        //    {
-
-        //    }
-        //}
-
         Deco_PutObject.Instance.fbxJson = fbxJson;
     }
 }
