@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using Ookii.Dialogs;
 using UnityEngine;
 using UnityEngine.UI;
+using TriLibCore;
+using TriLibCore.General;
 using Button = UnityEngine.UI.Button;
 
 public class FBXUpLoad : MonoBehaviour
@@ -22,7 +24,7 @@ public class FBXUpLoad : MonoBehaviour
     }
     GameObject obj;
 
-    Texture currentTex;
+    Texture2D currentTex;
 
     public List<Button> buttons = new List<Button>();
 
@@ -69,7 +71,7 @@ public class FBXUpLoad : MonoBehaviour
         }
         else
         {
-            currentTex = Resources.Load("Pallet" + buttonIdx.ToString()) as Texture;
+            currentTex = buttons[buttonIdx].GetComponent<Image>().mainTexture as Texture2D;
             idx = buttonIdx;
         }
     }
@@ -112,12 +114,13 @@ public class FBXUpLoad : MonoBehaviour
     public void OpenFBXFile()
     {
         //fileName = Path.GetFileName(m_FilePaths[0]).Substring(0, Path.GetFileName(m_FilePaths[0]).Length - 4);
-        string path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + ".fbx";
+        string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + ".fbx";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
 
+        //post
         File.WriteAllBytes(path, data);
 
-        path = UnityEngine.Application.dataPath + "/Resources/" + fileName + ".fbx";
+        path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
         File.WriteAllBytes(path, data);
 
         StartCoroutine(WaitForFile(path)); 
@@ -125,25 +128,24 @@ public class FBXUpLoad : MonoBehaviour
 
     public void OpenImageFile(int buttonIdx)
     {
-        //if (obj.transform.childCount <= idx)
-        //    return;
-        //string path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + "Pallet" + buttonIdx.ToString() + ".jpg";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
-        //string path = UnityEngine.Application.dataPath + "/Resources/" + Path.GetFileName(m_FilePaths[0]);
-        string path = UnityEngine.Application.dataPath + "/Resources/" + "Pallet" + buttonIdx.ToString() + ".jpg";
-
+        string path = UnityEngine.Application.persistentDataPath + "/Pallet" + buttonIdx.ToString() + ".jpg";
         File.WriteAllBytes(path, data);
 
-        StartCoroutine(WaitForImage(path, buttonIdx));
+        Texture2D tex = new Texture2D(2, 2);
+        tex.LoadImage(data);
+        Rect rect = new Rect(0, 0, tex.width, tex.height);
+        buttons[buttonIdx].GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
+        buttons[buttonIdx].transform.GetChild(0).gameObject.SetActive(false);
     }
 
-    void ChangeMat(Transform obj, Texture texture)
+    void ChangeMat(Transform obj, Texture2D texture)
     {
         obj.GetComponent<Renderer>().material.mainTexture = texture;
-        string path = UnityEngine.Application.dataPath + "/Resources/" + "Pallet" + idx.ToString() + ".jpg";
-        byte[] data = File.ReadAllBytes(path);
+        byte[] data = File.ReadAllBytes(UnityEngine.Application.persistentDataPath + "/Pallet" + idx.ToString() + ".jpg");
         int objIdx = obj.GetSiblingIndex();
-        path = UnityEngine.Application.dataPath + "/LocalServer/" + "/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
+        //post
+        string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
         File.WriteAllBytes(path, data);
     }
 
@@ -151,12 +153,50 @@ public class FBXUpLoad : MonoBehaviour
     {
         while(true)
         {
-            if (Resources.Load(fileName))
+            if (File.Exists(path))
                 break;
             yield return null;
         }
 
-        obj = Instantiate(Resources.Load(fileName) as GameObject);
+        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+    }
+
+    #region Trilib
+    /// <summary>
+    /// Called when any error occurs.
+    /// </summary>
+    /// <param name="obj">The contextualized error, containing the original exception and the context passed to the method where the error was thrown.</param>
+    private void OnError(IContextualizedError obj)
+    {
+        Debug.LogError($"An error occurred while loading your Model: {obj.GetInnerException()}");
+    }
+
+    /// <summary>
+    /// Called when the Model loading progress changes.
+    /// </summary>
+    /// <param name="assetLoaderContext">The context used to load the Model.</param>
+    /// <param name="progress">The loading progress.</param>
+    private void OnProgress(AssetLoaderContext assetLoaderContext, float progress)
+    {
+        Debug.Log($"Loading Model. Progress: {progress:P}");
+    }
+
+    /// <summary>
+    /// Called when the Model (including Textures and Materials) has been fully loaded.
+    /// </summary>
+    /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
+    /// <param name="assetLoaderContext">The context used to load the Model.</param>
+    private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
+    {
+        Debug.Log("Materials loaded. Model fully loaded.");
+        obj = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
+        //obj.transform.parent = null;
+        //Destroy(assetLoaderContext.RootGameObject);
+        for (int i = 0; i < obj.transform.childCount; i++)
+        {
+            obj.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+        }
         obj.name = fileName;
 
         for (int i = 0; i < obj.transform.childCount; i++)
@@ -170,19 +210,14 @@ public class FBXUpLoad : MonoBehaviour
         GameObject.Find("CamPos").GetComponent<FBXCamController>().target = obj;
     }
 
-    IEnumerator WaitForImage(string path, int buttonIdx)
+    /// <summary>
+    /// Called when the Model Meshes and hierarchy are loaded.
+    /// </summary>
+    /// <remarks>The loaded GameObject is available on the assetLoaderContext.RootGameObject field.</remarks>
+    /// <param name="assetLoaderContext">The context used to load the Model.</param>
+    private void OnLoad(AssetLoaderContext assetLoaderContext)
     {
-        while (true)
-        {
-            if (Resources.Load("Pallet" + buttonIdx.ToString()))
-                break;
-
-            yield return null;
-        }
-
-        Texture2D tex = Resources.Load("Pallet" + buttonIdx.ToString()) as Texture2D;
-        Rect rect = new Rect(0, 0, tex.width, tex.height);
-        buttons[buttonIdx].GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-        buttons[buttonIdx].transform.GetChild(0).gameObject.SetActive(false);
+        Debug.Log("Model loaded. Loading materials.");
     }
+    #endregion
 }
