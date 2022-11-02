@@ -38,5 +38,6 @@ public class Deco_FurnitItem : MonoBehaviour
     public void OnClicked()
     {
         Deco_PutObject.Instance.fbxJson = fbxJson;
+        Deco_PutObject.Instance.LoadFBX();
     }
 }

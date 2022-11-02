@@ -51,6 +51,15 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
+    public void LoadFBX()
+    {
+        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+        AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+
+        StartCoroutine(WaitForObj());
+    }
+
     void SecondPut()
     {
         // 키를 누르면 오브젝트 미리보기 생성
@@ -60,11 +69,11 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 16f, LayerMask.GetMask("Floor")))
             {
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
-                AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+                //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                //string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+                //AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
-                StartCoroutine(WaitForObj(hit));
+                StartCoroutine(WaitForObj_t(hit));
             }
         }
         // 누르고 있는 동안 오브젝트 이동
@@ -93,10 +102,13 @@ public class Deco_PutObject : MonoBehaviour
         {
             Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
             ChangeToOrigMat();
-            obj.GetComponentInChildren<Collider>().isTrigger = false;
-            obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = GameObject.Find("Room").transform;
-            obj = null;
+
+            GameObject loadObj = Instantiate(obj);
+            loadObj.name = obj.name;
+            loadObj.GetComponentInChildren<Collider>().isTrigger = false;
+            loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.transform.parent = GameObject.Find("Room").transform;
+            obj.SetActive(false);
         }
         // 배치 불가능 할 시 키를 떼면 제거
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
@@ -328,6 +340,33 @@ public class Deco_PutObject : MonoBehaviour
         else if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.First)
             obj.transform.forward = -Camera.main.transform.forward;
         obj.transform.parent = transform;
+    }
+
+    IEnumerator WaitForObj_t(RaycastHit hit)
+    {
+        while (!obj)
+        {
+            yield return null;
+        }
+
+        obj.transform.position = hit.point;
+        if (!fbxJson.location)
+            obj.transform.forward = hit.normal;
+        else if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.First)
+            obj.transform.forward = -Camera.main.transform.forward;
+        obj.SetActive(true);
+    }
+
+
+    IEnumerator WaitForObj()
+    {
+        while (!obj)
+        {
+            yield return null;
+        }
+
+        obj.transform.parent = transform;
+        obj.SetActive(false);
     }
 
     #region Trilib

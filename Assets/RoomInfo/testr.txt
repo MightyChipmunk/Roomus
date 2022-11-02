@@ -1,0 +1,11 @@
+{
+    "roomName": "testr",
+    "access": true,
+    "category": "Living Room",
+    "description": "",
+    "XSize": 5.0,
+    "YSize": 5.0,
+    "ZSize": 3.0,
+    "balcony": 0,
+    "datas": []
+}
