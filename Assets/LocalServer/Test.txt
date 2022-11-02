@@ -4,8 +4,8 @@
     "location": false,
     "category": "Bed",
     "information": "",
-    "xSize": 1.0,
+    "xSize": 0.5,
     "ySize": 0.5,
-    "zSize": 1.0,
+    "zSize": 0.5,
     "price": 1111
 }

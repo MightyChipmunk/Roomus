@@ -4209,8 +4209,6 @@ MonoBehaviour:
     ySize: 0
     zSize: 0
     price: 0
-  objFactory: {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d,
-    type: 3}
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
 --- !u!1 &1418314035
