@@ -101,6 +101,9 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             GameObject loadObj = Instantiate(obj, transform);
+            loadObj.transform.position = obj.transform.position;
+            loadObj.transform.eulerAngles = obj.transform.eulerAngles;
+            loadObj.transform.localScale = obj.transform.localScale;
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
@@ -108,6 +111,7 @@ public class Deco_PutObject : MonoBehaviour
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
             loadObj.transform.parent = GameObject.Find("Room").transform;
             obj.SetActive(false);
         }
@@ -188,6 +192,9 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             GameObject loadObj = Instantiate(obj, transform);
+            loadObj.transform.position = obj.transform.position;
+            loadObj.transform.eulerAngles = obj.transform.eulerAngles;
+            loadObj.transform.localScale = obj.transform.localScale;
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
@@ -195,6 +202,7 @@ public class Deco_PutObject : MonoBehaviour
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
             loadObj.transform.parent = GameObject.Find("Room").transform;
             obj.SetActive(false);
         }
@@ -271,6 +279,9 @@ public class Deco_PutObject : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
             GameObject loadObj = Instantiate(obj, transform);
+            loadObj.transform.position = obj.transform.position;
+            loadObj.transform.eulerAngles = obj.transform.eulerAngles;
+            loadObj.transform.localScale = obj.transform.localScale;
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
@@ -278,6 +289,7 @@ public class Deco_PutObject : MonoBehaviour
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.GetComponentInChildren<Rigidbody>().velocity = Vector3.zero;
             loadObj.transform.parent = GameObject.Find("Room").transform;
             obj.SetActive(false);
         }
