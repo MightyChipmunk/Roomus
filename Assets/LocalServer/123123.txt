@@ -1,0 +1,13 @@
+{
+    "furnitName": "123123",
+    "location": true,
+    "category": "Bed",
+    "information": "",
+    "xSize": 0.0,
+    "ySize": 0.0,
+    "zSize": 0.0,
+    "price": 0,
+    "fbxFileName": "123123",
+    "Materials": [],
+    "screenShotName": ""
+}

@@ -121,7 +121,6 @@ public class FBXUpLoad : MonoBehaviour
         //post
         File.WriteAllBytes(path, data);
         FBXUIManager.Instance.fbxData = data;
-        FBXUIManager.Instance.fbxJson.fbxFileName = fileName;
 
         //path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
         //File.WriteAllBytes(path, data);
@@ -150,7 +149,6 @@ public class FBXUpLoad : MonoBehaviour
         //post
         string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
         //File.WriteAllBytes(path, data);
-        FBXUIManager.Instance.fbxJson.Materials.Add(fileName + "Tex" + objIdx.ToString());
         FBXUIManager.Instance.fbxTextures.Add(data);
     }
 

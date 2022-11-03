@@ -1,5 +1,4 @@
 {
-    "id": 3457,
     "furnitName": "12312",
     "location": true,
     "category": "Bed",
@@ -7,5 +6,8 @@
     "xSize": 1.0,
     "ySize": 1.0,
     "zSize": 1.0,
-    "price": 1
+    "price": 1,
+    "fbxFileName": "12312",
+    "Materials": [],
+    "screenShotName": ""
 }

@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Linq;
 
 [Serializable]
 public class FBXJson
@@ -17,9 +18,6 @@ public class FBXJson
     public float ySize;
     public float zSize;
     public int price;
-    public string fbxFileName;
-    public List<string> Materials;
-    public string screenShotName;
 }
 
 public class FBXUIManager : MonoBehaviour
@@ -178,7 +176,6 @@ public class FBXUIManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         byte[] imgBytes;
-        fbxJson.screenShotName = fbxJson.furnitName + "ScreenShot";
 
         Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
         texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
@@ -193,12 +190,21 @@ public class FBXUIManager : MonoBehaviour
             form.AddBinaryData("fbxFile", fbxData);
         if (fbxTextures.Count > 0)
         {
-            foreach (byte[] data in fbxTextures)
-            {
-                form.AddBinaryData("", data);
-            }
+            //foreach (byte[] data in fbxTextures)
+            //{
+            //    form.AddBinaryData("materialList", data);
+            //}
+            byte[] bytes = ConvertToBytes(fbxTextures);
+            form.AddBinaryData("materialList", bytes);
         }
-        form.AddField("product", jsonData);
+        form.AddField("furnitName", fbxJson.furnitName);
+        form.AddField("location", fbxJson.location.ToString());
+        form.AddField("category", fbxJson.category);
+        form.AddField("information", fbxJson.information);
+        form.AddField("xSize", fbxJson.xSize.ToString());
+        form.AddField("ySize", fbxJson.ySize.ToString());
+        form.AddField("zSize", fbxJson.zSize.ToString());
+        form.AddField("price", fbxJson.price.ToString());
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
         {
@@ -213,6 +219,10 @@ public class FBXUIManager : MonoBehaviour
                 Debug.Log("Form upload complete!");
             }
         }
+    }
 
+    byte[] ConvertToBytes(List<byte[]> list)
+    {
+        return list.SelectMany(b => b).ToArray();
     }
 }
