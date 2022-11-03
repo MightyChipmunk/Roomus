@@ -352,21 +352,6 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
-    IEnumerator WaitForObj(RaycastHit hit)
-    {
-        while(!obj)
-        {
-            yield return null;
-        }
-
-        obj.transform.position = hit.point;
-        if (!fbxJson.location)
-            obj.transform.forward = hit.normal;
-        else if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.First)
-            obj.transform.forward = -Camera.main.transform.forward;
-        obj.transform.parent = transform;
-    }
-
     IEnumerator WaitForObj_t(RaycastHit hit)
     {
         while (!obj)
