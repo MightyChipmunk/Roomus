@@ -100,21 +100,22 @@ public class Deco_PutObject : MonoBehaviour
         // 배치 가능할 시 키를 떼면 생성
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
-            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            ChangeToOrigMat();
-
-            GameObject loadObj = Instantiate(obj);
+            GameObject loadObj = Instantiate(obj, transform);
+            ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
+            loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
-            loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            if (fbxJson.location)
+                loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
             loadObj.transform.parent = GameObject.Find("Room").transform;
             obj.SetActive(false);
         }
         // 배치 불가능 할 시 키를 떼면 제거
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
         {
-            Destroy(obj);
-            obj = null;
+            obj.SetActive(false);
+            canPut = true;
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
@@ -140,11 +141,13 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 50f, LayerMask.GetMask("Floor", "Wall")))
             {
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
-                AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+                //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                //string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+                //AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
-                StartCoroutine(WaitForObj(hit));
+                //StartCoroutine(WaitForObj(hit));
+
+                StartCoroutine(WaitForObj_t(hit));
             }
         }
         else if (Input.GetKey(KeyCode.G) && obj)
@@ -181,20 +184,25 @@ public class Deco_PutObject : MonoBehaviour
                     obj.transform.Rotate(0, 100f * Time.deltaTime, 0);
             }
         }
+        // 배치 가능할 시 키를 떼면 생성
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
-            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            ChangeToOrigMat();
-            obj.GetComponentInChildren<Collider>().isTrigger = false;
+            GameObject loadObj = Instantiate(obj, transform);
+            ChangeToOrigMat(loadObj);
+            loadObj.name = obj.name;
+            loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
+            loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
-                obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = GameObject.Find("Room").transform;
-            obj = null;
+                loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.transform.parent = GameObject.Find("Room").transform;
+            obj.SetActive(false);
         }
+        // 배치 불가능 할 시 키를 떼면 제거
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
         {
-            Destroy(obj);
-            obj = null;
+            obj.SetActive(false);
+            canPut = true;
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
@@ -219,11 +227,11 @@ public class Deco_PutObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor", "Wall")))
             {
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
-                AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+                //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                //string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+                //AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
-                StartCoroutine(WaitForObj(hit));
+                StartCoroutine(WaitForObj_t(hit));
             }
         }
         else if (Input.GetKey(KeyCode.G) && obj)
@@ -259,20 +267,25 @@ public class Deco_PutObject : MonoBehaviour
                     obj.transform.Rotate(0, 100f * Time.deltaTime, 0);
             }
         }
+        // 배치 가능할 시 키를 떼면 생성
         else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
         {
-            Deco_Json.Instance.SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
-            ChangeToOrigMat();
-            obj.GetComponentInChildren<Collider>().isTrigger = false;
+            GameObject loadObj = Instantiate(obj, transform);
+            ChangeToOrigMat(loadObj);
+            loadObj.name = obj.name;
+            loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
+            loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
-                obj.GetComponentInChildren<Rigidbody>().useGravity = true;
-            obj.transform.parent = GameObject.Find("Room").transform;
-            obj = null;
+                loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
+            loadObj.transform.parent = GameObject.Find("Room").transform;
+            obj.SetActive(false);
         }
+        // 배치 불가능 할 시 키를 떼면 제거
         else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
         {
-            Destroy(obj);
-            obj = null;
+            obj.SetActive(false);
+            canPut = true;
         }
         else if (Input.GetKeyDown(KeyCode.F))
         {
@@ -318,9 +331,9 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
-    void ChangeToOrigMat()
+    void ChangeToOrigMat(GameObject _obj)
     {
-        Transform go = obj.transform.GetChild(0);
+        Transform go = _obj.transform.GetChild(0);
         for (int i = 0; i < go.childCount; i++)
         {
             go.GetChild(i).GetComponent<Renderer>().material = origMats[i];

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using TriLibCore;
 using TriLibCore.General;
 using Button = UnityEngine.UI.Button;
+using UnityEngine.Networking;
 
 public class FBXUpLoad : MonoBehaviour
 {
@@ -147,6 +148,8 @@ public class FBXUpLoad : MonoBehaviour
         //post
         string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
         File.WriteAllBytes(path, data);
+
+
     }
 
     IEnumerator WaitForFile(string path)

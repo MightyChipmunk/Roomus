@@ -5,7 +5,7 @@
     "category": "Table",
     "information": "",
     "xSize": 1.0,
-    "ySize": 1.0,
+    "ySize": 0.75,
     "zSize": 1.0,
     "price": 1
 }
