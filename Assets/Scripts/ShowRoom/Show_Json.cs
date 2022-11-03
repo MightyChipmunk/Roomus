@@ -47,7 +47,7 @@ public class Show_Json : MonoBehaviourPun
                 //ArrayJson 형태로 Json을 변환
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
                 if (arrayJson.access)
-                    initPos -= (arrayJson.XSize / 2 + 3) * Vector3.right;
+                    initPos -= (arrayJson.xSize / 2 + 3) * Vector3.right;
             }
         }
         foreach (FileInfo file in di.GetFiles())
@@ -61,7 +61,7 @@ public class Show_Json : MonoBehaviourPun
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
                 if (arrayJson.access)
                 {
-                    initPos += (arrayJson.XSize + 3) * Vector3.right;
+                    initPos += (arrayJson.xSize + 3) * Vector3.right;
                     LoadFile(fileName, initPos);
                 }
             }
@@ -92,7 +92,7 @@ public class Show_Json : MonoBehaviourPun
         newWalls.transform.localPosition = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJson.XSize, arrayJson.YSize, arrayJson.ZSize, arrayJson.balcony, newRoom.transform);
+        Deco_RoomInit.Instance.MakeRoom(arrayJson.xSize, arrayJson.ySize, arrayJson.zSize, arrayJson.balcony, newRoom.transform);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {
@@ -102,8 +102,8 @@ public class Show_Json : MonoBehaviourPun
 
         newRoom.AddComponent<PhotonView>();
         Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
-        infoUI.x = arrayJson.XSize;
-        infoUI.y = arrayJson.YSize;
+        infoUI.x = arrayJson.xSize;
+        infoUI.y = arrayJson.ySize;
         infoUI.category = arrayJson.category;
         infoUI.description = arrayJson.description;
     }
@@ -115,20 +115,20 @@ public class Show_Json : MonoBehaviourPun
             if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
             {
                 FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-                if (fbxJson.id == idx)
-                {
-                    foreach (FileInfo info in di.GetFiles())
-                    {
-                        if (info.Name.Contains(fbxJson.furnitName) && !info.Name.Contains("meta") && !info.Name.Contains("txt"))
-                        {
-                            byte[] data = File.ReadAllBytes(info.FullName);
-                            string path = Application.dataPath + "/Resources/" + info.Name;
-                            File.WriteAllBytes(path, data);
+                //if (fbxJson.id == idx)
+                //{
+                //    foreach (FileInfo info in di.GetFiles())
+                //    {
+                //        if (info.Name.Contains(fbxJson.furnitName) && !info.Name.Contains("meta") && !info.Name.Contains("txt"))
+                //        {
+                //            byte[] data = File.ReadAllBytes(info.FullName);
+                //            string path = Application.dataPath + "/Resources/" + info.Name;
+                //            File.WriteAllBytes(path, data);
 
-                            StartCoroutine(WaitForUpload(info, fbxJson, idx, position, eulerAngle, localScale, room));
-                        }
-                    }
-                }
+                //            StartCoroutine(WaitForUpload(info, fbxJson, idx, position, eulerAngle, localScale, room));
+                //        }
+                //    }
+                //}
             }
         }
     }
@@ -169,7 +169,6 @@ public class Show_Json : MonoBehaviourPun
             decoIdx.Name = fbxJson.furnitName;
             decoIdx.Price = fbxJson.price;
             decoIdx.Category = fbxJson.category;
-            decoIdx.Idx = fbxJson.id;
 
             for (int i = 0; i < go.transform.childCount; i++)
             {

@@ -9,7 +9,6 @@ using UnityEngine.UI;
 [Serializable]
 public class FBXJson
 {
-    public int id;
     public string furnitName;
     public bool location;
     public string category;
@@ -18,11 +17,15 @@ public class FBXJson
     public float ySize;
     public float zSize;
     public int price;
+    public string fbxFileName;
+    public List<string> Materials;
+    public string screenShotName;
 }
 
 public class FBXUIManager : MonoBehaviour
 {
-    FBXJson fbxJson = new FBXJson();
+    public FBXJson fbxJson = new FBXJson();
+    public List<byte[]> fbxTextures = new List<byte[]>();
 
     public JM_ScreenManager screenCode;
 
@@ -38,6 +41,19 @@ public class FBXUIManager : MonoBehaviour
     public InputField zInput;
     public Dropdown categoryUI;
     public InputField infoInput;
+
+    public static FBXUIManager Instance;
+
+    public byte[] fbxData;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -138,12 +154,8 @@ public class FBXUIManager : MonoBehaviour
                 fbxJson.category = "Kitchen";
                 break;
         }
-        fbxJson.id = UnityEngine.Random.Range(0, 10000);
         string jsonData = JsonUtility.ToJson(fbxJson, true);
         string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
-
-        UnityWebRequest www = UnityWebRequest.Post("192.168.0.243", jsonData);
-        //www.Post("192.168.0.243", jsonData);
 
         File.WriteAllText(path, jsonData);
 
@@ -158,21 +170,49 @@ public class FBXUIManager : MonoBehaviour
 
     public void OnEndClicked()
     {
-        StartCoroutine("capture");
+        StartCoroutine(capture("http://192.168.0.243:8000/v1/products"));
     }
 
-    IEnumerator capture()
+    IEnumerator capture(string uri)
     {
         yield return new WaitForEndOfFrame();
 
         byte[] imgBytes;
-        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "ScreenShot" + ".png";
+        fbxJson.screenShotName = fbxJson.furnitName + "ScreenShot";
 
         Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
         texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
         texture.Apply();
 
         imgBytes = texture.EncodeToPNG();
-        File.WriteAllBytes(path, imgBytes);
+        string jsonData = JsonUtility.ToJson(fbxJson, true);
+
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("screenShot", imgBytes, "imageName.jpg");
+        if (fbxData.Length > 0)
+            form.AddBinaryData("fbxFile", fbxData);
+        if (fbxTextures.Count > 0)
+        {
+            foreach (byte[] data in fbxTextures)
+            {
+                form.AddBinaryData("", data);
+            }
+        }
+        form.AddField("product", jsonData);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
+        }
+
     }
 }

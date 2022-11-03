@@ -115,14 +115,16 @@ public class FBXUpLoad : MonoBehaviour
     public void OpenFBXFile()
     {
         //fileName = Path.GetFileName(m_FilePaths[0]).Substring(0, Path.GetFileName(m_FilePaths[0]).Length - 4);
-        string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + ".fbx";
+        string path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
 
         //post
         File.WriteAllBytes(path, data);
+        FBXUIManager.Instance.fbxData = data;
+        FBXUIManager.Instance.fbxJson.fbxFileName = fileName;
 
-        path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
-        File.WriteAllBytes(path, data);
+        //path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
+        //File.WriteAllBytes(path, data);
 
         StartCoroutine(WaitForFile(path)); 
     }
@@ -147,9 +149,9 @@ public class FBXUpLoad : MonoBehaviour
         int objIdx = obj.GetSiblingIndex();
         //post
         string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
-        File.WriteAllBytes(path, data);
-
-
+        //File.WriteAllBytes(path, data);
+        FBXUIManager.Instance.fbxJson.Materials.Add(fileName + "Tex" + objIdx.ToString());
+        FBXUIManager.Instance.fbxTextures.Add(data);
     }
 
     IEnumerator WaitForFile(string path)

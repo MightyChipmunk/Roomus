@@ -1,0 +1,11 @@
+{
+    "id": 3457,
+    "furnitName": "12312",
+    "location": true,
+    "category": "Bed",
+    "information": "123",
+    "xSize": 1.0,
+    "ySize": 1.0,
+    "zSize": 1.0,
+    "price": 1
+}

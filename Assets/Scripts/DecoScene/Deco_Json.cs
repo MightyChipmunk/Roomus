@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using TriLibCore;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [Serializable]
@@ -22,9 +23,9 @@ public class ArrayJson
     public bool access;
     public string category;
     public string description;
-    public float XSize;
-    public float YSize;
-    public float ZSize;
+    public float xSize;
+    public float ySize;
+    public float zSize;
     public int balcony;
     public List<SaveJsonInfo> datas;
 }
@@ -74,9 +75,9 @@ public class Deco_Json : MonoBehaviour
     public void SaveRoomInfo(string roomName, float x, float y, float z, int bal)
     {
         arrayJson.roomName = roomName;
-        arrayJson.XSize = x;
-        arrayJson.YSize = y;
-        arrayJson.ZSize = z;
+        arrayJson.xSize = x;
+        arrayJson.ySize = y;
+        arrayJson.zSize = z;
         arrayJson.balcony = bal;
     }
 
@@ -106,7 +107,7 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    void SaveNewFile(string roomName)
+    public void SaveNewFile(string roomName)
     {
         if (roomName.Length == 0)
             return;
@@ -115,14 +116,33 @@ public class Deco_Json : MonoBehaviour
         //arrayJson을 Json으로 변환
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         //jsonData를 파일로 저장
-        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
+        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
+        //jsonData를 네트워크로 전달
+        StartCoroutine(OnPostJson(jsonData));
     }
 
-    public void SaveFile()
+    IEnumerator OnPostJson(string jsonData)
     {
-        string jsonData = JsonUtility.ToJson(arrayJson, true);
-        //jsonData를 파일로 저장
-        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+        //WWWForm form = new WWWForm();
+        //form.AddField("", jsonData);
+
+        using (UnityWebRequest www = UnityWebRequest.Post("URL", jsonData))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
+        }
     }
 
     public void PostFile(string roomName, bool access, int category, string desc)
@@ -173,8 +193,8 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.XSize, arrayJsonLoad.YSize, arrayJsonLoad.ZSize, arrayJsonLoad.balcony, newRoom.transform);
-        SaveRoomInfo(roomName, arrayJsonLoad.XSize, arrayJsonLoad.YSize, arrayJsonLoad.ZSize, arrayJsonLoad.balcony);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony, newRoom.transform);
+        SaveRoomInfo(roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -194,12 +214,10 @@ public class Deco_Json : MonoBehaviour
             if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
             {
                 FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-                if (fbxJson.id == idx)
-                {
-                    StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
-                    //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                    //AssetLoader.LoadModelFromFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
-                }
+                //if (fbxJson.id == idx)
+                //{
+                //    StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
+                //}
             }
         }
     }
@@ -235,7 +253,7 @@ public class Deco_Json : MonoBehaviour
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
-        decoIdx.Idx = fbxJson.id;
+        //decoIdx.Idx = fbxJson.id;
 
         for (int i = 0; i < go.transform.childCount; i++)
         {
@@ -252,7 +270,7 @@ public class Deco_Json : MonoBehaviour
             }
         }
 
-        SaveJson(obj, obj.GetComponent<Deco_Idx>().Idx);
+        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
     }
 
     #region Trilib

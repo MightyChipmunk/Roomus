@@ -104,7 +104,7 @@ public class Deco_PutObject : MonoBehaviour
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
-            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Id);
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -191,7 +191,7 @@ public class Deco_PutObject : MonoBehaviour
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
-            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Id);
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -274,7 +274,7 @@ public class Deco_PutObject : MonoBehaviour
             ChangeToOrigMat(loadObj);
             loadObj.name = obj.name;
             loadObj.GetComponentInChildren<Deco_ObjectCol>().enabled = false;
-            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Idx);
+            Deco_Json.Instance.SaveJson(loadObj, loadObj.GetComponent<Deco_Idx>().Id);
             loadObj.GetComponentInChildren<Collider>().isTrigger = false;
             if (fbxJson.location)
                 loadObj.GetComponentInChildren<Rigidbody>().useGravity = true;
@@ -427,7 +427,7 @@ public class Deco_PutObject : MonoBehaviour
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
-        decoIdx.Idx = fbxJson.id;
+        //decoIdx.Idx = fbxJson.id;
 
         for (int i = 0; i < go.transform.childCount; i++)
         {

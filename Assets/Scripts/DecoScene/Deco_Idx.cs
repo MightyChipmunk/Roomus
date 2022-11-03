@@ -5,7 +5,7 @@ using UnityEngine;
 public class Deco_Idx : MonoBehaviour
 {
     [SerializeField]
-    int idx;
+    int id;
     [SerializeField]
     string furnitName;
     [SerializeField]
@@ -13,7 +13,7 @@ public class Deco_Idx : MonoBehaviour
     [SerializeField]
     string category;
 
-    public int Idx { get { return idx; } set { idx = value; } }
+    public int Id { get { return id; } set { id = value; } }
     public string Name { get { return furnitName; } set { furnitName = value; } }
     public int Price { get { return price; } set { price = value; } }
     public string Category { get { return category; } set { category = value; } }

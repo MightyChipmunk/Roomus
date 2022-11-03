@@ -40,6 +40,7 @@ public class Deco_RoomInit : MonoBehaviour
         {
             MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
             Deco_Json.Instance.SaveRoomInfo(roomName, xSize, ySize, zSize, balcony);
+            Deco_Json.Instance.SaveNewFile(roomName);
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
         // 방을 불러왔을 때

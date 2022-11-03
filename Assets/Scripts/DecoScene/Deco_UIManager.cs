@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using System.IO;
+using UnityEngine.Networking;
 
 public class Deco_UIManager : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class Deco_UIManager : MonoBehaviour
 
     void OnPublicChanged(bool value)
     {
-        if (value) 
+        if (value)
             privateToggle.isOn = false;
         else
             privateToggle.isOn = true;
@@ -85,7 +86,7 @@ public class Deco_UIManager : MonoBehaviour
         if (library.activeSelf)
             library.SetActive(false);
         else
-            library.SetActive(true);    
+            library.SetActive(true);
     }
 
     void AddContent(FBXJson fbxJson)
@@ -123,5 +124,30 @@ public class Deco_UIManager : MonoBehaviour
     void OnDescSubmit(string s)
     {
         description = s;
+    }
+
+    IEnumerator OnGetJson(string uri)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (www.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(pages[page] + ": Error: " + www.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(pages[page] + ": HTTP Error: " + www.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    Debug.Log(pages[page] + ":\nReceived: " + www.downloadHandler.text);
+                    break;
+            }
+        }
     }
 }
