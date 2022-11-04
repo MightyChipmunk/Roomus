@@ -1,0 +1,11 @@
+{
+    "id": 5182,
+    "furnitName": "sdafsd",
+    "location": true,
+    "category": "Bed",
+    "information": "",
+    "xSize": 1.0,
+    "ySize": 1.0,
+    "zSize": 1.0,
+    "price": 213
+}

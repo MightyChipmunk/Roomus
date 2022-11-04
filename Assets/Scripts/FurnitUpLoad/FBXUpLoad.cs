@@ -60,6 +60,13 @@ public class FBXUpLoad : MonoBehaviour
             OpenFBXFile();
     }
 
+    public void OpenFolder()
+    {
+        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
+        assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, assetLoaderOptions);
+    }
+
     public void OnImageButtonOpenFile(int buttonIdx) // 버튼에 추가할 메서드
     {
         if (buttons[buttonIdx].transform.GetChild(0).gameObject.activeSelf)
@@ -167,6 +174,15 @@ public class FBXUpLoad : MonoBehaviour
 
     #region Trilib
     /// <summary>
+    /// Called when the the Model begins to load.
+    /// </summary>
+    /// <param name="filesSelected">Indicates if any file has been selected.</param>
+    private void OnBeginLoad(bool filesSelected)
+    {
+        
+    }
+
+    /// <summary>
     /// Called when any error occurs.
     /// </summary>
     /// <param name="obj">The contextualized error, containing the original exception and the context passed to the method where the error was thrown.</param>
@@ -193,13 +209,14 @@ public class FBXUpLoad : MonoBehaviour
     private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
     {
         Debug.Log("Materials loaded. Model fully loaded.");
+
         obj = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
         obj.transform.parent = null;
         //Destroy(assetLoaderContext.RootGameObject);
-        for (int i = 0; i < obj.transform.childCount; i++)
-        {
-            obj.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        }
+        //for (int i = 0; i < obj.transform.childCount; i++)
+        //{
+        //    obj.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+        //}
         obj.name = fileName;
 
         for (int i = 0; i < obj.transform.childCount; i++)
