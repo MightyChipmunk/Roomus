@@ -190,12 +190,15 @@ public class FBXUIManager : MonoBehaviour
             form.AddBinaryData("fbxFile", fbxData);
         if (fbxTextures.Count > 0)
         {
-            //foreach (byte[] data in fbxTextures)
-            //{
-            //    form.AddBinaryData("materialList", data);
-            //}
-            byte[] bytes = ConvertToBytes(fbxTextures);
-            form.AddBinaryData("materialList", bytes);
+            for (int i = 0; i < 5; i++)
+            {
+                if (fbxTextures.Count > i)
+                {
+                    form.AddBinaryData("material" + (i + 1).ToString(), fbxTextures[i]);
+                }
+            }
+            //byte[] bytes = ConvertToBytes(fbxTextures);
+            //form.AddBinaryData("materialList", bytes);
         }
         form.AddField("furnitName", fbxJson.furnitName);
         form.AddField("location", fbxJson.location.ToString());
