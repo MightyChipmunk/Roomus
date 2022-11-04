@@ -155,7 +155,7 @@ public class FBXUIManager : MonoBehaviour
         string jsonData = JsonUtility.ToJson(fbxJson, true);
         string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
 
-        File.WriteAllText(path, jsonData);
+        //File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);
         fbx.gameObject.SetActive(true);
@@ -182,24 +182,44 @@ public class FBXUIManager : MonoBehaviour
         texture.Apply();
 
         imgBytes = texture.EncodeToPNG();
-        string jsonData = JsonUtility.ToJson(fbxJson, true);
+
+        string path = Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
+        Directory.CreateDirectory(path);
 
         WWWForm form = new WWWForm();
-        form.AddBinaryData("screenShot", imgBytes, "imageName.jpg");
-        if (fbxData.Length > 0)
-            form.AddBinaryData("fbxFile", fbxData);
-        if (fbxTextures.Count > 0)
+        File.WriteAllBytes(path + "ScreenShot.png", imgBytes);
+        File.WriteAllBytes(path + "FbxFile.fbx", fbxData);
+        
+        for (int i = 0; i < fbxTextures.Count; i++)
         {
-            for (int i = 0; i < 5; i++)
-            {
-                if (fbxTextures.Count > i)
-                {
-                    form.AddBinaryData("material" + (i + 1).ToString(), fbxTextures[i]);
-                }
-            }
-            //byte[] bytes = ConvertToBytes(fbxTextures);
-            //form.AddBinaryData("materialList", bytes);
+            File.WriteAllBytes(path + "FbxTex" + (i + 1).ToString() + ".jpg", fbxTextures[i]);
         }
+
+        ZipManager.ZipFiles(path, path + "zipFile.zip", "", false);
+
+        while(!File.Exists(path + "zipFile.zip"))
+        {
+            yield return null;
+        }
+
+        byte[] zipData = File.ReadAllBytes(path + "zipFile.zip");
+        form.AddBinaryData("zipFile", zipData);
+
+        //form.AddBinaryData("screenShot", imgBytes, "imageName.jpg");
+        //if (fbxData.Length > 0)
+        //    form.AddBinaryData("fbxFile", fbxData);
+        //if (fbxTextures.Count > 0)
+        //{
+        //    for (int i = 0; i < 5; i++)
+        //    {
+        //        if (fbxTextures.Count > i)
+        //        {
+        //            form.AddBinaryData("material" + (i + 1).ToString(), fbxTextures[i]);
+        //        }
+        //    }
+        //    //byte[] bytes = ConvertToBytes(fbxTextures);
+        //    //form.AddBinaryData("materialList", bytes);
+        //}
         form.AddField("furnitName", fbxJson.furnitName);
         form.AddField("location", fbxJson.location.ToString());
         form.AddField("category", fbxJson.category);

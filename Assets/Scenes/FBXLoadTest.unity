@@ -6007,6 +6007,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21b6b9a9cdf98a43835f873a1fbc811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fbxJson:
+    furnitName: 
+    location: 0
+    category: 
+    information: 
+    xSize: 0
+    ySize: 0
+    zSize: 0
+    price: 0
   screenCode: {fileID: 1295196748}
   infos: {fileID: 717893502}
   fbx: {fileID: 1633740022}
@@ -6019,6 +6028,7 @@ MonoBehaviour:
   zInput: {fileID: 221137985}
   categoryUI: {fileID: 780601909}
   infoInput: {fileID: 1222924967}
+  fbxData: 
 --- !u!4 &1924617249
 Transform:
   m_ObjectHideFlags: 0
