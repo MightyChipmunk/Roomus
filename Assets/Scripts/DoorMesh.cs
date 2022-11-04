@@ -29,7 +29,7 @@ public class DoorMesh : MonoBehaviour
          3,0,7, 0,4,7, // <- two triangles less in the door mesh
          8,9,12, 9,13,12, 9,10,13, 10,14,13,
          10,11,14, 11,15,14, 11,8,15, 8,12,15
-         //,16,17,19, 17,18,19 // <- these triangles close the door 
+         ,16,17,19, 17,18,19 // <- these triangles close the door 
      };
 
     void Start()
