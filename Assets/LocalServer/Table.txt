@@ -1,11 +1,11 @@
 {
-    "id": 6453,
+    "id": 2308,
     "furnitName": "Table",
     "location": true,
     "category": "Table",
-    "information": "Wood Table",
+    "information": "",
     "xSize": 1.0,
     "ySize": 0.75,
     "zSize": 1.0,
-    "price": 99000
+    "price": 1
 }

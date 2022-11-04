@@ -40,6 +40,7 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
+        // 추후에 서버에 있는 모든 Json파일을 요청해서 받는 식으로 전환
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
         {
@@ -107,7 +108,6 @@ public class Deco_UIManager : MonoBehaviour
             screenCode.isStart = true;
             screenCode.alpha = 1;
         }
-        
     }
 
     public void OnUploadClicked()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [Serializable]
@@ -140,6 +141,10 @@ public class FBXUIManager : MonoBehaviour
         fbxJson.id = UnityEngine.Random.Range(0, 10000);
         string jsonData = JsonUtility.ToJson(fbxJson, true);
         string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
+
+        UnityWebRequest www = UnityWebRequest.Post("192.168.0.243", jsonData);
+        //www.Post("192.168.0.243", jsonData);
+
         File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);

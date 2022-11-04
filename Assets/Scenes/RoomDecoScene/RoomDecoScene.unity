@@ -4209,8 +4209,6 @@ MonoBehaviour:
     ySize: 0
     zSize: 0
     price: 0
-  objFactory: {fileID: 2221272363813988884, guid: 57e906b083dc8804c958f723989e216d,
-    type: 3}
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
 --- !u!1 &1418314035
@@ -4223,6 +4221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1418314036}
   - component: {fileID: 1418314037}
+  - component: {fileID: 1418314038}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -4248,7 +4247,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1418314037
 MonoBehaviour:
@@ -4267,15 +4266,29 @@ MonoBehaviour:
     m_Right: 5
     m_Top: 5
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 1
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1418314038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418314035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1433124350
 GameObject:
   m_ObjectHideFlags: 0
@@ -6989,8 +7002,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2093317092}
   m_HandleRect: {fileID: 2093317091}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.44333333
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

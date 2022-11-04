@@ -28,7 +28,10 @@ public class Deco_LoadRoomList : MonoBehaviour
         if(Instance == null)
             Instance = this;
         else
-            Destroy(gameObject);
+        {
+            Destroy(Instance.gameObject);
+            Instance = this;
+        }
 
         DontDestroyOnLoad(gameObject);
     }
