@@ -46,36 +46,22 @@ public class FolderUpload : MonoBehaviour
 
             File.WriteAllBytes(path, data);
         }
+        string zipPath = UnityEngine.Application.dataPath + "/" + di.Name + "/";
+        ZipManager.ZipFiles(zipPath, zipPath + "zipFile.zip", "", false);
 
-        StartCoroutine(WaitForFile(paths));
+        StartCoroutine(WaitForFile(zipPath + "zipFile.zip"));
     }
 
-    IEnumerator WaitForFile(List<string> paths)
+    IEnumerator WaitForFile(string path)
     {
-        bool allFileExist = false;
-        while (!allFileExist)
+        while (!File.Exists(path))
         {
-            bool fileExist = true;
-            foreach (string s in paths)
-            {
-                if (!File.Exists(s))
-                {
-                    fileExist = false;
-                }
-            }
-            allFileExist = fileExist;
             yield return null;
         }
 
-        foreach (string s in paths)
-        {
-            if (s.Substring(s.Length - 4, 4) == ".fbx")
-            {
-                UniversalRPMaterialMapper urp = new UniversalRPMaterialMapper();
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                AssetLoader.LoadModelFromFile(s, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
-            }
-        }
+
+        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
     }
 
     #region Trilib
