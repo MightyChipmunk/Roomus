@@ -71,6 +71,8 @@ public class FolderUpload : MonoBehaviour
             if (s.Substring(s.Length - 4, 4) == ".fbx")
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                assetLoaderOptions.ImportMaterials = true;
+                assetLoaderOptions.ImportTextures = true;
                 AssetLoader.LoadModelFromFile(s, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
             }
         }
