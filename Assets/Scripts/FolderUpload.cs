@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using TriLibCore;
+using TriLibCore.URP.Mappers;
 using UnityEngine;
 
 public class FolderUpload : MonoBehaviour
@@ -70,9 +71,8 @@ public class FolderUpload : MonoBehaviour
         {
             if (s.Substring(s.Length - 4, 4) == ".fbx")
             {
+                UniversalRPMaterialMapper urp = new UniversalRPMaterialMapper();
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                assetLoaderOptions.ImportMaterials = true;
-                assetLoaderOptions.ImportTextures = true;
                 AssetLoader.LoadModelFromFile(s, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
             }
         }
