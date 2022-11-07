@@ -252,7 +252,7 @@ public class FBXUpLoad : MonoBehaviour
         Debug.Log("Materials loaded. Model fully loaded.");
 
         obj = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
-        obj.transform.parent = null;
+        //obj.transform.parent = null;
         //Destroy(assetLoaderContext.RootGameObject);
         //for (int i = 0; i < obj.transform.childCount; i++)
         //{
@@ -260,13 +260,13 @@ public class FBXUpLoad : MonoBehaviour
         //}
         obj.name = fileName;
 
-        for (int i = 0; i < obj.transform.childCount; i++)
-        {
-            Rigidbody rig = obj.transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
-            rig.useGravity = false;
-            rig.isKinematic = true;
-            MeshCollider col = obj.transform.GetChild(i).gameObject.AddComponent<MeshCollider>();
-        }
+        //for (int i = 0; i < obj.transform.childCount; i++)
+        //{
+        //    Rigidbody rig = obj.transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
+        //    rig.useGravity = false;
+        //    rig.isKinematic = true;
+        //    MeshCollider col = obj.transform.GetChild(i).gameObject.AddComponent<MeshCollider>();
+        //}
 
         GameObject.Find("CamPos").GetComponent<FBXCamController>().target = obj;
     }

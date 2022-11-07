@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using TriLibCore;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Deco_PutObject : MonoBehaviour
 {
@@ -51,13 +52,15 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
-    public void LoadFBX()
+    public void LoadFBX(int id = 0)
     {
         var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
         string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
         AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
         StartCoroutine(WaitForObj());
+
+        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", id));
     }
 
     void SecondPut()
@@ -377,6 +380,27 @@ public class Deco_PutObject : MonoBehaviour
 
         obj.transform.parent = transform;
         obj.SetActive(false);
+    }
+
+    IEnumerator OnPostJson(string uri, int id)
+    {
+
+        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(uri, AssetDownloader.HttpRequestMethod.Post, id.ToString()))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
+                    null, null, true, false);
+            }
+        }
     }
 
     #region Trilib

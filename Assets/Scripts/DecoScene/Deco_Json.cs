@@ -116,17 +116,17 @@ public class Deco_Json : MonoBehaviour
         //arrayJson을 Json으로 변환
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         //jsonData를 파일로 저장
-        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
+        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
         //jsonData를 네트워크로 전달
-        StartCoroutine(OnPostJson(jsonData));
+        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
     }
 
-    IEnumerator OnPostJson(string jsonData)
+    IEnumerator OnPostJson(string uri, string jsonData)
     {
         //WWWForm form = new WWWForm();
         //form.AddField("", jsonData);
 
-        using (UnityWebRequest www = UnityWebRequest.Post("URL", jsonData))
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, jsonData))
         {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);

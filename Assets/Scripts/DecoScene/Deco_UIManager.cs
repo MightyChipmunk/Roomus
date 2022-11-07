@@ -53,6 +53,8 @@ public class Deco_UIManager : MonoBehaviour
             }
         }
 
+
+
         library.SetActive(false);
 
         nameField.onEndEdit.AddListener(OnNameSubmit);
@@ -89,11 +91,12 @@ public class Deco_UIManager : MonoBehaviour
             library.SetActive(true);
     }
 
-    void AddContent(FBXJson fbxJson)
+    void AddContent(FBXJson fbxJson, int id = 0)
     {
         GameObject item = Instantiate(furnitItem, trContent);
         item.name = fbxJson.furnitName;
         item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
+        item.GetComponent<Deco_FurnitItem>().ID = id;
         item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
 
@@ -126,38 +129,48 @@ public class Deco_UIManager : MonoBehaviour
         description = s;
     }
 
+    IEnumerator OnPostJson(string uri)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("ID", "10");
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // Show results as text
+                Debug.Log(www.downloadHandler.text);
+
+                // Or retrieve results as binary data
+                byte[] results = www.downloadHandler.data;
+            }
+        }
+    }
+
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             yield return www.SendWebRequest();
 
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
-
-            switch (www.result)
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    Debug.LogError(pages[page] + ": Error: " + www.error);
-                    break;
-                case UnityWebRequest.Result.ProtocolError:
-                    Debug.LogError(pages[page] + ": HTTP Error: " + www.error);
-                    break;
-                case UnityWebRequest.Result.Success:
-                    Debug.Log(pages[page] + ":\nReceived: " + www.downloadHandler.text);
-                    break;
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // Show results as text
+                FBXJson jsonData = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+
+                // Or retrieve results as binary data
+                byte[] results = www.downloadHandler.data;
             }
         }
     }
-
-    //IEnumerator OnGetPost(string uri)
-    //{
-
-
-    //    using (UnityWebRequest www = UnityWebRequest.Post(uri, ))
-    //    {
-
-    //    }
-    //}
 }
