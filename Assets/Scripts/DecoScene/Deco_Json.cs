@@ -10,7 +10,7 @@ using UnityEngine.UI;
 [Serializable]
 public class SaveJsonInfo
 {
-    public int idx;
+    public int id;
     public Vector3 position;
     public Vector3 eulerAngle;
     public Vector3 localScale;
@@ -86,7 +86,7 @@ public class Deco_Json : MonoBehaviour
         SaveJsonInfo info;
         
         info = new SaveJsonInfo();
-        info.idx = idx;
+        info.id = idx;
         info.position = go.transform.position;
         info.eulerAngle = go.transform.eulerAngles;
         info.localScale = go.transform.localScale;
@@ -199,10 +199,35 @@ public class Deco_Json : MonoBehaviour
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
             SaveJsonInfo info = arrayJsonLoad.datas[i];
-            LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
     }
-    void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
+
+    public void LoadFile(int id)
+    {
+        StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products", id));
+        //ArrayJson의 데이터로 방 생성
+        Destroy(GameObject.Find("Room"));
+        GameObject newRoom = new GameObject("Room");
+        GameObject newWalls = new GameObject("Walls");
+        newRoom.transform.position = Vector3.zero;
+        newRoom.transform.rotation = Quaternion.identity;
+        newRoom.transform.localScale = Vector3.one;
+        newWalls.transform.parent = newRoom.transform;
+        newWalls.transform.position = Vector3.zero;
+        newWalls.transform.rotation = Quaternion.identity;
+        newWalls.transform.localScale = Vector3.one;
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony, newRoom.transform);
+        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony);
+        //ArrayJson의 데이터를 가지고 오브젝트 생성
+        for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+        {
+            SaveJsonInfo info = arrayJsonLoad.datas[i];
+            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+        }
+    }
+
+    void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
         // id를 보냄
         // id에 해당하는 fbx 파일과 Json파일을 받음
@@ -216,23 +241,25 @@ public class Deco_Json : MonoBehaviour
                 FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
                 //if (fbxJson.id == idx)
                 //{
-                //    StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
+                //    StartCoroutine(WaitForFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
                 //}
             }
         }
+
+        StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products", position, eulerAngle, localScale, room, id));
     }
 
-    IEnumerator WaitForFile(Vector3 pos, string path, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, FBXJson fbxJson)
+    IEnumerator WaitForFile(string path, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, FBXJson fbxJson)
     {
         var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
         AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
-        while (!objs.ContainsKey(pos))
+        while (!objs.ContainsKey(position))
         {
             yield return null;
         }
 
-        GameObject obj = objs[pos];
+        GameObject obj = objs[position];
         obj.transform.parent = room;
         obj.transform.localPosition = position;
         obj.transform.localEulerAngles = eulerAngle;
@@ -271,6 +298,103 @@ public class Deco_Json : MonoBehaviour
         }
 
         SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
+    }
+
+    IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
+    {
+        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(uri, AssetDownloader.HttpRequestMethod.Post, id.ToString() + "fbx"))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
+                    null, null);
+            }
+        }
+
+        FBXJson fbxJson = new FBXJson();
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString() + "json"))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+            }
+        }
+
+        while (!objs.ContainsKey(position))
+        {
+            yield return null;
+        }
+
+        GameObject obj = objs[position];
+        obj.transform.parent = room;
+        obj.transform.localPosition = position;
+        obj.transform.localEulerAngles = eulerAngle;
+        obj.transform.localScale = localScale;
+        GameObject go = obj.transform.GetChild(0).gameObject;
+        BoxCollider col = go.AddComponent<BoxCollider>();
+        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        Rigidbody rb = go.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        if (fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward;
+        else if (!fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+        go.transform.localRotation = Quaternion.identity;
+        Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+        decoIdx.Name = fbxJson.furnitName;
+        decoIdx.Price = fbxJson.price;
+        decoIdx.Category = fbxJson.category;
+        //decoIdx.Idx = fbxJson.id;
+
+        //for (int i = 0; i < go.transform.childCount; i++)
+        //{
+        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+        //}
+
+        for (int i = 0; i < go.transform.childCount; i++)
+        {
+            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+            {
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
+                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
+            }
+        }
+
+        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
+    }
+
+    IEnumerator LoadJson(string uri, int id)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString() + "roomJson"))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(www.downloadHandler.text);
+            }
+        }
     }
 
     #region Trilib

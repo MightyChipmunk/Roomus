@@ -97,7 +97,7 @@ public class Show_Json : MonoBehaviourPun
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {
             SaveJsonInfo info = arrayJson.datas[i];
-            LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
 
         newRoom.AddComponent<PhotonView>();

@@ -396,9 +396,8 @@ public class Deco_PutObject : MonoBehaviour
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
                 AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
-                    null, null, true, false);
+                    null, null);
             }
         }
     }
