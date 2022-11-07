@@ -58,8 +58,7 @@ public class FolderUpload : MonoBehaviour
         {
             yield return null;
         }
-
-
+        
         var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
         AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
     }

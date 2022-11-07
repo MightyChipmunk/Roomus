@@ -150,4 +150,14 @@ public class Deco_UIManager : MonoBehaviour
             }
         }
     }
+
+    //IEnumerator OnGetPost(string uri)
+    //{
+
+
+    //    using (UnityWebRequest www = UnityWebRequest.Post(uri, ))
+    //    {
+
+    //    }
+    //}
 }
