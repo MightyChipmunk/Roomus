@@ -39,8 +39,8 @@ public class FolderUpload : MonoBehaviour
         DirectoryInfo di = new DirectoryInfo(f_FilePath);
         foreach (FileInfo file in di.GetFiles())
         {
-            Directory.CreateDirectory(UnityEngine.Application.dataPath + "/" + di.Name);
-            string path = UnityEngine.Application.dataPath + "/" + di.Name + "/" + file.Name;
+            Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer/" + di.Name);
+            string path = UnityEngine.Application.dataPath + "/LocalServer/" + di.Name + "/" + file.Name;
             paths.Add(path);
             byte[] data = File.ReadAllBytes(file.FullName);
 

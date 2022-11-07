@@ -60,13 +60,6 @@ public class FBXUpLoad : MonoBehaviour
             OpenFBXFile();
     }
 
-    public void OpenFolder()
-    {
-        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
-        assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, assetLoaderOptions);
-    }
-
     public void OnImageButtonOpenFile(int buttonIdx) // 버튼에 추가할 메서드
     {
         if (buttons[buttonIdx].transform.GetChild(0).gameObject.activeSelf)
@@ -157,6 +150,54 @@ public class FBXUpLoad : MonoBehaviour
         string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
         //File.WriteAllBytes(path, data);
         FBXUIManager.Instance.fbxTextures.Add(data);
+    }
+
+    FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+    string f_FilePath;
+
+    public void OnFBXButtonOpenFolder() // 버튼에 추가할 메서드
+    {
+        if (fbd.ShowDialog() == DialogResult.OK)
+        {
+            f_FilePath = fbd.SelectedPath;
+        }
+
+        if (f_FilePath.Length > 0)
+        {
+            OpenFolder();
+        }
+    }
+
+    void OpenFolder()
+    {
+        List<string> paths = new List<string>();
+
+        DirectoryInfo di = new DirectoryInfo(f_FilePath);
+        foreach (FileInfo file in di.GetFiles())
+        {
+            Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer/" + FileName);
+            string path = UnityEngine.Application.dataPath + "/LocalServer/" + FileName + "/" + file.Name;
+            paths.Add(path);
+            byte[] data = File.ReadAllBytes(file.FullName);
+
+            File.WriteAllBytes(path, data);
+        }
+        string zipPath = UnityEngine.Application.dataPath + "/LocalServer/" + FileName + "/";
+        ZipManager.ZipFiles(zipPath, zipPath + FileName + ".zip", "", false);
+
+        StartCoroutine(WaitForZipFile(zipPath + FileName + ".zip"));
+    }
+
+    IEnumerator WaitForZipFile(string path)
+    {
+        while (!File.Exists(path))
+        {
+            yield return null;
+        }
+
+        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
     }
 
     IEnumerator WaitForFile(string path)

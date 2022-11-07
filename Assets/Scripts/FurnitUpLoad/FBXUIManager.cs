@@ -188,21 +188,8 @@ public class FBXUIManager : MonoBehaviour
 
         WWWForm form = new WWWForm();
         File.WriteAllBytes(path + "ScreenShot.png", imgBytes);
-        File.WriteAllBytes(path + "FbxFile.fbx", fbxData);
-        
-        for (int i = 0; i < fbxTextures.Count; i++)
-        {
-            File.WriteAllBytes(path + "FbxTex" + (i + 1).ToString() + ".jpg", fbxTextures[i]);
-        }
 
-        ZipManager.ZipFiles(path, path + "zipFile.zip", "", false);
-
-        while(!File.Exists(path + "zipFile.zip"))
-        {
-            yield return null;
-        }
-
-        byte[] zipData = File.ReadAllBytes(path + "zipFile.zip");
+        byte[] zipData = File.ReadAllBytes(path + fbxJson.furnitName + ".zip");
         form.AddBinaryData("zipFile", zipData);
 
         //form.AddBinaryData("screenShot", imgBytes, "imageName.jpg");
