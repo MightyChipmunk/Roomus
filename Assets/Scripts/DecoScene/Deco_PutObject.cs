@@ -433,15 +433,15 @@ public class Deco_PutObject : MonoBehaviour
 
         obj.name = fbxJson.furnitName;
 
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
-        //    {
-        //        Texture2D tex = new Texture2D(2, 2);
-        //        tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
-        //        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
-        //    }
-        //}
+        for (int i = 0; i < go.transform.childCount; i++)
+        {
+            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+            {
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
+                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
+            }
+        }
 
         AddOrigMats();
     }
