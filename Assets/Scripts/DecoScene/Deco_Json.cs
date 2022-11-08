@@ -264,8 +264,8 @@ public class Deco_Json : MonoBehaviour
                 wrapper.transform.localPosition = position;
                 wrapper.transform.localEulerAngles = eulerAngle;
                 wrapper.transform.localScale = localScale;
-                FBXJson wrapperJson = wrapper.AddComponent<FBXJson>();
-                wrapperJson = fbxJson;
+                Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
+                wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
                 AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
                     null, null);
             }
@@ -320,7 +320,7 @@ public class Deco_Json : MonoBehaviour
     {
         Debug.Log("Materials loaded. Model fully loaded.");
 
-        FBXJson fbxJson = assetLoaderContext.WrapperGameObject.GetComponent<FBXJson>();
+        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(assetLoaderContext.WrapperGameObject.GetComponent<Deco_WrapperData>().jsonData);
 
         GameObject obj = assetLoaderContext.RootGameObject;
         obj.transform.parent = assetLoaderContext.WrapperGameObject.transform.parent;
@@ -343,24 +343,10 @@ public class Deco_Json : MonoBehaviour
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
-        //decoIdx.Idx = fbxJson.id;
-
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        //}
-
-        for (int i = 0; i < go.transform.childCount; i++)
-        {
-            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
-            {
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
-                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
-            }
-        }
-
+        
         SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
+
+        Destroy(assetLoaderContext.WrapperGameObject);
     }
 
     /// <summary>
