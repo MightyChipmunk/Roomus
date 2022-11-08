@@ -45,8 +45,6 @@ public class Deco_Json : MonoBehaviour
     ArrayJson arrayJson;
     ArrayJson arrayJsonLoad;
 
-    Dictionary<Vector3, GameObject> objs = new Dictionary<Vector3, GameObject>();
-
     private void Awake()
     {
         if (Instance == null)
@@ -229,98 +227,14 @@ public class Deco_Json : MonoBehaviour
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        // id를 보냄
-        // id에 해당하는 fbx 파일과 Json파일을 받음
-        // 받은 정보와 포지션, 앵글, 스케일 값을 이용해서 생성
-
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        //foreach (FileInfo file in di.GetFiles())
-        //{
-        //    if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
-        //    {
-        //        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-        //        //if (fbxJson.id == idx)
-        //        //{
-        //        //    StartCoroutine(WaitForFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
-        //        //}
-        //    }
-        //}
-
         StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products", position, eulerAngle, localScale, room, id));
-    }
-
-    IEnumerator WaitForFile(string path, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, FBXJson fbxJson)
-    {
-        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
-
-        while (!objs.ContainsKey(position))
-        {
-            yield return null;
-        }
-
-        GameObject obj = objs[position];
-        obj.transform.parent = room;
-        obj.transform.localPosition = position;
-        obj.transform.localEulerAngles = eulerAngle;
-        obj.transform.localScale = localScale;
-        GameObject go = obj.transform.GetChild(0).gameObject;
-        BoxCollider col = go.AddComponent<BoxCollider>();
-        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
-        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
-        Rigidbody rb = go.AddComponent<Rigidbody>();
-        rb.useGravity = false;
-        rb.velocity = Vector3.zero;
-        if (fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward;
-        else if (!fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
-        Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
-        decoIdx.Name = fbxJson.furnitName;
-        decoIdx.Price = fbxJson.price;
-        decoIdx.Category = fbxJson.category;
-        //decoIdx.Idx = fbxJson.id;
-
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        //}
-
-        for (int i = 0; i < go.transform.childCount; i++)
-        {
-            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
-            {
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
-                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
-            }
-        }
-
-        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
     }
 
     IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
     {
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(uri, AssetDownloader.HttpRequestMethod.Post, id.ToString() + "fbx"))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
-                    null, null);
-            }
-        }
-
         FBXJson fbxJson = new FBXJson();
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString() + "json"))
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString()))
         {
             yield return www.SendWebRequest();
 
@@ -334,50 +248,30 @@ public class Deco_Json : MonoBehaviour
             }
         }
 
-        while (!objs.ContainsKey(position))
+        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.url, AssetDownloader.HttpRequestMethod.Get))
         {
-            yield return null;
-        }
+            yield return www.SendWebRequest();
 
-        GameObject obj = objs[position];
-        obj.transform.parent = room;
-        obj.transform.localPosition = position;
-        obj.transform.localEulerAngles = eulerAngle;
-        obj.transform.localScale = localScale;
-        GameObject go = obj.transform.GetChild(0).gameObject;
-        BoxCollider col = go.AddComponent<BoxCollider>();
-        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
-        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
-        Rigidbody rb = go.AddComponent<Rigidbody>();
-        rb.useGravity = false;
-        rb.velocity = Vector3.zero;
-        if (fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward;
-        else if (!fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
-        Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
-        decoIdx.Name = fbxJson.furnitName;
-        decoIdx.Price = fbxJson.price;
-        decoIdx.Category = fbxJson.category;
-        //decoIdx.Idx = fbxJson.id;
-
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        //}
-
-        for (int i = 0; i < go.transform.childCount; i++)
-        {
-            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                Texture2D tex = new Texture2D(2, 2);
-                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
-                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
+                Debug.Log(www.error);
+            }
+            else
+            {
+                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                GameObject wrapper = new GameObject();
+                wrapper.transform.parent = room;
+                wrapper.transform.localPosition = position;
+                wrapper.transform.localEulerAngles = eulerAngle;
+                wrapper.transform.localScale = localScale;
+                FBXJson wrapperJson = wrapper.AddComponent<FBXJson>();
+                wrapperJson = fbxJson;
+                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
+                    null, null);
             }
         }
 
-        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
+        
     }
 
     IEnumerator LoadJson(string uri, int id)
@@ -417,7 +311,6 @@ public class Deco_Json : MonoBehaviour
         Debug.Log($"Loading Model. Progress: {progress:P}");
     }
 
-    int objIdx = 0;
     /// <summary>
     /// Called when the Model (including Textures and Materials) has been fully loaded.
     /// </summary>
@@ -426,7 +319,48 @@ public class Deco_Json : MonoBehaviour
     private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
     {
         Debug.Log("Materials loaded. Model fully loaded.");
-        objs.Add(arrayJsonLoad.datas[objIdx++].position, assetLoaderContext.RootGameObject);
+
+        FBXJson fbxJson = assetLoaderContext.WrapperGameObject.GetComponent<FBXJson>();
+
+        GameObject obj = assetLoaderContext.RootGameObject;
+        obj.transform.parent = assetLoaderContext.WrapperGameObject.transform.parent;
+        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.position;
+        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.eulerAngles;
+        obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
+        GameObject go = obj.transform.GetChild(0).gameObject;
+        BoxCollider col = go.AddComponent<BoxCollider>();
+        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        Rigidbody rb = go.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        if (fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward;
+        else if (!fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+        go.transform.localRotation = Quaternion.identity;
+        Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+        decoIdx.Name = fbxJson.furnitName;
+        decoIdx.Price = fbxJson.price;
+        decoIdx.Category = fbxJson.category;
+        //decoIdx.Idx = fbxJson.id;
+
+        //for (int i = 0; i < go.transform.childCount; i++)
+        //{
+        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+        //}
+
+        for (int i = 0; i < go.transform.childCount; i++)
+        {
+            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+            {
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
+                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
+            }
+        }
+
+        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
     }
 
     /// <summary>
