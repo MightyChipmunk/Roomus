@@ -6,7 +6,7 @@
     "XSize": 8.0,
     "YSize": 8.0,
     "ZSize": 3.0,
-    "balcony": 1,
+    "door": 1,
     "datas": [
         {
             "idx": 2308,

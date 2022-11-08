@@ -19,21 +19,6 @@ public class Deco_FurnitItem : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(OnClicked);
 
-        ////get
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        //foreach (FileInfo file in di.GetFiles())
-        //{
-        //    // 추후에 이름이 아닌 ID를 받는 방식으로 대체해야됨
-        //    if (file.Name == fbxJson.furnitName + "ScreenShot.png")
-        //    {
-        //        byte[] data = File.ReadAllBytes(file.FullName);
-        //        Texture2D tex = new Texture2D(2, 2);
-        //        tex.LoadImage(data);
-        //        Rect rect = new Rect(0, 0, tex.width, tex.height);
-        //        GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-        //    }
-        //}
-
         // 받아온 이미지의 바이너리 데이터로 자신의 이미지 변경
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(imgBytes);

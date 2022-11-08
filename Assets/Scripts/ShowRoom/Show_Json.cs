@@ -9,7 +9,7 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
     public InputField loadInputField; 
-    public Objects objects;
+    //public Objects objects;
     ArrayJson arrayJson;
 
     Vector3 initPos = new Vector3(0, 0, 20);
@@ -92,7 +92,7 @@ public class Show_Json : MonoBehaviourPun
         newWalls.transform.localPosition = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJson.xSize, arrayJson.ySize, arrayJson.zSize, arrayJson.balcony, newRoom.transform);
+        Deco_RoomInit.Instance.MakeRoom(arrayJson.xSize, arrayJson.ySize, arrayJson.zSize, arrayJson.door, newRoom.transform);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJson.datas.Count; i++)
         {

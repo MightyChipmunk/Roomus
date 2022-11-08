@@ -10,7 +10,7 @@ using System.Linq;
 [Serializable]
 public class FBXJson
 {
-    public string url;
+    public int no;
     public string furnitName;
     public bool location;
     public string category;
@@ -19,6 +19,10 @@ public class FBXJson
     public float ySize;
     public float zSize;
     public int price;
+    public string createdDate;
+    public string lastModifiedDate;
+    public string fileUrl;
+    public string screenShotUrl;
 }
 
 public class FBXUIManager : MonoBehaviour
@@ -181,7 +185,7 @@ public class FBXUIManager : MonoBehaviour
         // 가구의 스크린샷을 찍어서 바이너리 데이터로 저장
         byte[] imgBytes;
         Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
+        texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
         texture.Apply();
         imgBytes = texture.EncodeToPNG();
 

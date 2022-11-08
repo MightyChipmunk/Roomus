@@ -26,14 +26,8 @@ public class ArrayJson
     public float xSize;
     public float ySize;
     public float zSize;
-    public int balcony;
+    public int door;
     public List<SaveJsonInfo> datas;
-}
-
-[Serializable]
-public class Objects
-{
-    public List<GameObject> datas;
 }
 
 public class Deco_Json : MonoBehaviour
@@ -76,7 +70,7 @@ public class Deco_Json : MonoBehaviour
         arrayJson.xSize = x;
         arrayJson.ySize = y;
         arrayJson.zSize = z;
-        arrayJson.balcony = bal;
+        arrayJson.door = bal;
     }
 
     public void SaveJson(GameObject go, int idx)
@@ -116,7 +110,7 @@ public class Deco_Json : MonoBehaviour
         //jsonData를 파일로 저장
         //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
         // jsonData를 네트워크로 전달
-        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
+        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
     }
 
     // 방 정보를 서버에 Json 형식으로 업로드
@@ -192,8 +186,8 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony, newRoom.transform);
-        SaveRoomInfo(roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door, newRoom.transform);
+        SaveRoomInfo(roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -217,8 +211,8 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony, newRoom.transform);
-        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.balcony);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door, newRoom.transform);
+        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -254,7 +248,7 @@ public class Deco_Json : MonoBehaviour
         }
 
         // 가져온 Json 데이터의 url로 Get 요청을 해서 가구의 zip파일을 가져오고 생성함
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.url, AssetDownloader.HttpRequestMethod.Get))
+        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
         {
             yield return www.SendWebRequest();
 
