@@ -34,7 +34,7 @@ public class Deco_FurnitItem : MonoBehaviour
         //    }
         //}
 
-
+        // 받아온 이미지의 바이너리 데이터로 자신의 이미지 변경
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(imgBytes);
         Rect rect = new Rect(0, 0, tex.width, tex.height);
@@ -50,6 +50,7 @@ public class Deco_FurnitItem : MonoBehaviour
     public void OnClicked()
     {
         //Deco_PutObject.Instance.fbxJson = fbxJson;
+        // 클릭하면 현재 선택한 가구의 ID가 뭔지 전달
         Deco_PutObject.Instance.LoadFBX(ID);
     }
 }

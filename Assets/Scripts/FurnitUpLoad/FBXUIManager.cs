@@ -169,30 +169,37 @@ public class FBXUIManager : MonoBehaviour
 
     public void OnEndClicked()
     {
+        // 스크린샷을 찍고 가구 파일, 스크린샷 파일, 가구 정보 Json 데이터를 서버에 전달
         StartCoroutine(capture("http://192.168.0.243:8000/v1/products"));
     }
 
+    // 스크린샷, 가구 파일, 정보 데이터를 서버로 전달하는 함수
     IEnumerator capture(string uri)
     {
         yield return new WaitForEndOfFrame();
 
+        // 가구의 스크린샷을 찍어서 바이너리 데이터로 저장
         byte[] imgBytes;
-
         Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
         texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
         texture.Apply();
-
         imgBytes = texture.EncodeToPNG();
 
+        // zip파일로 묶을 파일들을 저장할 디렉토리 생성
         string path = Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
         Directory.CreateDirectory(path);
 
-        WWWForm form = new WWWForm();
+        // 디렉토리에 스크린샷 파일 저장
         File.WriteAllBytes(path + "ScreenShot.png", imgBytes);
 
+        // 미리 생성된 fbx의 zip파일을 파이더리 데이터로 읽음
         byte[] zipData = File.ReadAllBytes(path + fbxJson.furnitName + ".zip");
-        form.AddBinaryData("zipFile", zipData);
 
+        // 폼데이터를 생성하고 fbx의 zip파일과 스크린샷 파일을 추가
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("zipFile", zipData);
+        form.AddBinaryData("screenShot", imgBytes);
+        // 폼데이터에 가구의 정보를 추가
         form.AddField("furnitName", fbxJson.furnitName);
         form.AddField("location", fbxJson.location.ToString());
         form.AddField("category", fbxJson.category);
@@ -215,10 +222,5 @@ public class FBXUIManager : MonoBehaviour
                 Debug.Log("Form upload complete!");
             }
         }
-    }
-
-    byte[] ConvertToBytes(List<byte[]> list)
-    {
-        return list.SelectMany(b => b).ToArray();
     }
 }

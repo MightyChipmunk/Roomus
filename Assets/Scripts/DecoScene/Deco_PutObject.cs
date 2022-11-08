@@ -60,6 +60,7 @@ public class Deco_PutObject : MonoBehaviour
 
         //StartCoroutine(WaitForObj());
 
+        // 받아온 id로 서버에 가구 요청
         StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", id));
     }
 
@@ -370,8 +371,10 @@ public class Deco_PutObject : MonoBehaviour
         obj.SetActive(true);
     }
 
+    // ID로 요청해서 해당 ID 가구의 정보를 담는 Json 파일을 가져오는 함수
     IEnumerator OnPostJson(string uri, int id)
     {
+        // id로 요청해서 Json 형식으로 정보를 가져옴
         using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString()))
         {
             yield return www.SendWebRequest();
@@ -383,9 +386,11 @@ public class Deco_PutObject : MonoBehaviour
             else
             {
                 fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+                Debug.Log("FBXJson Download complete!");
             }
         }
 
+        // 가져온 Json 파일에 있는 Url(fbx의 zip파일이 있는 url)로 Get을 해서 가구 생성
         using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.url, AssetDownloader.HttpRequestMethod.Get))
         {
             yield return www.SendWebRequest();
@@ -399,6 +404,7 @@ public class Deco_PutObject : MonoBehaviour
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
                 AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
                     null, null);
+                Debug.Log("FBX.zip Download complete!");
             }
         }
     }

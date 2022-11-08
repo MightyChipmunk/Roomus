@@ -114,11 +114,12 @@ public class Deco_Json : MonoBehaviour
         //arrayJson을 Json으로 변환
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         //jsonData를 파일로 저장
-        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
-        //jsonData를 네트워크로 전달
+        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
+        // jsonData를 네트워크로 전달
         StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
     }
 
+    // 방 정보를 서버에 Json 형식으로 업로드
     IEnumerator OnPostJson(string uri, string jsonData)
     {
         //WWWForm form = new WWWForm();
@@ -203,6 +204,7 @@ public class Deco_Json : MonoBehaviour
 
     public void LoadFile(int id)
     {
+        // 방 가구의 정보들을 서버에서 받아옴
         StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products", id));
         //ArrayJson의 데이터로 방 생성
         Destroy(GameObject.Find("Room"));
@@ -230,10 +232,12 @@ public class Deco_Json : MonoBehaviour
         StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products", position, eulerAngle, localScale, room, id));
     }
 
+    // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
     IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
     {
         FBXJson fbxJson = new FBXJson();
 
+        // id로 요청해서 Json 형식으로 정보를 가져옴
         using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString()))
         {
             yield return www.SendWebRequest();
@@ -245,9 +249,11 @@ public class Deco_Json : MonoBehaviour
             else
             {
                 fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+                Debug.Log("FBXJson Download complete!");
             }
         }
 
+        // 가져온 Json 데이터의 url로 Get 요청을 해서 가구의 zip파일을 가져오고 생성함
         using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.url, AssetDownloader.HttpRequestMethod.Get))
         {
             yield return www.SendWebRequest();
@@ -268,12 +274,12 @@ public class Deco_Json : MonoBehaviour
                 wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
                 AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
                     null, null);
+                Debug.Log("FBX.zip Download complete!");
             }
         }
-
-        
     }
 
+    // 서버에 방 id로 요청해서 방의 정보를 Json 형식으로 받아오는 함수
     IEnumerator LoadJson(string uri, int id)
     {
         using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString() + "roomJson"))
@@ -287,6 +293,7 @@ public class Deco_Json : MonoBehaviour
             else
             {
                 arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(www.downloadHandler.text);
+                Debug.Log("ArrayJson Download complete!");
             }
         }
     }

@@ -136,6 +136,7 @@ public class Deco_UIManager : MonoBehaviour
         description = s;
     }
 
+    // url의 배열을 서버에서 받아오는 함수
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
@@ -148,15 +149,19 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
+                // url 배열을 json으로 받아서 가져옴
                 UrlJson urlJson = JsonUtility.FromJson<UrlJson>(www.downloadHandler.text);
                 for (int i = 0; i < urlJson.datas.Count; i++)
                 {
+                    // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
                     StartCoroutine(OnGetUrl(urlJson.datas[i]));
                 }
+                Debug.Log("UrlList Download complete!");
             }
         }
     }
 
+    // 가구의 스크린샷과 id를 받아오는 함수
     IEnumerator OnGetUrl(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
@@ -169,7 +174,10 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
+                // 가져온 스크린샷과 id로 라이브러리에 가구 추가
+                // Deco_FurnitItem
                 AddContent(Int32.Parse(www.downloadHandler.text), www.downloadHandler.data);
+                Debug.Log("ScreenShot Download complete!");
             }
         }
     }
