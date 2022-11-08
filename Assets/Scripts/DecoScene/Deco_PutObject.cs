@@ -52,15 +52,15 @@ public class Deco_PutObject : MonoBehaviour
         }
     }
 
-    public void LoadFBX(int id = 0)
+    public void LoadFBX(int id)
     {
-        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
-        AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+        //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+        //string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".fbx";
+        //AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
-        StartCoroutine(WaitForObj());
+        //StartCoroutine(WaitForObj());
 
-        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", id));
+        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", id));
     }
 
     void SecondPut()
@@ -370,22 +370,23 @@ public class Deco_PutObject : MonoBehaviour
         obj.SetActive(true);
     }
 
-
-    IEnumerator WaitForObj()
-    {
-        while (!obj)
-        {
-            yield return null;
-        }
-
-        obj.transform.parent = transform;
-        obj.SetActive(false);
-    }
-
     IEnumerator OnPostJson(string uri, int id)
     {
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString()))
+        {
+            yield return www.SendWebRequest();
 
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(uri, AssetDownloader.HttpRequestMethod.Post, id.ToString()))
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+            }
+        }
+
+        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.url, AssetDownloader.HttpRequestMethod.Get))
         {
             yield return www.SendWebRequest();
 
@@ -467,6 +468,9 @@ public class Deco_PutObject : MonoBehaviour
         //}
 
         AddOrigMats();
+
+        obj.transform.parent = transform;
+        obj.SetActive(false);
     }
 
     /// <summary>

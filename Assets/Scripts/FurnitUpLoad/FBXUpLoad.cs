@@ -171,14 +171,11 @@ public class FBXUpLoad : MonoBehaviour
 
     void OpenFolder()
     {
-        List<string> paths = new List<string>();
-
         DirectoryInfo di = new DirectoryInfo(f_FilePath);
         foreach (FileInfo file in di.GetFiles())
         {
             Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer/" + FileName);
             string path = UnityEngine.Application.dataPath + "/LocalServer/" + FileName + "/" + file.Name;
-            paths.Add(path);
             byte[] data = File.ReadAllBytes(file.FullName);
 
             File.WriteAllBytes(path, data);

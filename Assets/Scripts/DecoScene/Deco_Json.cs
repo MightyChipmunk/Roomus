@@ -118,7 +118,7 @@ public class Deco_Json : MonoBehaviour
         //jsonData를 파일로 저장
         File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
         //jsonData를 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
+        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
     }
 
     IEnumerator OnPostJson(string uri, string jsonData)
@@ -233,18 +233,18 @@ public class Deco_Json : MonoBehaviour
         // id에 해당하는 fbx 파일과 Json파일을 받음
         // 받은 정보와 포지션, 앵글, 스케일 값을 이용해서 생성
 
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        foreach (FileInfo file in di.GetFiles())
-        {
-            if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
-            {
-                FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-                //if (fbxJson.id == idx)
-                //{
-                //    StartCoroutine(WaitForFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
-                //}
-            }
-        }
+        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        //foreach (FileInfo file in di.GetFiles())
+        //{
+        //    if (file.Name.Contains("txt") && !file.Name.Contains("meta"))
+        //    {
+        //        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
+        //        //if (fbxJson.id == idx)
+        //        //{
+        //        //    StartCoroutine(WaitForFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
+        //        //}
+        //    }
+        //}
 
         StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products", position, eulerAngle, localScale, room, id));
     }

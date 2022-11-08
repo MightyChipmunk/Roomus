@@ -1,9 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using System.IO;
 using UnityEngine.Networking;
+
+public class UrlJson
+{
+    public List<string> datas = new List<string>();
+}
 
 public class Deco_UIManager : MonoBehaviour
 {
@@ -42,18 +48,18 @@ public class Deco_UIManager : MonoBehaviour
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
         // 추후에 서버에 있는 모든 Json파일을 요청해서 받는 식으로 전환
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        foreach (FileInfo file in di.GetFiles())
-        {
-            string type = file.Name.Substring(file.Name.Length - 3, 3);
-            if (type == "txt")
-            {
-                FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-                AddContent(fbxJson);
-            }
-        }
+        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        //foreach (FileInfo file in di.GetFiles())
+        //{
+        //    string type = file.Name.Substring(file.Name.Length - 3, 3);
+        //    if (type == "txt")
+        //    {
+        //        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
+        //        AddContent(fbxJson);
+        //    }
+        //}
 
-
+        StartCoroutine(OnGetJson("url 배열을 담은 서버url"));
 
         library.SetActive(false);
 
@@ -91,13 +97,14 @@ public class Deco_UIManager : MonoBehaviour
             library.SetActive(true);
     }
 
-    void AddContent(FBXJson fbxJson, int id = 0)
+    void AddContent(int id = 0, byte[] imgBytes = null)
     {
         GameObject item = Instantiate(furnitItem, trContent);
-        item.name = fbxJson.furnitName;
-        item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
+        item.name = id.ToString();
+        //item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
         item.GetComponent<Deco_FurnitItem>().ID = id;
-        item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
+        item.GetComponent<Deco_FurnitItem>().ImageBytes = imgBytes;
+        //item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
 
     public void OnPostClicked()
@@ -129,30 +136,6 @@ public class Deco_UIManager : MonoBehaviour
         description = s;
     }
 
-    IEnumerator OnPostJson(string uri)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("ID", "10");
-
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                // Show results as text
-                Debug.Log(www.downloadHandler.text);
-
-                // Or retrieve results as binary data
-                byte[] results = www.downloadHandler.data;
-            }
-        }
-    }
-
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
@@ -165,11 +148,28 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
-                // Show results as text
-                FBXJson jsonData = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+                UrlJson urlJson = JsonUtility.FromJson<UrlJson>(www.downloadHandler.text);
+                for (int i = 0; i < urlJson.datas.Count; i++)
+                {
+                    StartCoroutine(OnGetUrl(urlJson.datas[i]));
+                }
+            }
+        }
+    }
 
-                // Or retrieve results as binary data
-                byte[] results = www.downloadHandler.data;
+    IEnumerator OnGetUrl(string uri)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                AddContent(Int32.Parse(www.downloadHandler.text), www.downloadHandler.data);
             }
         }
     }

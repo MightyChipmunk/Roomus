@@ -10,6 +10,7 @@ using System.Linq;
 [Serializable]
 public class FBXJson
 {
+    public string url;
     public string furnitName;
     public bool location;
     public string category;
@@ -192,21 +193,6 @@ public class FBXUIManager : MonoBehaviour
         byte[] zipData = File.ReadAllBytes(path + fbxJson.furnitName + ".zip");
         form.AddBinaryData("zipFile", zipData);
 
-        //form.AddBinaryData("screenShot", imgBytes, "imageName.jpg");
-        //if (fbxData.Length > 0)
-        //    form.AddBinaryData("fbxFile", fbxData);
-        //if (fbxTextures.Count > 0)
-        //{
-        //    for (int i = 0; i < 5; i++)
-        //    {
-        //        if (fbxTextures.Count > i)
-        //        {
-        //            form.AddBinaryData("material" + (i + 1).ToString(), fbxTextures[i]);
-        //        }
-        //    }
-        //    //byte[] bytes = ConvertToBytes(fbxTextures);
-        //    //form.AddBinaryData("materialList", bytes);
-        //}
         form.AddField("furnitName", fbxJson.furnitName);
         form.AddField("location", fbxJson.location.ToString());
         form.AddField("category", fbxJson.category);
