@@ -2335,6 +2335,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Screen
       objectReference: {fileID: 0}
+    - target: {fileID: 4909364702281252871, guid: 0635a58f3714746e8af83d70311ffb83,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4909364703720408367, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}
       propertyPath: toolBar
@@ -2446,8 +2451,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveInputField: {fileID: 292187781}
   loadInputField: {fileID: 915089673}
-  objects:
-    datas: []
 --- !u!1 &713630796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4200,7 +4203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fbxJson:
-    id: 0
+    no: 0
     furnitName: 
     location: 0
     category: 
@@ -4209,6 +4212,10 @@ MonoBehaviour:
     ySize: 0
     zSize: 0
     price: 0
+    createdDate: 
+    lastModifiedDate: 
+    fileUrl: 
+    screenShotUrl: 
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
 --- !u!1 &1418314035
