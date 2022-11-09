@@ -6,6 +6,8 @@ TagManager:
   tags:
   - WallObj
   - FloorObj
+  - Bullet
+  - RoomInfo
   layers:
   - Default
   - TransparentFX
