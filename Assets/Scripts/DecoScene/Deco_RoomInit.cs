@@ -5,7 +5,7 @@ using UnityEngine;
 public class Deco_RoomInit : MonoBehaviour
 {
     public static Deco_RoomInit Instance;
-    public GameObject balconyFac;
+    //public GameObject balconyFac;
 
     string roomName;
     float xSize;
@@ -46,7 +46,7 @@ public class Deco_RoomInit : MonoBehaviour
         // 방을 불러왔을 때
         else if (Deco_LoadRoomList.Instance != null)    
         {
-            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
+            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
         }
     }

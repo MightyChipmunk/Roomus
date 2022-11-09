@@ -7,7 +7,7 @@ using System.IO;
 using UnityEngine.Networking;
 
 [System.Serializable]
-public class dataInfo
+public class furnitInfos
 {
     public int no;
     public string screenShotUrl;
@@ -152,7 +152,7 @@ public class Deco_UIManager : MonoBehaviour
             else
             {
                 // url 배열을 json으로 받아서 가져옴
-                dataInfo[] data = JsonHelper.FromJson<dataInfo>(www.downloadHandler.text);
+                furnitInfos[] data = JsonHelper.FromJson<furnitInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
                     // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
@@ -164,7 +164,7 @@ public class Deco_UIManager : MonoBehaviour
     }
 
     // 가구의 스크린샷과 id를 받아오는 함수
-    IEnumerator OnGetUrl(dataInfo info)
+    IEnumerator OnGetUrl(furnitInfos info)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {

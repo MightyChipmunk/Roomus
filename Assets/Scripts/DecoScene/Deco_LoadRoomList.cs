@@ -2,13 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+
+[System.Serializable]
+public class roomInfos
+{
+    public int no;
+    public string roomName;
+}
 
 public class Deco_LoadRoomList : MonoBehaviour
 {
     public static Deco_LoadRoomList Instance;
     public RectTransform trContent;
     public GameObject roomItem;
+
+    int id = 0;
+    public int ID { get { return id; } set { id = value; } }
 
     string roomName;
     public string RoomName 
@@ -38,16 +49,7 @@ public class Deco_LoadRoomList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
-        foreach (FileInfo File in di.GetFiles())
-        {
-            if (File.Extension.ToLower().CompareTo(".txt") == 0)
-            {
-                string fileName = File.Name.Substring(0, File.Name.Length - 4);
-                AddContent(fileName);
-            }
-        }
+        StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
     }
 
     // Update is called once per frame
@@ -56,10 +58,35 @@ public class Deco_LoadRoomList : MonoBehaviour
         
     }
 
-    void AddContent(string s)
+    void AddContent(int id, string s)
     {
         GameObject item = Instantiate(roomItem, trContent);
         item.name = s;
         item.GetComponentInChildren<Text>().text = s;
+        item.GetComponent<Deco_RoomItem>().ID = id;
+    }
+
+    IEnumerator OnGetJson(string uri)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // url 배열을 json으로 받아서 가져옴
+                roomInfos[] data = JsonHelper.FromJson<roomInfos>(www.downloadHandler.text);
+                for (int i = 0; i < data.Length; i++)
+                {
+                    // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
+                    AddContent(data[i].no, data[i].roomName);
+                }
+                Debug.Log("UrlList Download complete!");
+            }
+        }
     }
 }

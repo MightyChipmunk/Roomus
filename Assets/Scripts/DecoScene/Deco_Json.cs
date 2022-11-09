@@ -19,6 +19,7 @@ public class SaveJsonInfo
 [Serializable]
 public class ArrayJson
 {
+    public int no;
     public string roomName;
     public bool access;
     public string category;
@@ -199,7 +200,7 @@ public class Deco_Json : MonoBehaviour
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products", id));
+        StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products/" + id.ToString()));
         //ArrayJson의 데이터로 방 생성
         Destroy(GameObject.Find("Room"));
         GameObject newRoom = new GameObject("Room");
@@ -223,7 +224,7 @@ public class Deco_Json : MonoBehaviour
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products", position, eulerAngle, localScale, room, id));
+        StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -232,7 +233,7 @@ public class Deco_Json : MonoBehaviour
         FBXJson fbxJson = new FBXJson();
 
         // id로 요청해서 Json 형식으로 정보를 가져옴
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString()))
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             yield return www.SendWebRequest();
 
@@ -274,9 +275,9 @@ public class Deco_Json : MonoBehaviour
     }
 
     // 서버에 방 id로 요청해서 방의 정보를 Json 형식으로 받아오는 함수
-    IEnumerator LoadJson(string uri, int id)
+    IEnumerator LoadJson(string uri)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, id.ToString() + "roomJson"))
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             yield return www.SendWebRequest();
 

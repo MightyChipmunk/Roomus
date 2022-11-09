@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class Deco_RoomItem : MonoBehaviour
 {
+    int id = 0;
+    public int ID { get { return id; } set { id = value; } }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +24,7 @@ public class Deco_RoomItem : MonoBehaviour
     public void OnClicked()
     {
         Deco_LoadRoomList.Instance.RoomName = gameObject.name;
+        Deco_LoadRoomList.Instance.ID = ID;
         SceneManager.LoadScene("RoomDecoScene");
     }
 }
