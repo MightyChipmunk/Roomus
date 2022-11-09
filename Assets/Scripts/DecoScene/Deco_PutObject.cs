@@ -5,6 +5,13 @@ using TriLibCore;
 using UnityEngine;
 using UnityEngine.Networking;
 
+public class FBXWrapper
+{
+    public string statusCode;
+    public string message;
+    public FBXJson data;
+}
+
 public class Deco_PutObject : MonoBehaviour
 {
     public static Deco_PutObject Instance;
@@ -385,15 +392,21 @@ public class Deco_PutObject : MonoBehaviour
             }
             else
             {
-                fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+                fbxJson = wrapper.data;
+
+                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
                 Debug.Log("FBXJson Download complete!");
             }
         }
 
-        Debug.Log(fbxJson.fileUrl);
+        StartCoroutine(GetFBXFromUrl(fbxJson));
+    }
 
+    IEnumerator GetFBXFromUrl(FBXJson fbxJson)
+    {
         // 가져온 Json 파일에 있는 Url(fbx의 zip파일이 있는 url)로 Get을 해서 가구 생성
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
+        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         {
             yield return www.SendWebRequest();
 
@@ -403,9 +416,17 @@ public class Deco_PutObject : MonoBehaviour
             }
             else
             {
+                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+
+                File.WriteAllBytes(path, www.downloadHandler.data);
+
+                while (!File.Exists(path))
+                {
+                    yield return null;
+                }
+
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions,
-                    null, null);
+                AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
                 Debug.Log("FBX.zip Download complete!");
             }
         }

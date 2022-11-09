@@ -19,10 +19,10 @@ public class FBXJson
     public float ySize;
     public float zSize;
     public int price;
-    public string createdDate;
-    public string lastModifiedDate;
+    //public string createdDate;
+    //public string lastModifiedDate;
     public string fileUrl;
-    public string screenShotUrl;
+    //public string screenShotUrl;
 }
 
 public class FBXUIManager : MonoBehaviour
@@ -192,9 +192,6 @@ public class FBXUIManager : MonoBehaviour
         // zip파일로 묶을 파일들을 저장할 디렉토리 생성
         string path = Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
         Directory.CreateDirectory(path);
-
-        // 디렉토리에 스크린샷 파일 저장
-        File.WriteAllBytes(path + "ScreenShot.png", imgBytes);
 
         // 미리 생성된 fbx의 zip파일을 파이더리 데이터로 읽음
         byte[] zipData = File.ReadAllBytes(path + fbxJson.furnitName + ".zip");

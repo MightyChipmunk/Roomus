@@ -41,6 +41,20 @@ public class FBXUpLoad : MonoBehaviour
         Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer");
     }
 
+    private void Start()
+    {
+
+        //Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer");
+        //DirectoryInfo dir = new DirectoryInfo(UnityEngine.Application.dataPath + "/LocalServer");
+
+        //FileInfo[] files = dir.GetFiles("*.*", SearchOption.AllDirectories);
+
+        //foreach (FileInfo file in files)
+        //    file.Attributes = FileAttributes.Normal;
+
+        //Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
+    }
+
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

@@ -28,6 +28,7 @@ public class ArrayJson
     public float ySize;
     public float zSize;
     public int door;
+    public byte[] imgData;
     public List<SaveJsonInfo> datas;
 }
 
@@ -106,8 +107,19 @@ public class Deco_Json : MonoBehaviour
             return;
         //방 이름 변경
         arrayJson.roomName = roomName;
+
+        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
+        //byte[] imgBytes;
+        //Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        //texture.ReadPixels(new Rect(0,0, Screen.width, Screen.height), 0, 0, false);
+        //texture.Apply();
+        //imgBytes = texture.EncodeToPNG();
+        //// 방의 스크린샷 바이너리 데이터를 Json에 추가
+        //arrayJson.imgData = imgBytes;
+
         //arrayJson을 Json으로 변환
         string jsonData = JsonUtility.ToJson(arrayJson, true);
+
         //jsonData를 파일로 저장
         //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
         // jsonData를 네트워크로 전달
@@ -117,14 +129,11 @@ public class Deco_Json : MonoBehaviour
     // 방 정보를 서버에 Json 형식으로 업로드
     IEnumerator OnPostJson(string uri, string jsonData)
     {
-        //WWWForm form = new WWWForm();
-        //form.AddField("", jsonData);
-
         using (UnityWebRequest www = UnityWebRequest.Post(uri, jsonData))
         {
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("content-type", "application/json");
 
             yield return www.SendWebRequest();
 

@@ -20,7 +20,7 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
     // Start is called before the first frame update
     void Start()
     {
-        originPos = transform.position;
+        originPos = transform.localPosition;
         isInfoShowing = false;
         commentCode = comment.GetComponent<JM_RoomUI_3>();
         firstAndSecondCode = firstAndSecond.GetComponent<JM_RoomUI_2>();
@@ -31,12 +31,12 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
     {   
         if (isMove)
         {
-            transform.position = Vector3.Lerp(transform.position, infoPos.position, Time.deltaTime * 4);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, infoPos.localPosition, Time.deltaTime * 4);
             isInfoShowing = true;
 
-            if (Vector3.Distance(transform.position, infoPos.position) < 0.5f)
+            if (Vector3.Distance(transform.localPosition, infoPos.localPosition) < 0.5f)
             {
-                transform.position = infoPos.position;
+                transform.localPosition = infoPos.localPosition;
                 isMove = false;
             }
         }
@@ -45,7 +45,7 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
 
         if (isGoBack)
         {
-            transform.position = Vector3.Lerp(transform.position, originPos, Time.deltaTime * 4);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originPos, Time.deltaTime * 4);
             isInfoShowing = false;
 
             // comment session goes down if it is showing
@@ -57,9 +57,9 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
                 //isInfoGoBack = true;
             //}
 
-            if (Vector3.Distance(transform.position, originPos) < 0.5f)
+            if (Vector3.Distance(transform.localPosition, originPos) < 0.5f)
             {
-                transform.position = originPos;
+                transform.localPosition = originPos;
                 isGoBack = false;
             }
         }
@@ -99,12 +99,12 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
         float moveValue = Input.mousePosition.y - pivot;
         moveValue = Mathf.Clamp(moveValue, 0, 360);
         print(moveValue);
-        transform.position = originPos + new Vector3(0, moveValue, 0);
+        transform.localPosition = originPos + new Vector3(0, moveValue, 0);
 
         
         float verticalVal = Input.GetAxis("Mouse Y");
         print("vertical " + verticalVal);
-        transform.position += verticalVal * 20 * transform.up * Time.deltaTime;
+        transform.localPosition += verticalVal * 20 * transform.up * Time.deltaTime;
         
 
 
@@ -114,7 +114,7 @@ public class JM_RoomUI : MonoBehaviour //IBeginDragHandler, IDragHandler, IEndDr
         {
             Vector3 mousePos = new Vector3(originPos.x, Input.mousePosition.y, 0);
             Vector3 objPos = Camera.main.ScreenToViewportPoint(mousePos);
-            transform.position = mousePos;
+            transform.localPosition = mousePos;
         }
         
     }

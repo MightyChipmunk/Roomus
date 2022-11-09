@@ -20,7 +20,7 @@ public class JM_RoomUI_2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        originalPos = transform.position;
+        originalPos = transform.localPosition;
         firstCode = first.GetComponent<JM_RoomUI>();
         commentCode = comment.GetComponent<JM_RoomUI_3>();
     }
@@ -28,25 +28,25 @@ public class JM_RoomUI_2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(isMove);
-        print(Vector3.Distance(transform.position, movePos.position));
+        //print(isMove);
+        //print(Vector3.Distance(transform.position, movePos.position));
         if (isMove)
         {
-            transform.position = Vector3.Lerp(transform.position, movePos.position, Time.deltaTime * 4);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, movePos.localPosition, Time.deltaTime * 4);
             commentCode.isCommentShow = true;
-            if (Vector3.Distance(transform.position, movePos.position) < 0.5f)
+            if (Vector3.Distance(transform.localPosition, movePos.localPosition) < 0.5f)
             {
-                transform.position = movePos.position;
+                transform.localPosition = movePos.localPosition;
                 isMove = false;
             }
         }
         if (isGoBack)
         {
-            transform.position = Vector3.Lerp(transform.position, originalPos, Time.deltaTime * 4);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPos, Time.deltaTime * 4);
             commentCode.isCommentShow = false;
-            if (Vector3.Distance(transform.position, originalPos) < 0.5f)
+            if (Vector3.Distance(transform.localPosition, originalPos) < 0.5f)
             {
-                transform.position = originalPos;
+                transform.localPosition = originalPos;
                 isGoBack = false;
             }
         }

@@ -11,7 +11,7 @@ public class JM_RoomUI_3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        originCommentPos = transform.position;
+        originCommentPos = transform.localPosition;
     }
 
     // Update is called once per frame
@@ -19,18 +19,18 @@ public class JM_RoomUI_3 : MonoBehaviour
     {
         if (isCommentShow)
         {
-            transform.position = Vector3.Lerp(transform.position, commentMovePos.position, Time.deltaTime * 4);
-            if (Vector3.Distance(transform.position, commentMovePos.position) < 0.5f)
+            transform.localPosition = Vector3.Lerp(transform.localPosition, commentMovePos.localPosition, Time.deltaTime * 4);
+            if (Vector3.Distance(transform.localPosition, commentMovePos.localPosition) < 0.5f)
             {
-                transform.position = commentMovePos.position;
+                transform.localPosition = commentMovePos.localPosition;
             }
         }
         else if (!isCommentShow)
         {
-            transform.position = Vector3.Lerp(transform.position, originCommentPos, Time.deltaTime * 4);
-            if (Vector3.Distance(transform.position, originCommentPos) < 0.5f)
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originCommentPos, Time.deltaTime * 4);
+            if (Vector3.Distance(transform.localPosition, originCommentPos) < 0.5f)
             {
-                transform.position = originCommentPos;
+                transform.localPosition = originCommentPos;
             }
         }
     }
