@@ -6008,6 +6008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fbxJson:
+    no: 0
     furnitName: 
     location: 0
     category: 
@@ -6016,6 +6017,10 @@ MonoBehaviour:
     ySize: 0
     zSize: 0
     price: 0
+    createdDate: 
+    lastModifiedDate: 
+    fileUrl: 
+    screenShotUrl: 
   screenCode: {fileID: 1295196748}
   infos: {fileID: 717893502}
   fbx: {fileID: 1633740022}
