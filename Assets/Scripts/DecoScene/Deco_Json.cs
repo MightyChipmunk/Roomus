@@ -241,7 +241,6 @@ public class Deco_Json : MonoBehaviour
     {
         FBXJson fbxJson = new FBXJson();
 
-        // id로 요청해서 Json 형식으로 정보를 가져옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             yield return www.SendWebRequest();
@@ -252,13 +251,15 @@ public class Deco_Json : MonoBehaviour
             }
             else
             {
-                fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
+                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+                fbxJson = wrapper.data;
+
+                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
                 Debug.Log("FBXJson Download complete!");
             }
         }
 
-        // 가져온 Json 데이터의 url로 Get 요청을 해서 가구의 zip파일을 가져오고 생성함
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
+        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         {
             yield return www.SendWebRequest();
 
@@ -269,6 +270,14 @@ public class Deco_Json : MonoBehaviour
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                File.WriteAllBytes(path, www.downloadHandler.data);
+
+                while (!File.Exists(path))
+                {
+                    yield return null;
+                }
+
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
                 wrapper.transform.localPosition = position;
@@ -276,7 +285,7 @@ public class Deco_Json : MonoBehaviour
                 wrapper.transform.localScale = localScale;
                 Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
                 wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
-                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
+                AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
                     null, null);
                 Debug.Log("FBX.zip Download complete!");
             }

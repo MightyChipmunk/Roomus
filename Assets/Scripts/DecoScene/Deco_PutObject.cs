@@ -470,7 +470,7 @@ public class Deco_PutObject : MonoBehaviour
         go.transform.localRotation = Quaternion.identity;
         BoxCollider col = go.AddComponent<BoxCollider>();
         objCol = go.AddComponent<Deco_ObjectCol>();
-        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+        col.center = new Vector3(0, fbxJson.ySize / 2 + 0.05f, 0);
         col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
