@@ -35,6 +35,11 @@ public class Deco_PutObject : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        //StartCoroutine(GetFBXFromUrl(fbxJson));
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -71,6 +76,19 @@ public class Deco_PutObject : MonoBehaviour
 
         // 받아온 id로 서버에 가구 요청
         StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products" + "/" + id.ToString()));
+        
+        //StartCoroutine(WaitForObj());
+    }
+
+    IEnumerator WaitForObj()
+    {
+        while (!obj)
+        {
+            yield return null;
+        }
+
+        obj.transform.parent = transform;
+        obj.SetActive(false);
     }
 
     void SecondPut()
@@ -409,6 +427,7 @@ public class Deco_PutObject : MonoBehaviour
     {
         // 가져온 Json 파일에 있는 Url(fbx의 zip파일이 있는 url)로 Get을 해서 가구 생성
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 
