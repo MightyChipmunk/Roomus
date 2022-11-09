@@ -426,10 +426,10 @@ public class Deco_PutObject : MonoBehaviour
         decoIdx.Category = fbxJson.category;
         decoIdx.Idx = fbxJson.id;
 
-        for (int i = 0; i < go.transform.childCount; i++)
-        {
-            go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        }
+        //for (int i = 0; i < go.transform.childCount; i++)
+        //{
+        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
+        //}
 
         obj.name = fbxJson.furnitName;
 
