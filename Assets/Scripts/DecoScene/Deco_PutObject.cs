@@ -27,6 +27,8 @@ public class Deco_PutObject : MonoBehaviour
 
     private void Awake()
     {
+        Directory.Delete(Application.persistentDataPath, true);
+
         if (Instance == null)
             Instance = this;
         else
@@ -417,7 +419,6 @@ public class Deco_PutObject : MonoBehaviour
             else
             {
                 string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
-
                 File.WriteAllBytes(path, www.downloadHandler.data);
 
                 while (!File.Exists(path))

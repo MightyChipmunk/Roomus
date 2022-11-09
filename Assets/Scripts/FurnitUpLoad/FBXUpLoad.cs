@@ -186,6 +186,7 @@ public class FBXUpLoad : MonoBehaviour
     void OpenFolder()
     {
         DirectoryInfo di = new DirectoryInfo(f_FilePath);
+        Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
         foreach (FileInfo file in di.GetFiles())
         {
             Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer/" + FileName);
