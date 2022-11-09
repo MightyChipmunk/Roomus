@@ -15,10 +15,14 @@ public class SignUpManager : MonoBehaviour
     public GameObject mannequinCustom;
     public GameObject done;
 
+    public InputField fNameInput;
+    public InputField lNameInput;
     public InputField emailInput;
     public InputField idInput;
     public InputField pwInput;
 
+    string fName;
+    string lName;
     string email;
     string id;
     string pw;
@@ -37,6 +41,8 @@ public class SignUpManager : MonoBehaviour
         alluserInfo = new AllUserInfo();
         //alluserInfo.datas = new List<string>();       
 
+        fNameInput.onEndEdit.AddListener(UpdateFName);
+        lNameInput.onEndEdit.AddListener(UpdateLName);
         emailInput.onEndEdit.AddListener(UpdateEmail);
         idInput.onEndEdit.AddListener(UpdateID);
         pwInput.onEndEdit.AddListener(UpdatePW);
@@ -48,6 +54,16 @@ public class SignUpManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void UpdateFName(string input)
+    {
+        fName = input;
+    }
+
+    void UpdateLName(string input)
+    {
+        lName = input;
     }
 
     void UpdateEmail(string input)
@@ -72,21 +88,26 @@ public class SignUpManager : MonoBehaviour
         allInfo.datas = new List<UserInfo>();
 
         UserInfo myInfo = new UserInfo();
+        myInfo.fName = fName;
+        myInfo.lName = lName;
         myInfo.email = email;
         myInfo.id = id;
         myInfo.pw = pw;
 
+        string jsonRegisterInfo = JsonUtility.ToJson(myInfo);
+        print(jsonRegisterInfo);
+
         // file path
-        string path = Application.dataPath + "/" + "UserInfoFile" + ".txt";
-        string jsonMyInfo = JsonUtility.ToJson(myInfo);
-        print(jsonMyInfo);
+        //string path = Application.dataPath + "/" + "UserInfoFile" + ".txt";
+        //string jsonMyInfo = JsonUtility.ToJson(myInfo);
+        //print(jsonMyInfo);
 
-        allInfo.datas.Add(myInfo);
+        //allInfo.datas.Add(myInfo);
         
-        string jsonInfo = JsonUtility.ToJson(allInfo, true);
-        print(jsonInfo);
+        //string jsonInfo = JsonUtility.ToJson(allInfo, true);
+        //print(jsonInfo);
 
-        File.WriteAllText(path, jsonInfo);
+        //File.WriteAllText(path, jsonInfo);
 
         // bring file content if file already exists
         //if (File.Exists(path))
@@ -160,6 +181,8 @@ public class SignUpManager : MonoBehaviour
 
 public class UserInfo
 {
+    public string fName;
+    public string lName;
     public string email;
     public string id;
     public string pw;   

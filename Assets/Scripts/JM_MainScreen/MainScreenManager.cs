@@ -26,6 +26,11 @@ public class MainScreenManager : MonoBehaviour
         SceneManager.LoadScene("MyPage");
     }
 
+    public void OnClickMessage()
+    {
+        SceneManager.LoadScene("Message");
+    }
+
     public void OnClickRoomCustom()
     {
         SceneManager.LoadScene("RoomCustom_Main");
