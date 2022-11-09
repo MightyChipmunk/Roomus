@@ -38,22 +38,24 @@ public class Show_Json : MonoBehaviourPun
 
     void Start()
     {
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
-        foreach (FileInfo file in di.GetFiles())
-        {
-            if (file.Extension.ToLower().CompareTo(".txt") == 0)
-            {
-                string fileName = file.Name.Substring(0, file.Name.Length - 4);
-                //mapData.txt를 불러오기
-                string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
-                //ArrayJson 형태로 Json을 변환
-                arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
-                if (arrayJson.access)
-                {
-                    LoadFile(fileName);
-                }
-            }
-        }
+        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        //foreach (FileInfo file in di.GetFiles())
+        //{
+        //    if (file.Extension.ToLower().CompareTo(".txt") == 0)
+        //    {
+        //        string fileName = file.Name.Substring(0, file.Name.Length - 4);
+        //        //mapData.txt를 불러오기
+        //        string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + fileName + ".txt");
+        //        //ArrayJson 형태로 Json을 변환
+        //        arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
+        //        if (arrayJson.access)
+        //        {
+        //            LoadFile(fileName);
+        //        }
+        //    }
+        //}
+
+        //LoadFile("TEst2");
     }
 
     // Update is called once per frame
@@ -88,6 +90,13 @@ public class Show_Json : MonoBehaviourPun
             SaveJsonInfo info = arrayJsonLoad.datas[i];
             LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
         }
+
+        newRoom.AddComponent<PhotonView>();
+        Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+        infoUI.x = arrayJson.XSize;
+        infoUI.y = arrayJson.YSize;
+        infoUI.category = arrayJson.category;
+        infoUI.description = arrayJson.description;
     }
     void LoadObject(int idx, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
@@ -103,9 +112,16 @@ public class Show_Json : MonoBehaviourPun
                 FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
                 if (fbxJson.id == idx)
                 {
-                    StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
-                    //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                    //AssetLoader.LoadModelFromFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+                    var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                    GameObject wrapper = new GameObject();
+                    wrapper.transform.parent = room;
+                    wrapper.transform.localPosition = position;
+                    wrapper.transform.localEulerAngles = eulerAngle;
+                    wrapper.transform.localScale = localScale;
+                    Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
+                    wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
+                    AssetLoader.LoadModelFromFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions);
+                    //StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
                 }
             }
         }
@@ -189,7 +205,42 @@ public class Show_Json : MonoBehaviourPun
     private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
     {
         Debug.Log("Materials loaded. Model fully loaded.");
-        objs.Add(arrayJsonLoad.datas[objIdx++].position, assetLoaderContext.RootGameObject);
+
+        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(assetLoaderContext.WrapperGameObject.GetComponent<Deco_WrapperData>().jsonData);
+
+        GameObject obj = assetLoaderContext.RootGameObject;
+        obj.transform.parent = assetLoaderContext.WrapperGameObject.transform.parent;
+        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.position;
+        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.eulerAngles;
+        obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
+        GameObject go = obj.transform.GetChild(0).gameObject;
+        BoxCollider col = go.AddComponent<BoxCollider>();
+        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
+        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        Rigidbody rb = go.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        if (fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward;
+        else if (!fbxJson.location)
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+        go.transform.localRotation = Quaternion.identity;
+        Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+        decoIdx.Name = fbxJson.furnitName;
+        decoIdx.Price = fbxJson.price;
+        decoIdx.Category = fbxJson.category;
+
+        for (int i = 0; i < go.transform.childCount; i++)
+        {
+            if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
+            {
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
+                go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
+            }
+        }
+
+        Destroy(assetLoaderContext.WrapperGameObject);
     }
 
     /// <summary>
