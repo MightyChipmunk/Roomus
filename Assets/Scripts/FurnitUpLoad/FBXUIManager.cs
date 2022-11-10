@@ -142,9 +142,6 @@ public class FBXUIManager : MonoBehaviour
         string jsonData = JsonUtility.ToJson(fbxJson, true);
         string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
 
-        UnityWebRequest www = UnityWebRequest.Post("192.168.0.243", jsonData);
-        //www.Post("192.168.0.243", jsonData);
-
         File.WriteAllText(path, jsonData);
 
         infos.gameObject.SetActive(false);
@@ -166,7 +163,7 @@ public class FBXUIManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         byte[] imgBytes;
-        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "ScreenShot" + ".png";
+        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "/ScreenShot" + ".png";
 
         Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
         texture.ReadPixels(new Rect(960, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);

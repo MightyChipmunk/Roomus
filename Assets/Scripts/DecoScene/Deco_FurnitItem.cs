@@ -14,11 +14,11 @@ public class Deco_FurnitItem : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(OnClicked);
 
         //get
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer/" + gameObject.name);
         foreach (FileInfo file in di.GetFiles())
         {
             // 추후에 이름이 아닌 ID를 받는 방식으로 대체해야됨
-            if (file.Name == fbxJson.furnitName + "ScreenShot.png")
+            if (file.Name == "ScreenShot.png")
             {
                 byte[] data = File.ReadAllBytes(file.FullName);
                 Texture2D tex = new Texture2D(2, 2);
