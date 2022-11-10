@@ -55,7 +55,7 @@ public class Show_Json : MonoBehaviourPun
         //    }
         //}
 
-        //LoadFile("TEst2");
+        LoadFile("Test");
     }
 
     // Update is called once per frame
