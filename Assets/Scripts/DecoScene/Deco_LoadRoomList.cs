@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
 public class roomInfos
 {
     public int no;
+    public string category;
     public string roomName;
 }
 
@@ -56,6 +58,17 @@ public class Deco_LoadRoomList : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void CreateNewRoom()
+    {
+        SceneManager.LoadScene("NewRoomInit");
+    }
+
+    public void LoadRoom()
+    {
+        if (RoomName.Length > 0)
+            SceneManager.LoadScene("RoomDecoScene");
     }
 
     void AddContent(int id, string s)

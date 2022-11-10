@@ -485,12 +485,12 @@ public class Deco_PutObject : MonoBehaviour
         if (fbxJson.location)
             go.transform.localPosition = Vector3.zero;
         else
-            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         go.transform.localRotation = Quaternion.identity;
         BoxCollider col = go.AddComponent<BoxCollider>();
         objCol = go.AddComponent<Deco_ObjectCol>();
-        col.center = new Vector3(0, fbxJson.ySize / 2 + 0.05f, 0);
-        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+        col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();

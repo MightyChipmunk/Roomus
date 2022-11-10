@@ -25,6 +25,5 @@ public class Deco_RoomItem : MonoBehaviour
     {
         Deco_LoadRoomList.Instance.RoomName = gameObject.name;
         Deco_LoadRoomList.Instance.ID = ID;
-        SceneManager.LoadScene("RoomDecoScene");
     }
 }

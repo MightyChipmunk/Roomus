@@ -13,7 +13,9 @@ public class Deco_RoomInit : MonoBehaviour
     float zSize;
     int balcony;
 
-    public Material testMat;
+    public Material wallMat;
+    public Material floorMat;
+    public Material cellingMat;
 
     private void Awake()
     {
@@ -44,7 +46,7 @@ public class Deco_RoomInit : MonoBehaviour
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
         // 방을 불러왔을 때
-        else if (Deco_LoadRoomList.Instance != null)    
+        else if (Deco_GetXYZ.Instance == null)    
         {
             Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
@@ -54,17 +56,17 @@ public class Deco_RoomInit : MonoBehaviour
     public void MakeRoom(float x, float y, float z, int bal, Transform room)
     {
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        floor.GetComponent<Renderer>().material = testMat;
+        floor.GetComponent<Renderer>().material = floorMat;
         GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        leftWall.GetComponent<Renderer>().material = testMat;
+        leftWall.GetComponent<Renderer>().material = wallMat;
         GameObject rightWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        rightWall.GetComponent<Renderer>().material = testMat;
+        rightWall.GetComponent<Renderer>().material = wallMat;
         GameObject frontWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        frontWall.GetComponent<Renderer>().material = testMat;
+        frontWall.GetComponent<Renderer>().material = wallMat;
         GameObject backWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        backWall.GetComponent<Renderer>().material = testMat;       
+        backWall.GetComponent<Renderer>().material = wallMat;       
         GameObject celling = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        celling.GetComponent<Renderer>().material = testMat;
+        celling.GetComponent<Renderer>().material = cellingMat;
         floor.transform.parent = room;
         floor.layer = LayerMask.NameToLayer("Floor");
         floor.name = "Floor";

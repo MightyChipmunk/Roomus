@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 public class furnitInfos
 {
     public int no;
+    public string category;
     public string screenShotUrl;
 }
 

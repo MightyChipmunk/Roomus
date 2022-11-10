@@ -15,9 +15,9 @@ public class FBXJson
     public bool location;
     public string category;
     public string information;
-    public float xSize;
-    public float ySize;
-    public float zSize;
+    public float xsize;
+    public float ysize;
+    public float zsize;
     public int price;
     //public string createdDate;
     //public string lastModifiedDate;
@@ -108,15 +108,15 @@ public class FBXUIManager : MonoBehaviour
 
     void OnXchanged(string s)
     {
-        fbxJson.xSize = float.Parse(s);
+        fbxJson.xsize = float.Parse(s);
     }
     void OnYchanged(string s)
     {
-        fbxJson.ySize = float.Parse(s);
+        fbxJson.ysize = float.Parse(s);
     }
     void OnZchanged(string s)
     {
-        fbxJson.zSize = float.Parse(s);
+        fbxJson.ysize = float.Parse(s);
     }
 
     void OnInfoChanged(string s)
@@ -205,9 +205,9 @@ public class FBXUIManager : MonoBehaviour
         form.AddField("location", fbxJson.location.ToString());
         form.AddField("category", fbxJson.category);
         form.AddField("information", fbxJson.information);
-        form.AddField("xSize", fbxJson.xSize.ToString());
-        form.AddField("ySize", fbxJson.ySize.ToString());
-        form.AddField("zSize", fbxJson.zSize.ToString());
+        form.AddField("xSize", fbxJson.xsize.ToString());
+        form.AddField("ySize", fbxJson.ysize.ToString());
+        form.AddField("zSize", fbxJson.zsize.ToString());
         form.AddField("price", fbxJson.price.ToString());
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri, form))

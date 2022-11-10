@@ -6013,14 +6013,11 @@ MonoBehaviour:
     location: 0
     category: 
     information: 
-    xSize: 0
-    ySize: 0
-    zSize: 0
+    xsize: 0
+    ysize: 0
+    zsize: 0
     price: 0
-    createdDate: 
-    lastModifiedDate: 
     fileUrl: 
-    screenShotUrl: 
   screenCode: {fileID: 1295196748}
   infos: {fileID: 717893502}
   fbx: {fileID: 1633740022}

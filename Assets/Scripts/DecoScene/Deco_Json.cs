@@ -24,11 +24,11 @@ public class ArrayJson
     public bool access;
     public string category;
     public string description;
-    public float xSize;
-    public float ySize;
-    public float zSize;
+    public float xsize;
+    public float ysize;
+    public float zsize;
     public int door;
-    public byte[] imgData;
+    //public byte[] imgData;
     public List<SaveJsonInfo> datas;
 }
 
@@ -69,9 +69,9 @@ public class Deco_Json : MonoBehaviour
     public void SaveRoomInfo(string roomName, float x, float y, float z, int bal)
     {
         arrayJson.roomName = roomName;
-        arrayJson.xSize = x;
-        arrayJson.ySize = y;
-        arrayJson.zSize = z;
+        arrayJson.xsize = x;
+        arrayJson.ysize = y;
+        arrayJson.zsize = z;
         arrayJson.door = bal;
     }
 
@@ -108,33 +108,43 @@ public class Deco_Json : MonoBehaviour
         //방 이름 변경
         arrayJson.roomName = roomName;
 
-        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
-        //byte[] imgBytes;
-        //Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        //texture.ReadPixels(new Rect(0,0, Screen.width, Screen.height), 0, 0, false);
-        //texture.Apply();
-        //imgBytes = texture.EncodeToPNG();
-        //// 방의 스크린샷 바이너리 데이터를 Json에 추가
-        //arrayJson.imgData = imgBytes;
-
-        //arrayJson을 Json으로 변환
-        string jsonData = JsonUtility.ToJson(arrayJson, true);
-
-        //jsonData를 파일로 저장
-        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt", jsonData);
         // jsonData를 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", jsonData));
+        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", arrayJson));
+        string test = File.ReadAllText(Application.dataPath + "/Roominfo/TestRoom.txt");
+        ArrayJson testJson = JsonUtility.FromJson<ArrayJson>(test); 
+        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", testJson));
     }
 
     // 방 정보를 서버에 Json 형식으로 업로드
-    IEnumerator OnPostJson(string uri, string jsonData)
+    IEnumerator OnPostJson(string uri, ArrayJson arrayJson)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, jsonData))
-        {
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
-            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            www.SetRequestHeader("content-type", "application/json");
+        WWWForm form = new WWWForm();
 
+        SaveJsonInfo[] datas = arrayJson.datas.ToArray();
+        string datasString = JsonHelper.ToJson(datas);
+
+        yield return new WaitForEndOfFrame();
+
+        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
+        byte[] imgBytes;
+        Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0, false);
+        texture.Apply();
+        imgBytes = texture.EncodeToPNG();
+
+        form.AddBinaryData("screenShot", imgBytes);
+        form.AddField("roomName", arrayJson.roomName);
+        form.AddField("access", arrayJson.access.ToString());
+        form.AddField("category", arrayJson.category);
+        form.AddField("description", arrayJson.description);
+        form.AddField("xsize", arrayJson.xsize.ToString());
+        form.AddField("ysize", arrayJson.ysize.ToString());
+        form.AddField("zsize", arrayJson.zsize.ToString());
+        form.AddField("door", arrayJson.door.ToString());
+        form.AddField("datas", datasString);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -196,8 +206,8 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door, newRoom.transform);
-        SaveRoomInfo(roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
+        SaveRoomInfo(roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -221,8 +231,8 @@ public class Deco_Json : MonoBehaviour
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door, newRoom.transform);
-        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
+        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -349,15 +359,15 @@ public class Deco_Json : MonoBehaviour
         obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
-        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
-        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+        col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         if (fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward;
         else if (!fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;

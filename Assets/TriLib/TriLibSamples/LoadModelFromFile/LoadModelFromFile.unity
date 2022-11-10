@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ModelAsset: {fileID: 100002, guid: e51a66ac38771954699e15aa3d81a256, type: 3}
-  ModelPath: BG001.fbx
+  ModelPath: TriLibSampleModel.fbx
 --- !u!4 &153877216
 Transform:
   m_ObjectHideFlags: 0

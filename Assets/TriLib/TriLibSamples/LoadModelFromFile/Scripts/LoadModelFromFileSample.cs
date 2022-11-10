@@ -35,8 +35,8 @@ namespace TriLibCore.Samples
         /// </remarks>
         private void Start()
         {
-            //var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-            //AssetLoader.LoadModelFromFile(Application.dataPath + "/" + ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+            var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+            AssetLoader.LoadModelFromFile(Application.dataPath + "/" + ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
         }
 
         /// <summary>
@@ -67,12 +67,6 @@ namespace TriLibCore.Samples
         {
             Debug.Log("Materials loaded. Model fully loaded.");
             GameObject go = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
-            go.name = "Test";
-            for (int i = 0; i < go.transform.childCount; i++)
-            {
-                go.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-                Debug.Log(go.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader.name);
-            }
         }
 
         /// <summary>

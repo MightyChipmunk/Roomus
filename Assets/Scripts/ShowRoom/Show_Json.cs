@@ -50,7 +50,7 @@ public class Show_Json : MonoBehaviourPun
         newWalls.transform.position = Vector3.zero;
         newWalls.transform.rotation = Quaternion.identity;
         newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xSize, arrayJsonLoad.ySize, arrayJsonLoad.zSize, arrayJsonLoad.door, newRoom.transform);
+        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
         //ArrayJson의 데이터를 가지고 오브젝트 생성
         for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
         {
@@ -60,8 +60,8 @@ public class Show_Json : MonoBehaviourPun
 
         newRoom.AddComponent<PhotonView>();
         Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
-        infoUI.x = arrayJsonLoad.xSize;
-        infoUI.y = arrayJsonLoad.ySize;
+        infoUI.x = arrayJsonLoad.xsize;
+        infoUI.y = arrayJsonLoad.ysize;
         infoUI.category = arrayJsonLoad.category;
         infoUI.description = arrayJsonLoad.description;
     }
@@ -175,15 +175,15 @@ public class Show_Json : MonoBehaviourPun
         obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
-        col.center = new Vector3(0, fbxJson.ySize / 2, 0);
-        col.size = new Vector3(fbxJson.xSize, fbxJson.ySize, fbxJson.zSize);
+        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+        col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         if (fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward;
         else if (!fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zSize / 2 + 0.01f);
+            go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;
