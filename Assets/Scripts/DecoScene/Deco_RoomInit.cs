@@ -5,7 +5,7 @@ using UnityEngine;
 public class Deco_RoomInit : MonoBehaviour
 {
     public static Deco_RoomInit Instance;
-    public GameObject balconyFac;
+    //public GameObject balconyFac;
 
     string roomName;
     float xSize;
@@ -13,7 +13,9 @@ public class Deco_RoomInit : MonoBehaviour
     float zSize;
     int balcony;
 
-    public Material testMat;
+    public Material wallMat;
+    public Material floorMat;
+    public Material cellingMat;
 
     private void Awake()
     {
@@ -53,17 +55,17 @@ public class Deco_RoomInit : MonoBehaviour
     public void MakeRoom(float x, float y, float z, int bal, Transform room)
     {
         GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        floor.GetComponent<Renderer>().material = testMat;
+        floor.GetComponent<Renderer>().material = floorMat;
         GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        leftWall.GetComponent<Renderer>().material = testMat;
+        leftWall.GetComponent<Renderer>().material = wallMat;
         GameObject rightWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        rightWall.GetComponent<Renderer>().material = testMat;
+        rightWall.GetComponent<Renderer>().material = wallMat;
         GameObject frontWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        frontWall.GetComponent<Renderer>().material = testMat;
+        frontWall.GetComponent<Renderer>().material = wallMat;
         GameObject backWall = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        backWall.GetComponent<Renderer>().material = testMat;       
+        backWall.GetComponent<Renderer>().material = wallMat;       
         GameObject celling = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        celling.GetComponent<Renderer>().material = testMat;
+        celling.GetComponent<Renderer>().material = cellingMat;
         floor.transform.parent = room;
         floor.layer = LayerMask.NameToLayer("Floor");
         floor.name = "Floor";
