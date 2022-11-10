@@ -33,6 +33,14 @@ public class Deco_RoomInit : MonoBehaviour
             zSize = Deco_GetXYZ.Instance.Z;
             balcony = Deco_GetXYZ.Instance.Balcony;
         }
+        // 도면을 불러왔을 때
+        else if (JH_RoomDecoManager.Instance != null)
+        {
+            roomName = "Room1";
+            xSize = -1;
+            ySize = -1;
+            zSize = -1;
+        }
     }
 
     private void Start()
@@ -46,10 +54,18 @@ public class Deco_RoomInit : MonoBehaviour
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
         // 방을 불러왔을 때
-        else if (Deco_GetXYZ.Instance == null)    
+        else if (Deco_LoadRoomList.Instance != null)    
         {
             Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
+        }
+        // 도면 방을 가져왔을 때
+        else if (JH_RoomDecoManager.Instance != null)
+        {
+            GameObject go = Instantiate(Resources.Load<GameObject>("Room" + JH_RoomDecoManager.Instance.SelectedRoom.ToString()));
+            Deco_Json.Instance.SaveRoomInfo(roomName, -1, -1, -1, JH_RoomDecoManager.Instance.SelectedRoom);
+            go.name = "Room";
+            Destroy(JH_RoomDecoManager.Instance.gameObject);
         }
     }
     

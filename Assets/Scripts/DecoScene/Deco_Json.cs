@@ -105,14 +105,11 @@ public class Deco_Json : MonoBehaviour
     {
         if (roomName.Length == 0)
             return;
-        //방 이름 변경
+        // 방 이름 변경
         arrayJson.roomName = roomName;
 
         // jsonData를 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", arrayJson));
-        string test = File.ReadAllText(Application.dataPath + "/Roominfo/TestRoom.txt");
-        ArrayJson testJson = JsonUtility.FromJson<ArrayJson>(test); 
-        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", testJson));
+        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", arrayJson));
     }
 
     // 방 정보를 서버에 Json 형식으로 업로드
@@ -221,24 +218,40 @@ public class Deco_Json : MonoBehaviour
         // 방 가구의 정보들을 서버에서 받아옴
         StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products/" + id.ToString()));
         //ArrayJson의 데이터로 방 생성
-        Destroy(GameObject.Find("Room"));
-        GameObject newRoom = new GameObject("Room");
-        GameObject newWalls = new GameObject("Walls");
-        newRoom.transform.position = Vector3.zero;
-        newRoom.transform.rotation = Quaternion.identity;
-        newRoom.transform.localScale = Vector3.one;
-        newWalls.transform.parent = newRoom.transform;
-        newWalls.transform.position = Vector3.zero;
-        newWalls.transform.rotation = Quaternion.identity;
-        newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
-        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
-        //ArrayJson의 데이터를 가지고 오브젝트 생성
-        for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+        if (arrayJsonLoad.xsize > 0)
         {
-            SaveJsonInfo info = arrayJsonLoad.datas[i];
-            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            Destroy(GameObject.Find("Room"));
+            GameObject newRoom = new GameObject("Room");
+            GameObject newWalls = new GameObject("Walls");
+            newRoom.transform.position = Vector3.zero;
+            newRoom.transform.rotation = Quaternion.identity;
+            newRoom.transform.localScale = Vector3.one;
+            newWalls.transform.parent = newRoom.transform;
+            newWalls.transform.position = Vector3.zero;
+            newWalls.transform.rotation = Quaternion.identity;
+            newWalls.transform.localScale = Vector3.one;
+            Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
         }
+        else
+        {
+            GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
+            newRoom.name = "Room";
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
+        }
+        SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
     }
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)

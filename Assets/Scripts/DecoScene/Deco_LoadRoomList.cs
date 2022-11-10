@@ -62,7 +62,7 @@ public class Deco_LoadRoomList : MonoBehaviour
 
     public void CreateNewRoom()
     {
-        SceneManager.LoadScene("NewRoomInit");
+        SceneManager.LoadScene("RoomCustom_Main");
     }
 
     public void LoadRoom()

@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 9e3bf210187134e089983e53c4e4f36c
   - enabled: 1
-    path: Assets/Scenes/FBXLoad.unity
+    path: Assets/Scenes/UpLoadScene/FBXLoad.unity
     guid: c2847a135f79274498398aab39c5c2ae
   - enabled: 0
     path: Assets/Scenes/MyPage.unity
@@ -44,6 +44,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ShowRoom/Test_Lobby.unity
     guid: 25d3ef9bcd6a1f14abd5b2d02e4b8d75
+  - enabled: 1
+    path: Assets/Scenes/RoomDecoScene/LocalRoom.unity
+    guid: d63413b5ed33a6b4988bd627a4770dc5
   - enabled: 0
     path: Assets/Scenes/Shopping.unity
     guid: 62a152229a699425588a47dbf0ffaec0
