@@ -22,6 +22,7 @@ public class FBXJson
     //public string createdDate;
     //public string lastModifiedDate;
     public string fileUrl;
+    public int likes = 0;
     //public string screenShotUrl;
 }
 
