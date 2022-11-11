@@ -54,7 +54,7 @@ public class Deco_PutObject : MonoBehaviour
     public void LoadFBX()
     {
         var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "/" + fbxJson.furnitName + ".zip";
+        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".zip";
         AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
 
         StartCoroutine(WaitForObj());

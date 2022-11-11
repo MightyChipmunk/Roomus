@@ -204,7 +204,7 @@ public class Deco_Json : MonoBehaviour
                     wrapper.transform.localScale = localScale;
                     Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
                     wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
-                    AssetLoader.LoadModelFromFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions);
+                    AssetLoaderZip.LoadModelFromZipFile(file.FullName.Substring(0, file.FullName.Length - 4) + ".zip", OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions);
                     //StartCoroutine(WaitForFile(position, file.FullName.Substring(0, file.FullName.Length - 4) + ".fbx", position, eulerAngle, localScale, room, fbxJson));
                 }
             }

@@ -1,9 +1,9 @@
 {
-    "id": 3374,
+    "id": 2738,
     "furnitName": "1",
-    "location": false,
+    "location": true,
     "category": "Bed",
-    "information": "ertgfd",
+    "information": "1231231",
     "xSize": 0.5,
     "ySize": 0.5,
     "zSize": 0.5,

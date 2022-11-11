@@ -186,7 +186,7 @@ public class FBXUpLoad : MonoBehaviour
 
             File.WriteAllBytes(path, data);
         }
-        string zipPath = UnityEngine.Application.dataPath + "/LocalServer/" + FileName + "/";
+        string zipPath = UnityEngine.Application.dataPath + "/LocalServer/";
         ZipManager.ZipFiles(zipPath, zipPath + FileName + ".zip", "", false);
 
         StartCoroutine(WaitForZipFile(zipPath + FileName + ".zip"));
