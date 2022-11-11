@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Linq;
+using Ookii.Dialogs;
+using System.Windows.Forms;
 
 [Serializable]
 public class FBXJson
@@ -28,6 +30,10 @@ public class FBXJson
 
 public class FBXUIManager : MonoBehaviour
 {
+    private VistaOpenFileDialog m_OpenFileDialog = new VistaOpenFileDialog();
+
+    private string[] m_FilePaths; // 파일 패스
+
     public FBXJson fbxJson = new FBXJson();
     public List<byte[]> fbxTextures = new List<byte[]>();
 
@@ -49,6 +55,7 @@ public class FBXUIManager : MonoBehaviour
     public static FBXUIManager Instance;
 
     public byte[] fbxData;
+    byte[] imgBytes;
 
     private void Awake()
     {
@@ -159,7 +166,7 @@ public class FBXUIManager : MonoBehaviour
                 break;
         }
         string jsonData = JsonUtility.ToJson(fbxJson, true);
-        string path = Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
+        string path = UnityEngine.Application.dataPath + "/LocalServer/" + fbxJson.furnitName + ".txt";
 
         //File.WriteAllText(path, jsonData);
 
@@ -178,20 +185,52 @@ public class FBXUIManager : MonoBehaviour
         StartCoroutine(capture("http://192.168.0.243:8000/v1/products"));
     }
 
+    public void OnImageOpenFile() // 버튼에 추가할 메서드
+    {
+        SetOpenFBXFileDialog();
+        m_FilePaths = FileOpen(m_OpenFileDialog);
+
+        if (m_FilePaths.Length > 0)
+            OpenImageFile();
+    }
+
+    private void OpenImageFile()
+    {
+        imgBytes = File.ReadAllBytes(m_FilePaths[0]);
+    }
+
+    string[] FileOpen(VistaOpenFileDialog openFileDialog)
+    {
+        var result = openFileDialog.ShowDialog();
+        var filenames = result == DialogResult.OK ?
+            openFileDialog.FileNames :
+            new string[0];
+        openFileDialog.Dispose();
+        return filenames;
+    }
+
+    void SetOpenFBXFileDialog()
+    {
+        m_OpenFileDialog.Title = "파일 열기";
+        m_OpenFileDialog.Filter = "이미지 파일| *.png; *jpg";
+        m_OpenFileDialog.FilterIndex = 1;
+        m_OpenFileDialog.Multiselect = false;
+    }
+
     // 스크린샷, 가구 파일, 정보 데이터를 서버로 전달하는 함수
     IEnumerator capture(string uri)
     {
         yield return new WaitForEndOfFrame();
 
         // 가구의 스크린샷을 찍어서 바이너리 데이터로 저장
-        byte[] imgBytes;
-        Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
-        texture.Apply();
-        imgBytes = texture.EncodeToPNG();
+        //byte[] imgBytes;
+        //Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
+        //texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
+        //texture.Apply();
+        //imgBytes = texture.EncodeToPNG();
 
         // zip파일로 묶을 파일들을 저장할 디렉토리 생성
-        string path = Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
+        string path = UnityEngine.Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
         Directory.CreateDirectory(path);
 
         // 미리 생성된 fbx의 zip파일을 파이더리 데이터로 읽음
