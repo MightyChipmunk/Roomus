@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Show_InfoUI : MonoBehaviourPun
 {
     GameObject infoUI;
+    GameObject infoHeader;
     GameObject player;
     GameObject canvas;
 
@@ -20,7 +21,8 @@ public class Show_InfoUI : MonoBehaviourPun
     void Start()
     {
         canvas = GameObject.Find("Canvas");
-        infoUI = canvas.transform.Find("RoomInfo").gameObject;
+        infoUI = canvas.transform.Find("MoreInfo").gameObject;
+        infoHeader = infoUI.transform.Find("Header").gameObject;
         player = GameObject.Find(PhotonNetwork.NickName);
     }
 
@@ -31,9 +33,9 @@ public class Show_InfoUI : MonoBehaviourPun
         {
             canvas.GetComponent<Show_HideUI>().canHide = false;
             cap = true;
-            infoUI.transform.Find("RoomName").GetComponent<Text>().text = gameObject.name;
-            infoUI.transform.Find("Category").GetComponent<Text>().text = category;
-            infoUI.transform.Find("Description").GetComponent<Text>().text = description;
+            infoHeader.transform.Find("RoomName").GetComponent<Text>().text = gameObject.name;
+            infoHeader.transform.Find("Category").GetComponent<Text>().text = category;
+            infoHeader.transform.Find("Description").GetComponent<Text>().text = description;
         }
         else if (cap)
         {

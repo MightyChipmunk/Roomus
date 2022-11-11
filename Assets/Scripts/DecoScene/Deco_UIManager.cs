@@ -50,7 +50,7 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        // ÃßÈÄ¿¡ ¼­¹ö¿¡ ÀÖ´Â ¸ðµç JsonÆÄÀÏÀ» ¿äÃ»ÇØ¼­ ¹Þ´Â ½ÄÀ¸·Î ÀüÈ¯
+        // ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ Jsonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½Ø¼ï¿½ ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         //foreach (FileInfo file in di.GetFiles())
         //{
@@ -64,7 +64,7 @@ public class Deco_UIManager : MonoBehaviour
 
         StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
 
-        library.SetActive(false);
+        library.transform.parent.gameObject.SetActive(false);
 
         nameField.onEndEdit.AddListener(OnNameSubmit);
         descriptField.onEndEdit.AddListener(OnDescSubmit);
@@ -94,10 +94,10 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnLoadLibrary()
     {
-        if (library.activeSelf)
-            library.SetActive(false);
+        if (library.transform.parent.gameObject.activeSelf)
+            library.transform.parent.gameObject.SetActive(false);
         else
-            library.SetActive(true);
+            library.transform.parent.gameObject.SetActive(true);
     }
 
     void AddContent(int id = 0, byte[] imgBytes = null)
@@ -109,7 +109,7 @@ public class Deco_UIManager : MonoBehaviour
         item.GetComponent<Deco_FurnitItem>().ImageBytes = imgBytes;
         //item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
-
+/*
     public void OnPostClicked()
     {
         if (posting.activeSelf)
@@ -120,10 +120,9 @@ public class Deco_UIManager : MonoBehaviour
             screenCode.screen.SetActive(true);
             screenCode.isDark = true;
             screenCode.isStart = true;
-            screenCode.alpha = 1;
         }
     }
-
+*/
     public void OnUploadClicked()
     {
         Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);
@@ -139,7 +138,7 @@ public class Deco_UIManager : MonoBehaviour
         description = s;
     }
 
-    // urlÀÇ ¹è¿­À» ¼­¹ö¿¡¼­ ¹Þ¾Æ¿À´Â ÇÔ¼ö
+    // urlï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
@@ -152,11 +151,11 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
-                // url ¹è¿­À» jsonÀ¸·Î ¹Þ¾Æ¼­ °¡Á®¿È
+                // url ï¿½è¿­ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 furnitInfos[] data = JsonHelper.FromJson<furnitInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    // °¡Á®¿Â url ¹è¿­À» ¹Ýº¹¹®À¸·Î ¼øÈ¸ÇÏ¸ç ½ºÅ©¸°¼¦°ú id¸¦ °¡Á®¿À´Â ÇÔ¼ö ½ÇÇà
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ url ï¿½è¿­ï¿½ï¿½ ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½Ï¸ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ idï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
                     StartCoroutine(OnGetUrl(data[i]));
                 }
                 Debug.Log("UrlList Download complete!");
@@ -164,7 +163,7 @@ public class Deco_UIManager : MonoBehaviour
         }
     }
 
-    // °¡±¸ÀÇ ½ºÅ©¸°¼¦°ú id¸¦ ¹Þ¾Æ¿À´Â ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ idï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     IEnumerator OnGetUrl(furnitInfos info)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
@@ -177,7 +176,7 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
-                // °¡Á®¿Â ½ºÅ©¸°¼¦°ú id·Î ¶óÀÌºê·¯¸®¿¡ °¡±¸ Ãß°¡
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ idï¿½ï¿½ ï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
                 // Deco_FurnitItem
                 AddContent(info.no, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
