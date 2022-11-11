@@ -40,7 +40,6 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        // 추후에 서버에 있는 모든 Json파일을 요청해서 받는 식으로 전환
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
         foreach (FileInfo file in di.GetFiles())
         {
@@ -52,7 +51,7 @@ public class Deco_UIManager : MonoBehaviour
             }
         }
 
-        library.SetActive(false);
+        library.transform.parent.gameObject.SetActive(false);
 
         nameField.onEndEdit.AddListener(OnNameSubmit);
         descriptField.onEndEdit.AddListener(OnDescSubmit);
@@ -82,10 +81,10 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnLoadLibrary()
     {
-        if (library.activeSelf)
-            library.SetActive(false);
+        if (library.transform.parent.gameObject.activeSelf)
+            library.transform.parent.gameObject.SetActive(false);
         else
-            library.SetActive(true);    
+            library.transform.parent.gameObject.SetActive(true);    
     }
 
     void AddContent(FBXJson fbxJson)
@@ -95,7 +94,7 @@ public class Deco_UIManager : MonoBehaviour
         item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
         item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
-
+/*
     public void OnPostClicked()
     {
         if (posting.activeSelf)
@@ -106,10 +105,9 @@ public class Deco_UIManager : MonoBehaviour
             screenCode.screen.SetActive(true);
             screenCode.isDark = true;
             screenCode.isStart = true;
-            screenCode.alpha = 1;
         }
     }
-
+*/
     public void OnUploadClicked()
     {
         Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);

@@ -53,7 +53,10 @@ public class SignInManager : MonoBehaviour
         string jsonLoginInfo = JsonUtility.ToJson(loginInfo);
         print(jsonLoginInfo);
 
-        StartCoroutine(UploadLoginInfo("http://192.168.0.6:8000/login"));
+        SceneManager.LoadScene("Main");
+
+        // login network connection
+        //StartCoroutine(UploadLoginInfo("http://192.168.0.6:8000/login"));
         
         
         //UnityWebRequest loginAPI = UnityWebRequest.Post("http://192.168.0.6:8000/login", jsonLoginInfo);
