@@ -67,7 +67,7 @@ public class Deco_LoadRoomList : MonoBehaviour
 
     public void LoadRoom()
     {
-        if (RoomName.Length > 0)
+        if (RoomName != null)
             SceneManager.LoadScene("RoomDecoScene");
     }
 

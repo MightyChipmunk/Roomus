@@ -28,6 +28,7 @@ public class Deco_UIManager : MonoBehaviour
     public InputField descriptField;
 
     string roomName;
+    public string RoomName { get { return roomName; } set { roomName = value; } }
     string description;
 
     GameObject library;
@@ -109,7 +110,7 @@ public class Deco_UIManager : MonoBehaviour
         item.GetComponent<Deco_FurnitItem>().ImageBytes = imgBytes;
         //item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
     }
-/*
+
     public void OnPostClicked()
     {
         if (posting.activeSelf)
@@ -122,7 +123,7 @@ public class Deco_UIManager : MonoBehaviour
             screenCode.isStart = true;
         }
     }
-*/
+
     public void OnUploadClicked()
     {
         Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);

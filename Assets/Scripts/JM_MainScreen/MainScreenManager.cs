@@ -33,13 +33,13 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickRoomCustom()
     {
-        SceneManager.LoadScene("RoomCustom_Main");
+        SceneManager.LoadScene("RoomCustom_New");
 
     }
 
     public void OnClickUpload()
     {
-        SceneManager.LoadScene("FBXLoadTest");
+        SceneManager.LoadScene("FBXLoad");
     }
 
     public void OnClickTravel()

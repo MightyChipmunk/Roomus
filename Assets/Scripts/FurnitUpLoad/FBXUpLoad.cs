@@ -74,13 +74,6 @@ public class FBXUpLoad : MonoBehaviour
             OpenFBXFile();
     }
 
-    public void OpenFolder()
-    {
-        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        var assetLoaderFilePicker = AssetLoaderFilePicker.Create();
-        assetLoaderFilePicker.LoadModelFromFilePickerAsync("Select a Model file", OnLoad, OnMaterialsLoad, OnProgress, OnBeginLoad, OnError, null, assetLoaderOptions);
-    }
-
     public void OnImageButtonOpenFile(int buttonIdx) // 버튼에 추가할 메서드
     {
         if (buttons[buttonIdx].transform.GetChild(0).gameObject.activeSelf)

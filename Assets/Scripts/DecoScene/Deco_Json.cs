@@ -21,13 +21,13 @@ public class ArrayJson
 {
     public int no;
     public string roomName;
-    public bool access;
-    public string category;
-    public string description;
+    public bool access = false;
+    public string category = "";
+    public string description = "";
     public float xsize;
     public float ysize;
     public float zsize;
-    public int door;
+    public int door = 0;
     //public byte[] imgData;
     public List<SaveJsonInfo> datas;
 }
@@ -52,6 +52,8 @@ public class Deco_Json : MonoBehaviour
 
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
+        arrayJsonLoad = new ArrayJson();
+        arrayJsonLoad.datas = new List<SaveJsonInfo>();
 
         //ObjectAdd();
 
@@ -132,8 +134,10 @@ public class Deco_Json : MonoBehaviour
         form.AddBinaryData("screenShot", imgBytes);
         form.AddField("roomName", arrayJson.roomName);
         form.AddField("access", arrayJson.access.ToString());
-        form.AddField("category", arrayJson.category);
-        form.AddField("description", arrayJson.description);
+        if (arrayJson.category != null)
+            form.AddField("category", arrayJson.category);
+        if (arrayJson.description != null)
+            form.AddField("description", arrayJson.description);
         form.AddField("xsize", arrayJson.xsize.ToString());
         form.AddField("ysize", arrayJson.ysize.ToString());
         form.AddField("zsize", arrayJson.zsize.ToString());

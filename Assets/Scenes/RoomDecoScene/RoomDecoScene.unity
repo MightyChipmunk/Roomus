@@ -636,9 +636,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f628ba1d20c840a27c6e5eaa1dffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  balconyFac: {fileID: 5017618855099804361, guid: ddd73aec97764b84bbb51413ec27663a,
-    type: 3}
-  testMat: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
+  wallMat: {fileID: 0}
+  floorMat: {fileID: 0}
+  cellingMat: {fileID: 0}
 --- !u!4 &67129365
 Transform:
   m_ObjectHideFlags: 0
@@ -5820,15 +5820,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fbxJson:
-    id: 0
+    no: 0
     furnitName: 
     location: 0
     category: 
     information: 
-    xSize: 0
-    ySize: 0
-    zSize: 0
+    xsize: 0
+    ysize: 0
+    zsize: 0
     price: 0
+    fileUrl: 
+    countLikes: 0
+    isDelete: 0
   can: {fileID: 2100000, guid: 7d6ad74b3150d0f45a4ee97fe492e6eb, type: 2}
   cant: {fileID: 2100000, guid: ed7b13c93fbde254db31274f4945bc0a, type: 2}
 --- !u!1 &1418314035
