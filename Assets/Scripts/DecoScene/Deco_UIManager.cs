@@ -51,18 +51,6 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        // ���Ŀ� ������ �ִ� ���� Json������ ��û�ؼ� �޴� ������ ��ȯ
-        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/LocalServer");
-        //foreach (FileInfo file in di.GetFiles())
-        //{
-        //    string type = file.Name.Substring(file.Name.Length - 3, 3);
-        //    if (type == "txt")
-        //    {
-        //        FBXJson fbxJson = JsonUtility.FromJson<FBXJson>(File.ReadAllText(file.FullName));
-        //        AddContent(fbxJson);
-        //    }
-        //}
-
         StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
 
         library.transform.parent.gameObject.SetActive(false);
@@ -101,14 +89,16 @@ public class Deco_UIManager : MonoBehaviour
             library.transform.parent.gameObject.SetActive(true);
     }
 
-    void AddContent(int id = 0, byte[] imgBytes = null)
+    void AddContent(string category, int id = 0, byte[] imgBytes = null)
     {
         GameObject item = Instantiate(furnitItem, trContent);
         item.name = id.ToString();
         //item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
         item.GetComponent<Deco_FurnitItem>().ID = id;
+        if (category != null)
+            item.GetComponent<Deco_FurnitItem>().Category = category;
         item.GetComponent<Deco_FurnitItem>().ImageBytes = imgBytes;
-        //item.GetComponentInChildren<Text>().text = fbxJson.furnitName;
+        item.GetComponentInChildren<Text>().text = "";
     }
 
     public void OnPostClicked()
@@ -137,6 +127,17 @@ public class Deco_UIManager : MonoBehaviour
     void OnDescSubmit(string s)
     {
         description = s;
+    }
+
+    public void OnClickCategory(string s)
+    {
+        for (int i = 0; i < trContent.transform.childCount; i++)
+        {
+            if (trContent.transform.GetChild(i).GetComponent<Deco_FurnitItem>().Category != s)
+                trContent.transform.GetChild(i).gameObject.SetActive(false);
+            else
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
     // url�� �迭�� �������� �޾ƿ��� �Լ�
@@ -179,7 +180,7 @@ public class Deco_UIManager : MonoBehaviour
             {
                 // ������ ��ũ������ id�� ���̺귯���� ���� �߰�
                 // Deco_FurnitItem
-                AddContent(info.no, www.downloadHandler.data);
+                AddContent(info.category, info.no, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }
