@@ -240,7 +240,7 @@ public class FBXUIManager : MonoBehaviour
 
         // 폼데이터를 생성하고 fbx의 zip파일과 스크린샷 파일을 추가
         WWWForm form = new WWWForm();
-        form.AddBinaryData("zipFile", zipData);
+        form.AddBinaryData("zipFile", zipData, "ZipFile", "application/zip");
         form.AddBinaryData("screenShot", imgBytes);
         // 폼데이터에 가구의 정보를 추가
         form.AddField("furnitName", fbxJson.furnitName);
