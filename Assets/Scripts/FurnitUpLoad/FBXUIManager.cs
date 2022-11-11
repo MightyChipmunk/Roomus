@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Linq;
 using Ookii.Dialogs;
 using System.Windows.Forms;
+using Screen = UnityEngine.Screen;
 
 [Serializable]
 public class FBXJson
@@ -24,7 +25,8 @@ public class FBXJson
     //public string createdDate;
     //public string lastModifiedDate;
     public string fileUrl;
-    public int likes = 0;
+    public int countLikes = 0;
+    public bool isDelete = false;
     //public string screenShotUrl;
 }
 
@@ -196,7 +198,7 @@ public class FBXUIManager : MonoBehaviour
 
     private void OpenImageFile()
     {
-        imgBytes = File.ReadAllBytes(m_FilePaths[0]);
+        //imgBytes = File.ReadAllBytes(m_FilePaths[0]);
     }
 
     string[] FileOpen(VistaOpenFileDialog openFileDialog)
@@ -222,12 +224,12 @@ public class FBXUIManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        // 가구의 스크린샷을 찍어서 바이너리 데이터로 저장
-        //byte[] imgBytes;
-        //Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
-        //texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
-        //texture.Apply();
-        //imgBytes = texture.EncodeToPNG();
+        //가구의 스크린샷을 찍어서 바이너리 데이터로 저장
+        byte[] imgBytes;
+        Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
+        texture.Apply();
+        imgBytes = texture.EncodeToPNG();
 
         // zip파일로 묶을 파일들을 저장할 디렉토리 생성
         string path = UnityEngine.Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
@@ -245,10 +247,12 @@ public class FBXUIManager : MonoBehaviour
         form.AddField("location", fbxJson.location.ToString());
         form.AddField("category", fbxJson.category);
         form.AddField("information", fbxJson.information);
-        form.AddField("xSize", fbxJson.xsize.ToString());
-        form.AddField("ySize", fbxJson.ysize.ToString());
-        form.AddField("zSize", fbxJson.zsize.ToString());
+        form.AddField("xsize", fbxJson.xsize.ToString());
+        form.AddField("ysize", fbxJson.ysize.ToString());
+        form.AddField("zsize", fbxJson.zsize.ToString());
         form.AddField("price", fbxJson.price.ToString());
+
+        Debug.Log(fbxJson.xsize.ToString());
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
         {

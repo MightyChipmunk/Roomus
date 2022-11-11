@@ -29,6 +29,8 @@ public class PutDeleteTest : MonoBehaviour
 
         UnityWebRequest www = UnityWebRequest.Put(url, jsonData);
 
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+        www.uploadHandler = new UploadHandlerRaw(jsonToSend);
         www.SetRequestHeader("Content-Type", "application/json");
 
         yield return www.SendWebRequest();
@@ -39,7 +41,7 @@ public class PutDeleteTest : MonoBehaviour
         }
         else
         {
-            Debug.Log("Delete complete!");
+            Debug.Log("Put complete!");
         }
     }
     

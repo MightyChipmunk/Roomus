@@ -51,7 +51,7 @@ public class Deco_LoadRoomList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
+        //StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
     }
 
     // Update is called once per frame
