@@ -103,7 +103,7 @@ public class Show_Json : MonoBehaviourPun
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/products//" + id.ToString()));
+        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/products/" + id.ToString()));
         if (arrayJsonLoad.xsize > 0)
         {
             Destroy(GameObject.Find("Room"));
@@ -158,7 +158,7 @@ public class Show_Json : MonoBehaviourPun
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products//" + id.ToString(), position, eulerAngle, localScale, room, id));
+        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -166,39 +166,38 @@ public class Show_Json : MonoBehaviourPun
     {
         FBXJson fbxJson = new FBXJson();
 
-        // 테스트용으로 임의의 값을 넣음
-        fbxJson.furnitName = "Test";
-        fbxJson.price = 100000;
-        fbxJson.location = true;
-        fbxJson.xsize = 1;
-        fbxJson.ysize = 0.75f;
-        fbxJson.zsize = 1;
-        fbxJson.no = 1;
-        fbxJson.category = "Bed";
+        //// 테스트용으로 임의의 값을 넣음
+        //fbxJson.furnitName = "Test";
+        //fbxJson.price = 100000;
+        //fbxJson.location = true;
+        //fbxJson.xsize = 1;
+        //fbxJson.ysize = 0.75f;
+        //fbxJson.zsize = 1;
+        //fbxJson.no = 1;
+        //fbxJson.category = "Bed";
 
-        //// 가구 ID로 요청해서 가구의 정보를 받아옴
-        //using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        //{
-        //    yield return www.SendWebRequest();
+        // 가구 ID로 요청해서 가구의 정보를 받아옴
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
 
-        //    if (www.result != UnityWebRequest.Result.Success)
-        //    {
-        //        Debug.Log(www.error);
-        //    }
-        //    else
-        //    {
-        //        FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
-        //        fbxJson = wrapper.data;
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+                fbxJson = wrapper.data;
 
-        //        //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
-        //        Debug.Log("FBXJson Download complete!");
-        //    }
-        //}
+                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
+                Debug.Log("FBXJson Download complete!");
+            }
+        }
 
         // 받아온 가구 정보를 사용해서 가구 생성
-        //using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
-        using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
-        //using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
+        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 

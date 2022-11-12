@@ -77,12 +77,12 @@ public class Deco_Json : MonoBehaviour
         arrayJson.door = bal;
     }
 
-    public void SaveJson(GameObject go, int idx)
+    public void SaveJson(GameObject go, int id)
     {
         SaveJsonInfo info;
         
         info = new SaveJsonInfo();
-        info.id = idx;
+        info.id = id;
         info.position = go.transform.position;
         info.eulerAngle = go.transform.eulerAngles;
         info.localScale = go.transform.localScale;
@@ -115,13 +115,11 @@ public class Deco_Json : MonoBehaviour
         string jsonData = JsonUtility.ToJson(arrayJson, true);
         File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
 
-        StartCoroutine(WaitForScreenShot());
-
         // jsonData를 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products/", arrayJson));
+        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson));
     }
 
-    IEnumerator WaitForScreenShot()
+    public IEnumerator WaitForScreenShot()
     {
         yield return new WaitForEndOfFrame();
 
@@ -132,6 +130,13 @@ public class Deco_Json : MonoBehaviour
         texture.Apply();
         imgBytes = texture.EncodeToPNG();
         File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png", imgBytes);
+
+        if (!File.Exists(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png"))
+        {
+            yield return null;
+        }
+
+        Deco_UIManager.Instance.EndScreenShot();
     }
 
     // 방 정보를 서버에 Json 형식으로 업로드
@@ -304,7 +309,7 @@ public class Deco_Json : MonoBehaviour
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products//" + id.ToString(), position, eulerAngle, localScale, room, id));
+        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -312,38 +317,38 @@ public class Deco_Json : MonoBehaviour
     {
         FBXJson fbxJson = new FBXJson();
 
-        // 테스트용으로 임의의 값을 넣음
-        fbxJson.furnitName = "Test";
-        fbxJson.price = 100000;
-        fbxJson.location = true;
-        fbxJson.xsize = 1;
-        fbxJson.ysize = 0.75f;
-        fbxJson.zsize = 1;
-        fbxJson.no = 1;
-        fbxJson.category = "Bed";
+        //// 테스트용으로 임의의 값을 넣음
+        //fbxJson.furnitName = "Test";
+        //fbxJson.price = 100000;
+        //fbxJson.location = true;
+        //fbxJson.xsize = 1;
+        //fbxJson.ysize = 0.75f;
+        //fbxJson.zsize = 1;
+        //fbxJson.no = 1;
+        //fbxJson.category = "Bed";
 
-        //// 가구 ID로 요청해서 가구의 정보를 받아옴
-        //using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        //{
-        //    yield return www.SendWebRequest();
+        // 가구 ID로 요청해서 가구의 정보를 받아옴
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
 
-        //    if (www.result != UnityWebRequest.Result.Success)
-        //    {
-        //        Debug.Log(www.error);
-        //    }
-        //    else
-        //    {
-        //        FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
-        //        fbxJson = wrapper.data;
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+                fbxJson = wrapper.data;
 
-        //        //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
-        //        Debug.Log("FBXJson Download complete!");
-        //    }
-        //}
+                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
+                Debug.Log("FBXJson Download complete!");
+            }
+        }
 
         // 받아온 가구 정보를 사용해서 가구 생성
-        //using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
-        using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
+        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 
@@ -448,7 +453,7 @@ public class Deco_Json : MonoBehaviour
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
         
-        SaveJson(obj, obj.GetComponent<Deco_Idx>().Id);
+        SaveJson(obj, fbxJson.no);
 
         Destroy(assetLoaderContext.WrapperGameObject);
     }

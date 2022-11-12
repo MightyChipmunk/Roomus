@@ -52,7 +52,7 @@ public class Deco_LoadRoomList : MonoBehaviour
     void Start()
     {
         // 네트워크로 방 리스트를 가져옴
-        //StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products/"));
+        //StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
 
         // 로컬로 방 리스트를 가져옴
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
