@@ -210,6 +210,13 @@ public class Deco_Json : MonoBehaviour
         }
         arrayJson.description = desc;
 
+        string path = Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png";
+        if (File.Exists(path))
+        {
+            File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", File.ReadAllBytes(path));
+            File.Delete(path);
+        }
+
         SaveNewFile(roomName);
     }
 
@@ -433,18 +440,19 @@ public class Deco_Json : MonoBehaviour
 
         GameObject obj = assetLoaderContext.RootGameObject;
         obj.transform.parent = assetLoaderContext.WrapperGameObject.transform.parent;
-        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.position;
-        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.eulerAngles;
+        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.localPosition;
+        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.localEulerAngles;
         obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
+        col.isTrigger = true;
         col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         if (fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward;
+            go.transform.localPosition = Vector3.zero;
         else if (!fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         go.transform.localRotation = Quaternion.identity;

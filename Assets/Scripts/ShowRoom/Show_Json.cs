@@ -11,6 +11,8 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
+    GameObject player;
+
     //public Objects objects;
     ArrayJson arrayJsonLoad;
 
@@ -24,8 +26,8 @@ public class Show_Json : MonoBehaviourPun
         else
             Destroy(gameObject);
 
-        GameObject go = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        go.name = PhotonNetwork.NickName;
+        player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        player.name = PhotonNetwork.NickName;
         PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
     }
 
@@ -82,12 +84,13 @@ public class Show_Json : MonoBehaviourPun
 
             GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
             newRoom.name = "Room";
+            //newRoom.transform.position = new Vector3(1.2f, 0, 1.9f);
 
             //ArrayJson의 데이터를 가지고 오브젝트 생성
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
@@ -139,6 +142,8 @@ public class Show_Json : MonoBehaviourPun
 
             GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
             newRoom.name = "Room";
+
+            player.transform.position = new Vector3(1.2f, 0, 2f);
 
             //ArrayJson의 데이터를 가지고 오브젝트 생성
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
@@ -282,18 +287,19 @@ public class Show_Json : MonoBehaviourPun
 
         GameObject obj = assetLoaderContext.RootGameObject;
         obj.transform.parent = assetLoaderContext.WrapperGameObject.transform.parent;
-        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.position;
-        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.eulerAngles;
+        obj.transform.localPosition = assetLoaderContext.WrapperGameObject.transform.localPosition;
+        obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.localEulerAngles;
         obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
+        col.isTrigger = true;
         col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
         if (fbxJson.location)
-            go.transform.localPosition = Vector3.zero + Vector3.forward;
+            go.transform.localPosition = Vector3.zero;
         else if (!fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         go.transform.localRotation = Quaternion.identity;
