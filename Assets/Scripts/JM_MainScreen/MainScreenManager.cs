@@ -51,4 +51,9 @@ public class MainScreenManager : MonoBehaviour
     {
 
     }
+
+    public void OnClickRoom()
+    {
+        SceneManager.LoadScene("ShowRoom_New");
+    }
 }
