@@ -50,13 +50,16 @@ public class Deco_RoomInit : MonoBehaviour
         {
             MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
             Deco_Json.Instance.SaveRoomInfo(roomName, xSize, ySize, zSize, balcony);
-            Deco_Json.Instance.SaveNewFile(roomName);
+            //Deco_Json.Instance.SaveNewFile(roomName);
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
         // 방을 불러왔을 때
         else if (Deco_LoadRoomList.Instance != null)    
         {
-            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
+            // 네트워크로 불러오기
+            //Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
+            // 로컬로 불러오기
+            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
         }
         // 도면 방을 가져왔을 때

@@ -1,0 +1,31 @@
+{
+    "no": 0,
+    "roomName": "Test",
+    "access": true,
+    "category": "Living Room",
+    "description": "asfasdfasdf",
+    "xsize": 5.0,
+    "ysize": 5.0,
+    "zsize": 3.0,
+    "door": 0,
+    "datas": [
+        {
+            "id": 0,
+            "position": {
+                "x": -1.4149280786514283,
+                "y": 0.0,
+                "z": 0.02019214630126953
+            },
+            "eulerAngle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "localScale": {
+                "x": 1.0,
+                "y": 1.0000001192092896,
+                "z": 1.0000001192092896
+            }
+        }
+    ]
+}

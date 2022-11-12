@@ -31,44 +31,134 @@ public class Show_Json : MonoBehaviourPun
 
     void Start()
     {
-        LoadFile(Show_LoadRoomList.Instance.ID);
+        // 로컬로 방 불러오기
+        LoadFile(Show_LoadRoomList.Instance.RoomName);
+        // 네트워크로 방 불러오기
+        //LoadFile(Show_LoadRoomList.Instance.ID);
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 
+    //로컬로 방 불러오기
+    public void LoadFile(string roomName)
+    {
+        if (roomName == null)
+            return;
+        //mapData.txt를 불러오기
+        string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
+        //ArrayJson 형태로 Json을 변환
+        arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(jsonData);
+        if (arrayJsonLoad.xsize > 0)
+        {
+            Destroy(GameObject.Find("Room"));
+            GameObject newRoom = new GameObject("Room");
+            GameObject newWalls = new GameObject("Walls");
+            newRoom.transform.position = Vector3.zero;
+            newRoom.transform.rotation = Quaternion.identity;
+            newRoom.transform.localScale = Vector3.one;
+            newWalls.transform.parent = newRoom.transform;
+            newWalls.transform.position = Vector3.zero;
+            newWalls.transform.rotation = Quaternion.identity;
+            newWalls.transform.localScale = Vector3.one;
+            Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
+
+            newRoom.AddComponent<PhotonView>();
+            Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+            infoUI.x = arrayJsonLoad.xsize;
+            infoUI.y = arrayJsonLoad.ysize;
+            infoUI.category = arrayJsonLoad.category;
+            infoUI.description = arrayJsonLoad.description;
+        }
+        // 도면을 선택했을 시, 도면에 맞는 방 생성
+        else
+        {
+            Destroy(GameObject.Find("Room"));
+
+            GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
+            newRoom.name = "Room";
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
+            }
+
+            newRoom.AddComponent<PhotonView>();
+            Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+            infoUI.x = arrayJsonLoad.xsize;
+            infoUI.y = arrayJsonLoad.ysize;
+            infoUI.category = arrayJsonLoad.category;
+            infoUI.description = arrayJsonLoad.description;
+        }
+    }
+
+    // 네트워크로 방 불러오기
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products/" + id.ToString()));
-        //ArrayJson의 데이터로 방 생성
-        Destroy(GameObject.Find("Room"));
-        GameObject newRoom = new GameObject("Room");
-        GameObject newWalls = new GameObject("Walls");
-        newRoom.transform.position = Vector3.zero;
-        newRoom.transform.rotation = Quaternion.identity;
-        newRoom.transform.localScale = Vector3.one;
-        newWalls.transform.parent = newRoom.transform;
-        newWalls.transform.position = Vector3.zero;
-        newWalls.transform.rotation = Quaternion.identity;
-        newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
-        //ArrayJson의 데이터를 가지고 오브젝트 생성
-        for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/products//" + id.ToString()));
+        if (arrayJsonLoad.xsize > 0)
         {
-            SaveJsonInfo info = arrayJsonLoad.datas[i];
-            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
-        }
+            Destroy(GameObject.Find("Room"));
+            GameObject newRoom = new GameObject("Room");
+            GameObject newWalls = new GameObject("Walls");
+            newRoom.transform.position = Vector3.zero;
+            newRoom.transform.rotation = Quaternion.identity;
+            newRoom.transform.localScale = Vector3.one;
+            newWalls.transform.parent = newRoom.transform;
+            newWalls.transform.position = Vector3.zero;
+            newWalls.transform.rotation = Quaternion.identity;
+            newWalls.transform.localScale = Vector3.one;
+            Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
 
-        newRoom.AddComponent<PhotonView>();
-        Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
-        infoUI.x = arrayJsonLoad.xsize;
-        infoUI.y = arrayJsonLoad.ysize;
-        infoUI.category = arrayJsonLoad.category;
-        infoUI.description = arrayJsonLoad.description;
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
+
+            newRoom.AddComponent<PhotonView>();
+            Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+            infoUI.x = arrayJsonLoad.xsize;
+            infoUI.y = arrayJsonLoad.ysize;
+            infoUI.category = arrayJsonLoad.category;
+            infoUI.description = arrayJsonLoad.description;
+        }
+        // 도면을 선택했을 시, 도면에 맞는 방 생성
+        else
+        {
+            Destroy(GameObject.Find("Room"));
+
+            GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
+            newRoom.name = "Room";
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
+            }
+
+            newRoom.AddComponent<PhotonView>();
+            Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
+            infoUI.x = arrayJsonLoad.xsize;
+            infoUI.y = arrayJsonLoad.ysize;
+            infoUI.category = arrayJsonLoad.category;
+            infoUI.description = arrayJsonLoad.description;
+        }
     }
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
+        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products//" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -76,24 +166,39 @@ public class Show_Json : MonoBehaviourPun
     {
         FBXJson fbxJson = new FBXJson();
 
-        // id로 요청해서 Json 형식으로 정보를 가져옴
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
+        // 테스트용으로 임의의 값을 넣음
+        fbxJson.furnitName = "Test";
+        fbxJson.price = 100000;
+        fbxJson.location = true;
+        fbxJson.xsize = 1;
+        fbxJson.ysize = 0.75f;
+        fbxJson.zsize = 1;
+        fbxJson.no = 1;
+        fbxJson.category = "Bed";
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                fbxJson = JsonUtility.FromJson<FBXJson>(www.downloadHandler.text);
-                Debug.Log("FBXJson Download complete!");
-            }
-        }
+        //// 가구 ID로 요청해서 가구의 정보를 받아옴
+        //using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        //{
+        //    yield return www.SendWebRequest();
 
-        // 가져온 Json 데이터의 url로 Get 요청을 해서 가구의 zip파일을 가져오고 생성함
-        using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
+        //    if (www.result != UnityWebRequest.Result.Success)
+        //    {
+        //        Debug.Log(www.error);
+        //    }
+        //    else
+        //    {
+        //        FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+        //        fbxJson = wrapper.data;
+
+        //        //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
+        //        Debug.Log("FBXJson Download complete!");
+        //    }
+        //}
+
+        // 받아온 가구 정보를 사용해서 가구 생성
+        //using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
+        //using (UnityWebRequest www = AssetDownloader.CreateWebRequest(fbxJson.fileUrl, AssetDownloader.HttpRequestMethod.Get))
         {
             yield return www.SendWebRequest();
 
@@ -104,6 +209,14 @@ public class Show_Json : MonoBehaviourPun
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                File.WriteAllBytes(path, www.downloadHandler.data);
+
+                while (!File.Exists(path))
+                {
+                    yield return null;
+                }
+
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
                 wrapper.transform.localPosition = position;
@@ -111,7 +224,7 @@ public class Show_Json : MonoBehaviourPun
                 wrapper.transform.localScale = localScale;
                 Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
                 wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
-                AssetDownloader.LoadModelFromUri(www, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
+                AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
                     null, null);
                 Debug.Log("FBX.zip Download complete!");
             }

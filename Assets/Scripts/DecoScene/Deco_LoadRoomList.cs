@@ -51,7 +51,19 @@ public class Deco_LoadRoomList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
+        // 네트워크로 방 리스트를 가져옴
+        //StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products/"));
+
+        // 로컬로 방 리스트를 가져옴
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        foreach (FileInfo File in di.GetFiles())
+        {
+            if (File.Extension.ToLower().CompareTo(".txt") == 0)
+            {
+                string fileName = File.Name.Substring(0, File.Name.Length - 4);
+                AddContent(Random.Range(0, 1000), fileName);
+            }
+        }
     }
 
     // Update is called once per frame

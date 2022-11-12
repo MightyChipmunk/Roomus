@@ -2035,7 +2035,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 604460188}
         m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
         m_MethodName: OnUploadClicked
         m_Mode: 1
@@ -6644,7 +6644,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1514041105}
         m_TargetAssemblyTypeName: Deco_ChangeView, Assembly-CSharp
         m_MethodName: OnFirstClicked
         m_Mode: 1
@@ -6656,7 +6656,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1344668300}
         m_TargetAssemblyTypeName: Deco_PutObject, Assembly-CSharp
         m_MethodName: delObj
         m_Mode: 1
@@ -7614,7 +7614,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1514041105}
         m_TargetAssemblyTypeName: Deco_ChangeView, Assembly-CSharp
         m_MethodName: On2DClicked
         m_Mode: 1
@@ -7626,7 +7626,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1344668300}
         m_TargetAssemblyTypeName: Deco_PutObject, Assembly-CSharp
         m_MethodName: delObj
         m_Mode: 1
@@ -9538,7 +9538,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1514041105}
         m_TargetAssemblyTypeName: Deco_ChangeView, Assembly-CSharp
         m_MethodName: On3DClicked
         m_Mode: 1
@@ -9550,7 +9550,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1344668300}
         m_TargetAssemblyTypeName: Deco_PutObject, Assembly-CSharp
         m_MethodName: delObj
         m_Mode: 1

@@ -534,7 +534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00041337783}
+  m_AnchoredPosition: {x: 0, y: -0.0000018552888}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1673744823835147328
@@ -878,6 +878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: {fileID: 1673744824670801548}
   roomDescription: {fileID: 1673744824205390693}
+  roomImage: {fileID: 1673744824967001526}
   button: {fileID: 3562232962302128484}
 --- !u!1 &1673744824308987702
 GameObject:

@@ -14,12 +14,17 @@ public class Show_RoomItem : MonoBehaviour
 
     public Text roomName;
     public Text roomDescription;
+    public Image roomImage;
 
     public Button button;
 
     // Start is called before the first frame update
     void Start()
     {
+        Texture2D tex = new Texture2D(1, 1);
+        tex.LoadImage(imgBytes);
+        Rect rect = new Rect(0, 0, tex.width, tex.height);
+        roomImage.sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
         button.onClick.AddListener(OnClicked);
     }
 

@@ -51,7 +51,7 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
+        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products/"));
 
         library.transform.parent.gameObject.SetActive(false);
 

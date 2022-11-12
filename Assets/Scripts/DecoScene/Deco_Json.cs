@@ -105,13 +105,33 @@ public class Deco_Json : MonoBehaviour
 
     public void SaveNewFile(string roomName)
     {
-        if (roomName.Length == 0)
-            return;
-        // 방 이름 변경
-        arrayJson.roomName = roomName;
+        if (roomName != null)
+        {
+            // 방 이름 변경
+            arrayJson.roomName = roomName;
+        }
+        
+        // JsonData를 로컬로 저장
+        string jsonData = JsonUtility.ToJson(arrayJson, true);
+        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+
+        StartCoroutine(WaitForScreenShot());
 
         // jsonData를 네트워크로 전달
-        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products", arrayJson));
+        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products/", arrayJson));
+    }
+
+    IEnumerator WaitForScreenShot()
+    {
+        yield return new WaitForEndOfFrame();
+
+        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
+        byte[] imgBytes;
+        Texture2D texture = new Texture2D(800, 800, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
+        texture.Apply();
+        imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png", imgBytes);
     }
 
     // 방 정보를 서버에 Json 형식으로 업로드
@@ -188,39 +208,15 @@ public class Deco_Json : MonoBehaviour
         SaveNewFile(roomName);
     }
 
+    //로컬로 방 불러오기
     public void LoadFile(string roomName)
     {
-        if (roomName.Length == 0)
+        if (roomName == null)
             return;
         //mapData.txt를 불러오기
         string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(jsonData);
-        //ArrayJson의 데이터로 방 생성
-        Destroy(GameObject.Find("Room"));
-        GameObject newRoom = new GameObject("Room");
-        GameObject newWalls = new GameObject("Walls");
-        newRoom.transform.position = Vector3.zero; 
-        newRoom.transform.rotation = Quaternion.identity; 
-        newRoom.transform.localScale = Vector3.one;
-        newWalls.transform.parent = newRoom.transform;
-        newWalls.transform.position = Vector3.zero;
-        newWalls.transform.rotation = Quaternion.identity;
-        newWalls.transform.localScale = Vector3.one;
-        Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
-        SaveRoomInfo(roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
-        //ArrayJson의 데이터를 가지고 오브젝트 생성
-        for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
-        {
-            SaveJsonInfo info = arrayJsonLoad.datas[i];
-            LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
-        }
-    }
-
-    public void LoadFile(int id)
-    {
-        // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://192.168.0.243:8000/v1/products/" + id.ToString()));
         //ArrayJson의 데이터로 방 생성
         if (arrayJsonLoad.xsize > 0)
         {
@@ -243,8 +239,56 @@ public class Deco_Json : MonoBehaviour
                 LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
         }
+        // 도면을 선택했을 시, 도면에 맞는 방 생성
         else
         {
+            Destroy(GameObject.Find("Room"));
+
+            GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
+            newRoom.name = "Room";
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
+        }
+        SaveRoomInfo(roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
+    }
+
+    // 네트워크로 방 불러오기
+    public void LoadFile(int id)
+    {
+        // 방 가구의 정보들을 서버에서 받아옴
+        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/products/" + id.ToString()));
+        //ArrayJson의 데이터로 방 생성
+        if (arrayJsonLoad.xsize > 0)
+        {
+            Destroy(GameObject.Find("Room"));
+            GameObject newRoom = new GameObject("Room");
+            GameObject newWalls = new GameObject("Walls");
+            newRoom.transform.position = Vector3.zero;
+            newRoom.transform.rotation = Quaternion.identity;
+            newRoom.transform.localScale = Vector3.one;
+            newWalls.transform.parent = newRoom.transform;
+            newWalls.transform.position = Vector3.zero;
+            newWalls.transform.rotation = Quaternion.identity;
+            newWalls.transform.localScale = Vector3.one;
+            Deco_RoomInit.Instance.MakeRoom(arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door, newRoom.transform);
+
+            //ArrayJson의 데이터를 가지고 오브젝트 생성
+            for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
+            {
+                SaveJsonInfo info = arrayJsonLoad.datas[i];
+                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+            }
+        }
+        // 도면을 선택했을 시, 도면에 맞는 방 생성
+        else
+        {
+            Destroy(GameObject.Find("Room"));
+
             GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
             newRoom.name = "Room";
 
@@ -260,7 +304,7 @@ public class Deco_Json : MonoBehaviour
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
-        StartCoroutine(WaitForDownLoad("http://192.168.0.243:8000/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
+        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products//" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -268,25 +312,38 @@ public class Deco_Json : MonoBehaviour
     {
         FBXJson fbxJson = new FBXJson();
 
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
+        // 테스트용으로 임의의 값을 넣음
+        fbxJson.furnitName = "Test";
+        fbxJson.price = 100000;
+        fbxJson.location = true;
+        fbxJson.xsize = 1;
+        fbxJson.ysize = 0.75f;
+        fbxJson.zsize = 1;
+        fbxJson.no = 1;
+        fbxJson.category = "Bed";
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
-                fbxJson = wrapper.data;
+        //// 가구 ID로 요청해서 가구의 정보를 받아옴
+        //using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        //{
+        //    yield return www.SendWebRequest();
 
-                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
-                Debug.Log("FBXJson Download complete!");
-            }
-        }
+        //    if (www.result != UnityWebRequest.Result.Success)
+        //    {
+        //        Debug.Log(www.error);
+        //    }
+        //    else
+        //    {
+        //        FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+        //        fbxJson = wrapper.data;
 
-        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        //        //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
+        //        Debug.Log("FBXJson Download complete!");
+        //    }
+        //}
+
+        // 받아온 가구 정보를 사용해서 가구 생성
+        //using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 

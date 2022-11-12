@@ -51,7 +51,22 @@ public class Show_LoadRoomList : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(OnGetJson("http://192.168.0.243:8000/v1/products"));
+        // 네트워크의 방 리스트를 가져옴
+        //StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products/"));
+
+        // 로컬의 방 리스트를 가져옴
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        foreach (FileInfo file in di.GetFiles())
+        {
+            if (file.Extension.ToLower().CompareTo(".txt") == 0)
+            {
+                string jsonData = File.ReadAllText(file.FullName);
+                byte[] imgData = File.ReadAllBytes(file.FullName.Substring(0, file.FullName.Length - 4) + ".png");
+                ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
+                //string fileName = file.Name.Substring(0, file.Name.Length - 4);
+                AddContent(Random.Range(0, 1000), arrayJson.roomName, arrayJson.description, imgData);
+            }
+        }
     }
 
     // Update is called once per frame

@@ -28,6 +28,9 @@ public class JH_RoomDecoManager : MonoBehaviour
     {
         NewOrLoad.SetActive(true);
         LoadSelect.SetActive(false);
+
+        if (Deco_LoadRoomList.Instance != null)
+            Destroy(Deco_LoadRoomList.Instance.gameObject);
     }
 
     // Update is called once per frame

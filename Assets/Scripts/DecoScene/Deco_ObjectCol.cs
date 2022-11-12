@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Deco_ObjectCol : MonoBehaviour
 {
+    [SerializeField]
     bool isCollide = false;
     public bool IsCollide
     {
@@ -26,6 +27,7 @@ public class Deco_ObjectCol : MonoBehaviour
     {
         if (other.gameObject.layer != LayerMask.NameToLayer("Floor"))
         {
+            Debug.Log(other.name);
             IsCollide = true;
         }
     }

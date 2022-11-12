@@ -37,6 +37,15 @@ public class Deco_PutObject : MonoBehaviour
 
     private void Start()
     {
+        //fbxJson.furnitName = "Test";
+        //fbxJson.price = 100000;
+        //fbxJson.location = true;
+        //fbxJson.xsize = 1;
+        //fbxJson.ysize = 0.75f;
+        //fbxJson.zsize = 1;
+        //fbxJson.no = 1;
+        //fbxJson.category = "Bed";
+
         //StartCoroutine(GetFBXFromUrl(fbxJson));
     }
 
@@ -75,7 +84,7 @@ public class Deco_PutObject : MonoBehaviour
         //StartCoroutine(WaitForObj());
 
         // 받아온 id로 서버에 가구 요청
-        StartCoroutine(OnPostJson("http://192.168.0.243:8000/v1/products" + "/" + id.ToString()));
+        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products/" + "/" + id.ToString()));
         
         //StartCoroutine(WaitForObj());
     }
@@ -426,8 +435,8 @@ public class Deco_PutObject : MonoBehaviour
     IEnumerator GetFBXFromUrl(FBXJson fbxJson)
     {
         // 가져온 Json 파일에 있는 Url(fbx의 zip파일이 있는 url)로 Get을 해서 가구 생성
-        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
-        //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
+        //using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 
