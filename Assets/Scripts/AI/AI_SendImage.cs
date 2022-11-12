@@ -4,15 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.Networking;
-
-[Serializable]
-public class Cropped
-{
-    List<Images> data;
-}
 
 [Serializable]
 public class Images
@@ -27,6 +22,9 @@ public class AI_SendImage : MonoBehaviour
     private string[] m_FilePaths; // 파일 패스
 
     List<Texture2D> textures = new List<Texture2D>();
+
+    public GameObject cropItem;
+    public Transform content;
 
     public void OnFBXButtonOpenFile() // 버튼에 추가할 메서드
     {
@@ -93,13 +91,19 @@ public class AI_SendImage : MonoBehaviour
                 }
                 else
                 {
-                    textures.Add(((DownloadHandlerTexture)texRequest.downloadHandler).texture);
-                    byte[] data = ((DownloadHandlerTexture)texRequest.downloadHandler).texture.GetRawTextureData();
-                    File.WriteAllBytes(UnityEngine.Application.dataPath + "/" + i.ToString() + ".jpg", data);
+                    //textures.Add(((DownloadHandlerTexture)texRequest.downloadHandler).texture);
+                    GameObject go = Instantiate(cropItem, content);
+                    go.GetComponent<AI_CropItem>().texture = ((DownloadHandlerTexture)texRequest.downloadHandler).texture;
+                    go.GetComponent<AI_CropItem>().category = "Table";
+                    Debug.Log("Image Crop complete");
+
+                    texRequest.Dispose();
                 }
-            };
+            }
 
             Debug.Log("Form upload complete!");
+
+            www.Dispose();
         }
     }
 }
