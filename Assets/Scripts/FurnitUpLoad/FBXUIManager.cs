@@ -198,7 +198,7 @@ public class FBXUIManager : MonoBehaviour
 
     private void OpenImageFile()
     {
-        //imgBytes = File.ReadAllBytes(m_FilePaths[0]);
+        imgBytes = File.ReadAllBytes(m_FilePaths[0]);
     }
 
     string[] FileOpen(VistaOpenFileDialog openFileDialog)
@@ -214,7 +214,7 @@ public class FBXUIManager : MonoBehaviour
     void SetOpenFBXFileDialog()
     {
         m_OpenFileDialog.Title = "파일 열기";
-        m_OpenFileDialog.Filter = "이미지 파일| *.png; *jpg";
+        m_OpenFileDialog.Filter = "이미지 파일| *.png";
         m_OpenFileDialog.FilterIndex = 1;
         m_OpenFileDialog.Multiselect = false;
     }
@@ -224,12 +224,12 @@ public class FBXUIManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        //가구의 스크린샷을 찍어서 바이너리 데이터로 저장
-        byte[] imgBytes;
-        Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
-        texture.Apply();
-        imgBytes = texture.EncodeToPNG();
+        ////가구의 스크린샷을 찍어서 바이너리 데이터로 저장
+        //byte[] imgBytes;
+        //Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
+        //texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
+        //texture.Apply();
+        //imgBytes = texture.EncodeToPNG();
 
         // zip파일로 묶을 파일들을 저장할 디렉토리 생성
         string path = UnityEngine.Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
