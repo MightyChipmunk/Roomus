@@ -9,6 +9,9 @@ public class Show_RoomItem : MonoBehaviour
     int id = 0;
     public int ID { get { return id; } set { id = value; } }
 
+    string category = "";
+    public string Category { get { return category; } set { category = value; } }
+
     byte[] imgBytes;
     public byte[] ImageBytes { get { return imgBytes; } set { imgBytes = value; } }
 

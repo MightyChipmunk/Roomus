@@ -10,6 +10,7 @@ public class showRoomInfos
 {
     public int no;
     public string roomName;
+    public string category;
     public string roomDescription;
     public string screenShotUrl;
 }
@@ -64,7 +65,7 @@ public class Show_LoadRoomList : MonoBehaviour
                 byte[] imgData = File.ReadAllBytes(file.FullName.Substring(0, file.FullName.Length - 4) + ".png");
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
                 //string fileName = file.Name.Substring(0, file.Name.Length - 4);
-                AddContent(Random.Range(0, 1000), arrayJson.roomName, arrayJson.description, imgData);
+                AddContent(Random.Range(0, 1000), arrayJson.roomName, arrayJson.description, imgData, arrayJson.category);
             }
         }
     }
@@ -75,11 +76,12 @@ public class Show_LoadRoomList : MonoBehaviour
 
     }
 
-    void AddContent(int id, string roomName, string roomDesc, byte[] imgBytes)
+    void AddContent(int id, string roomName, string roomDesc, byte[] imgBytes, string category)
     {
         GameObject item = Instantiate(showRoomItem, trContent);
         item.name = roomName;
         item.GetComponent<Show_RoomItem>().ID = id;
+        item.GetComponent<Show_RoomItem>().Category = category;
         item.GetComponent<Show_RoomItem>().roomName.text = roomName;
         item.GetComponent<Show_RoomItem>().roomDescription.text = roomDesc;
         item.GetComponent<Show_RoomItem>().ImageBytes = imgBytes;
@@ -123,7 +125,7 @@ public class Show_LoadRoomList : MonoBehaviour
             {
                 // 가져온 스크린샷과 id로 라이브러리에 가구 추가
                 // Deco_FurnitItem
-                AddContent(info.no, info.roomName, info.roomDescription, www.downloadHandler.data);
+                AddContent(info.no, info.roomName, info.roomDescription, www.downloadHandler.data, info.category);
                 Debug.Log("ScreenShot Download complete!");
             }
         }
