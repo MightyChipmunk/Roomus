@@ -67,43 +67,41 @@ public class AI_SendImage : MonoBehaviour
 
         form.AddBinaryData("img", img, "Img", "application/jpg");
 
-        UnityWebRequest www = UnityWebRequest.Post(url, form);
-
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Images[] images = JsonHelper.FromJson<Images>(www.downloadHandler.text);
+            yield return www.SendWebRequest();
 
-            for (int i = 0; i < images.Length; i++)
+            if (www.result != UnityWebRequest.Result.Success)
             {
-                UnityWebRequest texRequest = UnityWebRequestTexture.GetTexture(images[i].url);
-
-                yield return texRequest.SendWebRequest();
-
-                if (texRequest.result != UnityWebRequest.Result.Success)
-                {
-                    Debug.Log(texRequest.error);
-                }
-                else
-                {
-                    //textures.Add(((DownloadHandlerTexture)texRequest.downloadHandler).texture);
-                    GameObject go = Instantiate(cropItem, content);
-                    go.GetComponent<AI_CropItem>().texture = ((DownloadHandlerTexture)texRequest.downloadHandler).texture;
-                    go.GetComponent<AI_CropItem>().category = "Table";
-                    Debug.Log("Image Crop complete");
-
-                    texRequest.Dispose();
-                }
+                Debug.Log(www.error);
             }
+            else
+            {
+                Images[] images = JsonHelper.FromJson<Images>(www.downloadHandler.text);
 
-            Debug.Log("Form upload complete!");
+                for (int i = 0; i < images.Length; i++)
+                {
+                    using (UnityWebRequest texRequest = UnityWebRequestTexture.GetTexture(images[i].url))
+                    {
+                        yield return texRequest.SendWebRequest();
 
-            www.Dispose();
+                        if (texRequest.result != UnityWebRequest.Result.Success)
+                        {
+                            Debug.Log(texRequest.error);
+                        }
+                        else
+                        {
+                            //textures.Add(((DownloadHandlerTexture)texRequest.downloadHandler).texture);
+                            GameObject go = Instantiate(cropItem, content);
+                            go.GetComponent<AI_CropItem>().texture = ((DownloadHandlerTexture)texRequest.downloadHandler).texture;
+                            go.GetComponent<AI_CropItem>().category = "Table";
+                            Debug.Log("Image Crop complete");
+                        }
+                    }
+                }
+
+                Debug.Log("Form upload complete!");
+            }
         }
     }
 }
