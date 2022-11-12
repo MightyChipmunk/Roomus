@@ -367,7 +367,9 @@ public class Deco_Json : MonoBehaviour
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
                 string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
-                File.WriteAllBytes(path, www.downloadHandler.data);
+
+                if (!File.Exists(path))
+                    File.WriteAllBytes(path, www.downloadHandler.data);
 
                 while (!File.Exists(path))
                 {
