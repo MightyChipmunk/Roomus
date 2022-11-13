@@ -9,6 +9,10 @@ public class LocalTestItem : MonoBehaviour
 
     [SerializeField]
     bool localTest = false;
+    [SerializeField]
+    string category = "Bedroom";
+
+    public string Category { get { return category; } }
 
     public Button button;
 

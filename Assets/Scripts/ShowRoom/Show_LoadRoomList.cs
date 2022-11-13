@@ -71,6 +71,22 @@ public class Show_LoadRoomList : MonoBehaviour
             }
         }
     }
+    public void OnClickCategory(string s)
+    {
+        for (int i = 0; i < trContent.transform.childCount; i++)
+        {
+            Show_RoomItem sr;
+            LocalTestItem lt;
+            if (trContent.transform.GetChild(i).TryGetComponent<Show_RoomItem>(out sr) && sr.Category != s)
+                trContent.transform.GetChild(i).gameObject.SetActive(false);
+            else if (trContent.transform.GetChild(i).TryGetComponent<Show_RoomItem>(out sr) && sr.Category == s)
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+            else if (trContent.transform.GetChild(i).TryGetComponent<LocalTestItem>(out lt) && lt.Category != s)
+                trContent.transform.GetChild(i).gameObject.SetActive(false);
+            else if (trContent.transform.GetChild(i).TryGetComponent<LocalTestItem>(out lt) && lt.Category == s)
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
 
     // Update is called once per frame
     void Update()

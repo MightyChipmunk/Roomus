@@ -2470,9 +2470,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 604460188}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
-        m_MethodName: OnLoadLibrary
+      - m_Target: {fileID: 609148624}
+        m_TargetAssemblyTypeName: JM_LibraryManager, Assembly-CSharp
+        m_MethodName: OnClickLibrary
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
