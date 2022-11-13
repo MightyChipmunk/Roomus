@@ -37,6 +37,8 @@ public class Show_LoadRoomList : MonoBehaviour
         }
     }
 
+    public bool localTest = false;
+
     private void Awake()
     {
         if (Instance == null)

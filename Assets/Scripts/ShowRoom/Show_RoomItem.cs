@@ -12,6 +12,9 @@ public class Show_RoomItem : MonoBehaviour
     string category = "";
     public string Category { get { return category; } set { category = value; } }
 
+    [SerializeField]
+    bool localTest = false;
+
     byte[] imgBytes;
     public byte[] ImageBytes { get { return imgBytes; } set { imgBytes = value; } }
 
@@ -41,6 +44,7 @@ public class Show_RoomItem : MonoBehaviour
     {
         Show_LoadRoomList.Instance.RoomName = gameObject.name;
         Show_LoadRoomList.Instance.ID = ID;
+        Show_LoadRoomList.Instance.localTest = localTest;
         SceneManager.LoadScene("Test_Connect");
     }
 }
