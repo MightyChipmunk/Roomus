@@ -214,7 +214,6 @@ public class Deco_Json : MonoBehaviour
         if (File.Exists(path))
         {
             File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", File.ReadAllBytes(path));
-            File.Delete(path);
         }
 
         SaveNewFile(roomName);

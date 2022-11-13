@@ -12,7 +12,14 @@ public class MainScreenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        screenCode = screenManager.GetComponent<JM_ScreenManager>();                                                               
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
+
+        if (JH_RoomDecoManager.Instance != null)
+            Destroy(JH_RoomDecoManager.Instance.gameObject);
+        else if (Deco_LoadRoomList.Instance != null)
+            Destroy(Deco_LoadRoomList.Instance.gameObject);
+        else if (Deco_GetXYZ.Instance != null)
+            Destroy(Deco_GetXYZ.Instance.gameObject);
     }
 
     // Update is called once per frame
