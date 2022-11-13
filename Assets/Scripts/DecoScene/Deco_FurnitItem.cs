@@ -12,6 +12,7 @@ public class Deco_FurnitItem : MonoBehaviour
     int id = 0;
     public int ID { get { return id; } set { id = value; } }
 
+    [SerializeField]
     string category = "";
     public string Category { get { return category; } set { category = value; } }
 
