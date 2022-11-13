@@ -27,7 +27,13 @@ public class Deco_PutObject : MonoBehaviour
 
     private void Awake()
     {
-        Directory.Delete(Application.persistentDataPath, true);
+        DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] files = dir.GetFiles("*.zip", SearchOption.AllDirectories);
+
+        foreach (FileInfo file in files)
+        {
+            file.Delete();
+        }
 
         if (Instance == null)
             Instance = this;

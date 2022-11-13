@@ -8,6 +8,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     void Start()
     {
+        PhotonNetwork.Disconnect();
         PhotonNetwork.ConnectUsingSettings();
     }
 

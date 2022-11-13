@@ -29,18 +29,18 @@ public class Show_InfoUI : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(player.transform.position, transform.position) < Mathf.Sqrt(Mathf.Pow(x + 3, 2) + Mathf.Pow(y + 3, 2))/2)
-        {
-            canvas.GetComponent<Show_HideUI>().canHide = false;
-            cap = true;
-            infoHeader.transform.Find("RoomName").GetComponent<Text>().text = gameObject.name;
-            infoHeader.transform.Find("Category").GetComponent<Text>().text = category;
-            infoHeader.transform.Find("Description").GetComponent<Text>().text = description;
-        }
-        else if (cap)
-        {
-            canvas.GetComponent<Show_HideUI>().canHide = true;
-            cap = false;
-        }
+        //if (Vector3.Distance(player.transform.position, transform.position) < Mathf.Sqrt(Mathf.Pow(x + 3, 2) + Mathf.Pow(y + 3, 2))/2)
+        //{
+        //    canvas.GetComponent<Show_HideUI>().canHide = false;
+        //    cap = true;
+        //    infoHeader.transform.Find("RoomName").GetComponent<Text>().text = gameObject.name;
+        //    infoHeader.transform.Find("Category").GetComponent<Text>().text = category;
+        //    infoHeader.transform.Find("Description").GetComponent<Text>().text = description;
+        //}
+        //else if (cap)
+        //{
+        //    canvas.GetComponent<Show_HideUI>().canHide = true;
+        //    cap = false;
+        //}
     }
 }

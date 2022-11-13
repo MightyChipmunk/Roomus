@@ -35,8 +35,7 @@ namespace TriLibCore.Samples
         /// </remarks>
         private void Start()
         {
-            var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-            AssetLoader.LoadModelFromFile(Application.dataPath + "/" + ModelPath, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
+
         }
 
         /// <summary>

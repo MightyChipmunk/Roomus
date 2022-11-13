@@ -30,11 +30,15 @@ public class CameraController : MonoBehaviourPun
         // 마우스 위치에 따른 각도 조절
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
-        mx += mh * rotSpeed * Time.deltaTime;
-        my += mv * rotSpeed * Time.deltaTime;
-        my = Mathf.Clamp(my, -60, 60);
+
         if (Input.GetKey(KeyCode.Z))
-            transform.eulerAngles = new Vector3(-my, mx, 0);
+        {
+            mx += mh * rotSpeed * Time.deltaTime;
+            my += mv * rotSpeed * Time.deltaTime;
+            my = Mathf.Clamp(my, -60, 60);
+        }
+            
+        transform.eulerAngles = new Vector3(-my, mx, 0);
 
         transform.position = player.transform.position; 
     }
