@@ -53,7 +53,7 @@ public class Deco_UIManager : MonoBehaviour
 
         StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
 
-        library.transform.parent.gameObject.SetActive(false);
+        //library.transform.parent.gameObject.SetActive(false);
 
         nameField.onEndEdit.AddListener(OnNameSubmit);
         descriptField.onEndEdit.AddListener(OnDescSubmit);
