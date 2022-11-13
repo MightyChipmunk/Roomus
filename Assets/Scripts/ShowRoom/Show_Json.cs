@@ -49,6 +49,7 @@ public class Show_Json : MonoBehaviourPun
         string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(jsonData);
+        JH_MoreInfoManager.Instance.arrayJson = arrayJsonLoad;
         if (arrayJsonLoad.xsize > 0)
         {
             Destroy(GameObject.Find("Room"));

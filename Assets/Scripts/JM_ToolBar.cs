@@ -18,12 +18,12 @@ public class JM_ToolBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.Slash))
         {
             ActivateToolBar();
         }
 
-        else if (Input.GetKeyUp(KeyCode.L))
+        else if (Input.GetKeyUp(KeyCode.Slash))
         {
             DeactivateToolBar();
         }

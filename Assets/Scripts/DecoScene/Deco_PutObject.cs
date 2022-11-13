@@ -74,11 +74,11 @@ public class Deco_PutObject : MonoBehaviour
 
     public void delObj()
     {
-        if (obj)
-        {
-            Destroy(obj);
-            obj = null;
-        }
+        //if (obj)
+        //{
+        //    Destroy(obj);
+        //    obj = null;
+        //}
     }
 
     public void LoadFBX(int id)

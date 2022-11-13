@@ -7,24 +7,43 @@ using UnityEngine.UI;
 public class JH_MoreInfoManager : MonoBehaviour
 {
     public GameObject item;
-    public GameObject itemMoreInfo;
-
     public Transform trContent;
+    public ArrayJson arrayJson;
+
+    public static JH_MoreInfoManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(Instance.gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        itemMoreInfo.SetActive(false);
+        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
     }
 
-    // Update is called once per frame
-    void Update()
+    List<int> IDs = new List<int>();
+    void GetIDs()
     {
-        
+        foreach (SaveJsonInfo info in arrayJson.datas)
+        {
+            IDs.Add(info.id);
+        }
     }
 
     IEnumerator OnGetJson(string uri)
     {
+        while(arrayJson == null)
+        {
+            yield return null;
+        }
+
+        GetIDs();
+
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
             yield return www.SendWebRequest();
@@ -38,14 +57,14 @@ public class JH_MoreInfoManager : MonoBehaviour
                 furnitInfos[] data = JsonHelper.FromJson<furnitInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    StartCoroutine(OnGetUrl(data[i]));
+                    if (IDs.Contains(data[i].no))
+                        StartCoroutine(OnGetUrl(data[i]));
                 }
                 Debug.Log("UrlList Download complete!");
             }
         }
     }
 
-    // ?????? ????????? id?? ?????? ???
     IEnumerator OnGetUrl(furnitInfos info)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
@@ -58,27 +77,18 @@ public class JH_MoreInfoManager : MonoBehaviour
             }
             else
             {
-                // ?????? ????????? id?? ????귯???? ???? ???
                 // Deco_FurnitItem
-                AddContent(info.category, www.downloadHandler.data);
+                AddContent(info.no, info.category, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }
     }
 
-    void AddContent(string name, byte[] imgData)
+    void AddContent(int id, string name, byte[] imgData)
     {
         GameObject obj = Instantiate(item, trContent);
-        obj.transform.Find("Text").GetComponent<Text>().text = name;
-        // 받아온 이미지의 바이너리 데이터로 자신의 이미지 변경
-        Texture2D tex = new Texture2D(2, 2);
-        tex.LoadImage(imgData);
-        Rect rect = new Rect(0, 0, tex.width, tex.height);
-        obj.transform.Find("Profile").GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-    }
-
-    void OnClicked()
-    {
-        itemMoreInfo.SetActive(true);
+        obj.GetComponent<Show_MoreInfoItem>().ItemName = name;
+        obj.GetComponent<Show_MoreInfoItem>().ID = id;
+        obj.GetComponent<Show_MoreInfoItem>().ImageBytes = imgData;
     }
 }
