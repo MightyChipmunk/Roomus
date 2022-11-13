@@ -126,7 +126,7 @@ public class FBXUIManager : MonoBehaviour
     }
     void OnZchanged(string s)
     {
-        fbxJson.ysize = float.Parse(s);
+        fbxJson.zsize = float.Parse(s);
     }
 
     void OnInfoChanged(string s)
