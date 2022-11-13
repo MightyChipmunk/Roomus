@@ -13,6 +13,7 @@ public class Show_InfoUI : MonoBehaviourPun
 
     public float x;
     public float y;
+    public string roomName;
     public string category;
     public string description;
 
@@ -24,6 +25,10 @@ public class Show_InfoUI : MonoBehaviourPun
         infoUI = canvas.transform.Find("MoreInfo").gameObject;
         infoHeader = infoUI.transform.Find("Header").gameObject;
         player = GameObject.Find(PhotonNetwork.NickName);
+
+        infoHeader.transform.Find("RoomName").GetComponent<Text>().text = roomName;
+        infoHeader.transform.Find("Category").GetComponent<Text>().text = category;
+        infoHeader.transform.Find("Description").GetComponent<Text>().text = description;
     }
 
     // Update is called once per frame

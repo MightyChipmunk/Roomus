@@ -10042,7 +10042,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Bedroom 1
 --- !u!222 &1026773393
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13570,7 +13570,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Studio interior set for undergraduate college students.
 --- !u!222 &1367340188
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14949,6 +14949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 5
   y: 5
+  roomName: BedRoom 1
   category: BedRoom
   description: Studio interior set for undergraduate college students.
 --- !u!1 &1553060530
