@@ -33,7 +33,8 @@ public class CameraController : MonoBehaviourPun
         mx += mh * rotSpeed * Time.deltaTime;
         my += mv * rotSpeed * Time.deltaTime;
         my = Mathf.Clamp(my, -60, 60);
-        transform.eulerAngles = new Vector3(-my, mx, 0);
+        if (Input.GetKey(KeyCode.Z))
+            transform.eulerAngles = new Vector3(-my, mx, 0);
 
         transform.position = player.transform.position; 
     }

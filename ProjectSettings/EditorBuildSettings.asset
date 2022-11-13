@@ -45,6 +45,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ShowRoom/ShowRoom_New.unity
     guid: 2f44083e2519a4cf89e4adf25b0a6d57
   - enabled: 1
+    path: Assets/Scenes/ShowRoom/JH_ShowRoom.unity
+    guid: 9375382ec77b335468e26468bae19ab9
+  - enabled: 1
     path: Assets/Scenes/ShowRoom/ShowRoom.unity
     guid: 636d8b3ed87a25a4fabc73370c277142
   - enabled: 1
