@@ -75,6 +75,33 @@ public class Deco_Json : MonoBehaviour
         arrayJson.ysize = y;
         arrayJson.zsize = z;
         arrayJson.door = bal;
+
+        //StartCoroutine(FirstPost("", roomName, x, y, z, bal));
+    }
+
+    IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddField("roomName", roomName);
+        form.AddField("xsize", x.ToString());
+        form.AddField("ysize", y.ToString());
+        form.AddField("zsize", z.ToString());
+        form.AddField("balcony", bal);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("roomInfo Download complete!");
+            }
+        }
     }
 
     public void SaveJson(GameObject go, int id)

@@ -1,0 +1,12 @@
+{
+    "no": 0,
+    "roomName": "asdf",
+    "access": true,
+    "category": "Living Room",
+    "description": "asdfasfd",
+    "xsize": -1.0,
+    "ysize": -1.0,
+    "zsize": -1.0,
+    "door": 0,
+    "datas": []
+}

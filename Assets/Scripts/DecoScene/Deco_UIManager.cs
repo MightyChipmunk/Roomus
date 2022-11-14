@@ -107,8 +107,8 @@ public class Deco_UIManager : MonoBehaviour
             posting.SetActive(false);
         else
         {
-
-            StartCoroutine(Deco_Json.Instance.WaitForScreenShot());
+            posting.SetActive(true);
+            //StartCoroutine(Deco_Json.Instance.WaitForScreenShot());
         }
     }
 
@@ -122,7 +122,30 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnUploadClicked()
     {
+        StartCoroutine(WaitForScreenShot(roomName));
         Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);
+    }
+
+    public IEnumerator WaitForScreenShot(string roomName)
+    {
+        posting.SetActive(false);
+
+        yield return new WaitForEndOfFrame();
+
+        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
+        byte[] imgBytes;
+        Texture2D texture = new Texture2D(800, 800, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
+        texture.Apply();
+        imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", imgBytes);
+
+        if (!File.Exists(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png"))
+        {
+            yield return null;
+        }
+
+        EndScreenShot();
     }
 
     void OnNameSubmit(string s)
