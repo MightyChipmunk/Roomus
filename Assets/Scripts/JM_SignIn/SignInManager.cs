@@ -97,12 +97,12 @@ public class SignInManager : MonoBehaviour
                 Debug.Log(loginAPI.downloadHandler.text);
                 token = loginAPI.GetResponseHeader("Authorization");
                 Debug.Log(loginAPI.GetResponseHeader("Authorization"));
-                Debug.Log(loginAPI);
 
                 //UserReturnInfo ex = (UserReturnInfo)loginAPI;
                 //Debug.Log(ex);
                 //UserReturnInfo returnInfo = JsonUtility.FromJson<UserReturnInfo>(loginAPIs)
-                
+
+                TokenManager.Instance.Token = token;
             }
         }
     }   

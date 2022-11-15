@@ -36,7 +36,7 @@ public class Deco_RoomInit : MonoBehaviour
         // 도면을 불러왔을 때
         else if (JH_RoomDecoManager.Instance != null)
         {
-            roomName = "Room1";
+            roomName = "Room" + JH_RoomDecoManager.Instance.SelectedRoom.ToString();
             xSize = -1;
             ySize = -1;
             zSize = -1;
@@ -50,6 +50,7 @@ public class Deco_RoomInit : MonoBehaviour
         {
             MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
             Deco_Json.Instance.SaveRoomInfo(roomName, xSize, ySize, zSize, balcony);
+            Deco_Json.Instance.FirstPost("roomUrl", roomName, xSize, ySize, zSize, balcony);
             //Deco_Json.Instance.SaveNewFile(roomName);
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
@@ -57,16 +58,17 @@ public class Deco_RoomInit : MonoBehaviour
         else if (Deco_LoadRoomList.Instance != null)    
         {
             // 네트워크로 불러오기
-            //Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
+            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
             // 로컬로 불러오기
-            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
+            //Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
         }
-        // 도면 방을 가져왔을 때
+        // 도면 방을 생성했을 때
         else if (JH_RoomDecoManager.Instance != null)
         {
             GameObject go = Instantiate(Resources.Load<GameObject>("Room" + JH_RoomDecoManager.Instance.SelectedRoom.ToString()));
             Deco_Json.Instance.SaveRoomInfo(roomName, -1, -1, -1, JH_RoomDecoManager.Instance.SelectedRoom);
+            Deco_Json.Instance.FirstPost("roomUrl", roomName, xSize, ySize, zSize, balcony);
             go.name = "Room";
             Destroy(JH_RoomDecoManager.Instance.gameObject);
         }
@@ -129,38 +131,18 @@ public class Deco_RoomInit : MonoBehaviour
         {
             case 1:
                 DoorMesh win1 = frontWall.AddComponent<DoorMesh>();
-                //GameObject balc1 = Instantiate(balconyFac);
-                //balc1.transform.parent = room;
-                //balc1.transform.localScale = new Vector3(frontWall.transform.localScale.x, z, 3);
-                //balc1.transform.forward = frontWall.transform.forward;
-                //balc1.transform.position = frontWall.transform.position;
                 win1.MakeHole(-0.15f / frontWall.transform.localScale.x * 3.5f, 0.15f / frontWall.transform.localScale.x * 3.5f, 0.1f / frontWall.transform.localScale.y * 3.5f);
                 break;
             case 2:
                 DoorMesh win2 = backWall.AddComponent<DoorMesh>();
-                //GameObject balc2 = Instantiate(balconyFac);
-                //balc2.transform.parent = room;
-                //balc2.transform.localScale = new Vector3(backWall.transform.localScale.x, z, 3);
-                //balc2.transform.forward = backWall.transform.forward;
-                //balc2.transform.position = backWall.transform.position;
                 win2.MakeHole(-0.15f / backWall.transform.localScale.x * 3.5f, 0.15f / backWall.transform.localScale.x * 3.5f, 0.1f / frontWall.transform.localScale.y * 3.5f);
                 break;
             case 3:
                 DoorMesh win3 = rightWall.AddComponent<DoorMesh>();
-                //GameObject balc3 = Instantiate(balconyFac);
-                //balc3.transform.parent = room;
-                //balc3.transform.localScale = new Vector3(rightWall.transform.localScale.x, z, 3);
-                //balc3.transform.forward = rightWall.transform.forward;
-                //balc3.transform.position = rightWall.transform.position;
                 win3.MakeHole(-0.15f / rightWall.transform.localScale.x * 3.5f, 0.15f / rightWall.transform.localScale.x * 3.5f, 0.1f / frontWall.transform.localScale.y * 3.5f);
                 break;
             case 4:
                 DoorMesh win4 = leftWall.AddComponent<DoorMesh>();
-                //GameObject balc4 = Instantiate(balconyFac);
-                //balc4.transform.parent = room;
-                //balc4.transform.localScale = new Vector3(leftWall.transform.localScale.x, z, 3);
-                //balc4.transform.forward = leftWall.transform.forward;
-                //balc4.transform.position = leftWall.transform.position;
                 win4.MakeHole(-0.15f / leftWall.transform.localScale.x * 3.5f, 0.15f / leftWall.transform.localScale.x * 3.5f, 0.1f / frontWall.transform.localScale.y * 3.5f);
                 break;
         }

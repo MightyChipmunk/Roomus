@@ -54,13 +54,6 @@ public class Deco_Json : MonoBehaviour
         arrayJson.datas = new List<SaveJsonInfo>();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
-
-        //ObjectAdd();
-
-        if (saveInputField != null)
-            saveInputField.onSubmit.AddListener(SaveNewFile);
-        if (loadInputField != null)
-            loadInputField.onSubmit.AddListener(LoadFile);
     }
 
     private void Start()
@@ -68,6 +61,7 @@ public class Deco_Json : MonoBehaviour
         Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
     }
 
+    // 현재 작업중인 방의 정보를 저장
     public void SaveRoomInfo(string roomName, float x, float y, float z, int bal)
     {
         arrayJson.roomName = roomName;
@@ -75,11 +69,11 @@ public class Deco_Json : MonoBehaviour
         arrayJson.ysize = y;
         arrayJson.zsize = z;
         arrayJson.door = bal;
-
-        //StartCoroutine(FirstPost("", roomName, x, y, z, bal));
     }
 
-    IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
+
+    // 처음 방을 생성할 때 네트워크에 방의 이름, 크기, 문 정보를 넘김
+    public IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
     {
         WWWForm form = new WWWForm();
 
@@ -130,7 +124,8 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    public void SaveNewFile(string roomName)
+    // 방을 포스팅 할 시 이름과 스크린샷 저장
+    public void SaveNewFile(string roomName, byte[] imgData)
     {
         if (roomName != null)
         {
@@ -139,51 +134,22 @@ public class Deco_Json : MonoBehaviour
         }
         
         // JsonData를 로컬로 저장
-        string jsonData = JsonUtility.ToJson(arrayJson, true);
-        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+        //string jsonData = JsonUtility.ToJson(arrayJson, true);
+        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
 
-        // jsonData를 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson));
+        // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
+        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson, imgData));
     }
 
-    public IEnumerator WaitForScreenShot()
-    {
-        yield return new WaitForEndOfFrame();
-
-        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
-        byte[] imgBytes;
-        Texture2D texture = new Texture2D(800, 800, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
-        texture.Apply();
-        imgBytes = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png", imgBytes);
-
-        if (!File.Exists(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png"))
-        {
-            yield return null;
-        }
-
-        Deco_UIManager.Instance.EndScreenShot();
-    }
-
-    // 방 정보를 서버에 Json 형식으로 업로드
-    IEnumerator OnPostJson(string uri, ArrayJson arrayJson)
+    // 방 정보와 스크린샷을 서버에 Json 형식으로 업로드
+    IEnumerator OnPostJson(string uri, ArrayJson arrayJson, byte[] imgData)
     {
         WWWForm form = new WWWForm();
 
         SaveJsonInfo[] datas = arrayJson.datas.ToArray();
         string datasString = JsonHelper.ToJson(datas);
 
-        yield return new WaitForEndOfFrame();
-
-        // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
-        byte[] imgBytes;
-        Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0, false);
-        texture.Apply();
-        imgBytes = texture.EncodeToPNG();
-
-        form.AddBinaryData("screenShot", imgBytes);
+        form.AddBinaryData("screenShot", imgData);
         form.AddField("roomName", arrayJson.roomName);
         form.AddField("access", arrayJson.access.ToString());
         if (arrayJson.category != null)
@@ -211,7 +177,7 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    public void PostFile(string roomName, bool access, int category, string desc)
+    public void PostFile(string roomName, bool access, int category, string desc, byte[] imgData)
     {
         arrayJson.access = access;
         switch (category)
@@ -237,13 +203,13 @@ public class Deco_Json : MonoBehaviour
         }
         arrayJson.description = desc;
 
-        string path = Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png";
-        if (File.Exists(path))
-        {
-            File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", File.ReadAllBytes(path));
-        }
+        //string path = Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png";
+        //if (File.Exists(path))
+        //{
+        //    File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", File.ReadAllBytes(path));
+        //}
 
-        SaveNewFile(roomName);
+        SaveNewFile(roomName, imgData);
     }
 
     //로컬로 방 불러오기
@@ -350,16 +316,6 @@ public class Deco_Json : MonoBehaviour
     {
         FBXJson fbxJson = new FBXJson();
 
-        //// 테스트용으로 임의의 값을 넣음
-        //fbxJson.furnitName = "Test";
-        //fbxJson.price = 100000;
-        //fbxJson.location = true;
-        //fbxJson.xsize = 1;
-        //fbxJson.ysize = 0.75f;
-        //fbxJson.zsize = 1;
-        //fbxJson.no = 1;
-        //fbxJson.category = "Bed";
-
         // 가구 ID로 요청해서 가구의 정보를 받아옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
@@ -381,7 +337,6 @@ public class Deco_Json : MonoBehaviour
 
         // 받아온 가구 정보를 사용해서 가구 생성
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
-        //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
             yield return www.SendWebRequest();
 

@@ -54,7 +54,7 @@ public class JH_RoomDecoManager : MonoBehaviour
 
     public void OnClickRoom(int n)
     {
-        //selectedRoom = n;
-        SceneManager.LoadScene("LocalRoom");
+        selectedRoom = n;
+        SceneManager.LoadScene("RoomDecoScene");
     }
 }

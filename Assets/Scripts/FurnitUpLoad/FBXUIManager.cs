@@ -28,6 +28,7 @@ public class FBXJson
     public int countLikes = 0;
     public bool isDelete = false;
     //public string screenShotUrl;
+    public string sellUrl = "";
 }
 
 public class FBXUIManager : MonoBehaviour
@@ -53,6 +54,7 @@ public class FBXUIManager : MonoBehaviour
     public InputField zInput;
     public Dropdown categoryUI;
     public InputField infoInput;
+    public InputField sellUrl;
 
     public static FBXUIManager Instance;
 
@@ -81,6 +83,7 @@ public class FBXUIManager : MonoBehaviour
         zInput.onEndEdit.AddListener(OnZchanged);
 
         infoInput.onEndEdit.AddListener(OnInfoChanged);
+        sellUrl.onEndEdit.AddListener(OnSellChanged);
     }
 
     // Update is called once per frame
@@ -132,6 +135,11 @@ public class FBXUIManager : MonoBehaviour
     void OnInfoChanged(string s)
     {
         fbxJson.information = s;
+    }
+
+    void OnSellChanged(string s)
+    {
+        fbxJson.sellUrl = s;
     }
 
     public void OnNextButtonClicked()
@@ -224,13 +232,6 @@ public class FBXUIManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        ////가구의 스크린샷을 찍어서 바이너리 데이터로 저장
-        //byte[] imgBytes;
-        //Texture2D texture = new Texture2D(Screen.width / 3, Screen.height / 2, TextureFormat.RGB24, false);
-        //texture.ReadPixels(new Rect(640, 360, Screen.width / 3, Screen.height / 2), 0, 0, false);
-        //texture.Apply();
-        //imgBytes = texture.EncodeToPNG();
-
         // zip파일로 묶을 파일들을 저장할 디렉토리 생성
         string path = UnityEngine.Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
         Directory.CreateDirectory(path);
@@ -251,6 +252,7 @@ public class FBXUIManager : MonoBehaviour
         form.AddField("ysize", fbxJson.ysize.ToString());
         form.AddField("zsize", fbxJson.zsize.ToString());
         form.AddField("price", fbxJson.price.ToString());
+        form.AddField("sell", fbxJson.sellUrl);
 
         Debug.Log(fbxJson.xsize.ToString());
 

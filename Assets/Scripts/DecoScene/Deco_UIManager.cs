@@ -122,11 +122,10 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnUploadClicked()
     {
-        StartCoroutine(WaitForScreenShot(roomName));
-        Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);
+        StartCoroutine(WaitForScreenShot());
     }
 
-    public IEnumerator WaitForScreenShot(string roomName)
+    public IEnumerator WaitForScreenShot()
     {
         posting.SetActive(false);
 
@@ -138,12 +137,8 @@ public class Deco_UIManager : MonoBehaviour
         texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
         texture.Apply();
         imgBytes = texture.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", imgBytes);
 
-        if (!File.Exists(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png"))
-        {
-            yield return null;
-        }
+        Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description, imgBytes);
 
         EndScreenShot();
     }
