@@ -5,17 +5,24 @@ using UnityEngine.Networking;
 
 public class PutDeleteTest : MonoBehaviour
 {
-    [SerializeField]
-    string url;
+    public GameObject prefab;
+    public Transform trContent;
+
+    string url = "http://54.180.108.64:80/v1/products";
+
+    private void Start()
+    {
+        StartCoroutine(OnGetJson(url));
+    }
 
     public void OnPut()
     {
-        StartCoroutine(Put(url));
+        //StartCoroutine(Put(url));
     }
 
     public void OnDelete()
     {
-        StartCoroutine(Delete(url));
+        //StartCoroutine(Delete(url));
     }
 
     IEnumerator Put(string url)
@@ -59,5 +66,58 @@ public class PutDeleteTest : MonoBehaviour
         {
             Debug.Log("Delete complete!");
         }
+    }
+
+    IEnumerator OnGetJson(string uri)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // url ?עק?? json???? ???? ??????
+                furnitInfos[] data = JsonHelper.FromJson<furnitInfos>(www.downloadHandler.text);
+                for (int i = 0; i < data.Length; i++)
+                {
+                    // ?????? url ?עק?? ????????? ?????? ????????? id?? ???????? ??? ????
+                    StartCoroutine(OnGetUrl(data[i]));
+                }
+                Debug.Log("UrlList Download complete!");
+            }
+        }
+    }
+
+    IEnumerator OnGetUrl(furnitInfos info)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // ?????? ????????? id?? ????‚צ???? ???? ???
+                // Deco_FurnitItem
+                AddContent(info.no, www.downloadHandler.data);
+                Debug.Log("ScreenShot Download complete!");
+            }
+        }
+    }
+
+    void AddContent(int id = 0, byte[] imgBytes = null)
+    {
+        GameObject item = Instantiate(prefab, trContent);
+        item.name = id.ToString();
+        //item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
+        item.GetComponent<DeleteItem>().ID = id;
+        item.GetComponent<DeleteItem>().ImageBytes = imgBytes;
     }
 }
