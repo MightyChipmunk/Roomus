@@ -8,9 +8,24 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [Serializable]
+public class SaveRoomNo
+{
+    public int data;
+}
+
+[Serializable]
 public class SaveJsonInfo
 {
-    public int id;
+    public int idx;
+    public Vector3 position;
+    public Vector3 eulerAngle;
+    public Vector3 localScale;
+}
+
+[Serializable]
+public class SaveJsonInfo_Get
+{
+    public int funitureArrangementNo;
     public Vector3 position;
     public Vector3 eulerAngle;
     public Vector3 localScale;
@@ -19,7 +34,7 @@ public class SaveJsonInfo
 [Serializable]
 public class ArrayJson
 {
-    public int no;
+    public int roomNo;
     public string roomName;
     public bool access = false;
     public string category = "";
@@ -32,6 +47,36 @@ public class ArrayJson
     public List<SaveJsonInfo> datas;
 }
 
+[Serializable]
+public class ArrayJson_First
+{
+    public int no;
+    public string roomName;
+    public bool access = false;
+    public string category = "";
+    public string description = "";
+    public float xsize;
+    public float ysize;
+    public float zsize;
+    public int door = 0;
+}
+
+[Serializable]
+public class ArrayJson_Get
+{
+    public int roomNo;
+    public string roomName = "";
+    public bool access = false;
+    public string category = "";
+    public string description = "";
+    public float xsize;
+    public float ysize;
+    public float zsize;
+    public int door = 0;
+    //public byte[] imgData;
+    public List<SaveJsonInfo> furnitureArrangementList;
+}
+
 public class Deco_Json : MonoBehaviour
 {
     public InputField saveInputField;
@@ -40,6 +85,7 @@ public class Deco_Json : MonoBehaviour
     public static Deco_Json Instance { get; set; }
     ArrayJson arrayJson;
     ArrayJson arrayJsonLoad;
+    SaveRoomNo saveRoomNo;
 
     private void Awake()
     {
@@ -54,6 +100,8 @@ public class Deco_Json : MonoBehaviour
         arrayJson.datas = new List<SaveJsonInfo>();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
+
+        saveRoomNo = new SaveRoomNo();
     }
 
     private void Start()
@@ -75,16 +123,21 @@ public class Deco_Json : MonoBehaviour
     // 처음 방을 생성할 때 네트워크에 방의 이름, 크기, 문 정보를 넘김
     public IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
     {
-        WWWForm form = new WWWForm();
+        ArrayJson_First firstJson = new ArrayJson_First();
+        firstJson.roomName = roomName;
+        firstJson.xsize = x;
+        firstJson.ysize = y;
+        firstJson.zsize = z;
+        firstJson.door = bal;
 
-        form.AddField("roomName", roomName);
-        form.AddField("xsize", x.ToString());
-        form.AddField("ysize", y.ToString());
-        form.AddField("zsize", z.ToString());
-        form.AddField("balcony", bal);
+        string jsonData = JsonUtility.ToJson(firstJson);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
         {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -93,7 +146,8 @@ public class Deco_Json : MonoBehaviour
             }
             else
             {
-                Debug.Log("roomInfo Download complete!");
+                saveRoomNo = JsonUtility.FromJson<SaveRoomNo>(www.downloadHandler.text);
+                Debug.Log("roomInfo Upload complete!");
             }
         }
     }
@@ -103,7 +157,7 @@ public class Deco_Json : MonoBehaviour
         SaveJsonInfo info;
         
         info = new SaveJsonInfo();
-        info.id = id;
+        info.idx = id;
         info.position = go.transform.position;
         info.eulerAngle = go.transform.eulerAngles;
         info.localScale = go.transform.localScale;
@@ -141,41 +195,91 @@ public class Deco_Json : MonoBehaviour
         File.WriteAllBytes(path, imgData);
 
         // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
-        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson, imgData));
+        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/rooms/", saveRoomNo.data, arrayJson, imgData));
     }
 
     // 방 정보와 스크린샷을 서버에 Json 형식으로 업로드
-    IEnumerator OnPostJson(string uri, ArrayJson arrayJson, byte[] imgData)
+    IEnumerator OnPostJson(string uri, int id, ArrayJson arrayJson, byte[] imgData)
     {
-        WWWForm form = new WWWForm();
+        //WWWForm form = new WWWForm();
+
+        //SaveJsonInfo[] datas = arrayJson.datas.ToArray();
+        //string datasString = JsonHelper.ToJson(datas);
+
+        //form.AddBinaryData("screenShot", imgData);
+        //form.AddField("roomName", arrayJson.roomName);
+        //form.AddField("access", arrayJson.access.ToString());
+        //if (arrayJson.category != null)
+        //    form.AddField("category", arrayJson.category);
+        //if (arrayJson.description != null)
+        //    form.AddField("description", arrayJson.description);
+        //form.AddField("xsize", arrayJson.xsize.ToString());
+        //form.AddField("ysize", arrayJson.ysize.ToString());
+        //form.AddField("zsize", arrayJson.zsize.ToString());
+        //form.AddField("door", arrayJson.door.ToString());
+        //form.AddField("datas", datasString);
+
+        //using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        //{
+        //    yield return www.SendWebRequest();
+
+        //    if (www.result != UnityWebRequest.Result.Success)
+        //    {
+        //        Debug.Log(www.error);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Form upload complete!");
+        //    }
+        //}
+
+        ArrayJson_First firstJson = new ArrayJson_First();
+        firstJson.roomName = arrayJson.roomName;
+        firstJson.xsize = arrayJson.xsize;
+        firstJson.ysize = arrayJson.ysize;
+        firstJson.zsize = arrayJson.zsize;
+        firstJson.door = arrayJson.door;
+
+        string jsonData = JsonUtility.ToJson(firstJson);
+
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString(), jsonData))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Room Put complete!");
+                }
+            }
+        }
 
         SaveJsonInfo[] datas = arrayJson.datas.ToArray();
         string datasString = JsonHelper.ToJson(datas);
 
-        form.AddBinaryData("screenShot", imgData);
-        form.AddField("roomName", arrayJson.roomName);
-        form.AddField("access", arrayJson.access.ToString());
-        if (arrayJson.category != null)
-            form.AddField("category", arrayJson.category);
-        if (arrayJson.description != null)
-            form.AddField("description", arrayJson.description);
-        form.AddField("xsize", arrayJson.xsize.ToString());
-        form.AddField("ysize", arrayJson.ysize.ToString());
-        form.AddField("zsize", arrayJson.zsize.ToString());
-        form.AddField("door", arrayJson.door.ToString());
-        form.AddField("datas", datasString);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/furniture", datasString))
         {
-            yield return www.SendWebRequest();
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            {
+                yield return www.SendWebRequest();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Form upload complete!");
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Furnit Put complete!");
+                }
             }
         }
     }
@@ -237,7 +341,7 @@ public class Deco_Json : MonoBehaviour
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
@@ -252,7 +356,7 @@ public class Deco_Json : MonoBehaviour
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
         }
         SaveRoomInfo(roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
@@ -262,7 +366,7 @@ public class Deco_Json : MonoBehaviour
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/products/" + id.ToString()));
+        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/rooms/" + id.ToString()));
         //ArrayJson의 데이터로 방 생성
         if (arrayJsonLoad.xsize > 0)
         {
@@ -282,7 +386,7 @@ public class Deco_Json : MonoBehaviour
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
@@ -297,7 +401,7 @@ public class Deco_Json : MonoBehaviour
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);

@@ -31,7 +31,7 @@ public class JH_MoreInfoManager : MonoBehaviour
     {
         foreach (SaveJsonInfo info in arrayJson.datas)
         {
-            IDs.Add(info.id);
+            IDs.Add(info.idx);
         }
     }
 

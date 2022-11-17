@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class AI_CropItem : MonoBehaviour
 {
     public Texture texture;
+    public byte[] texBytes;
     public string category;
 
     // Start is called before the first frame update
@@ -19,6 +21,27 @@ public class AI_CropItem : MonoBehaviour
 
     void OnClick()
     {
-        Deco_UIManager.Instance.OnClickCategory(category);
+        StartCoroutine(OnClickPost(""));
+    }
+
+    IEnumerator OnClickPost(string url)
+    {
+        WWWForm form = new WWWForm();
+
+        form.AddBinaryData("cropImage", texBytes);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Form upload complete!");
+            }
+        }
     }
 }

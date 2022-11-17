@@ -81,7 +81,7 @@ public class Show_Json : MonoBehaviourPun
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
@@ -104,7 +104,7 @@ public class Show_Json : MonoBehaviourPun
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
@@ -140,7 +140,7 @@ public class Show_Json : MonoBehaviourPun
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
@@ -164,7 +164,7 @@ public class Show_Json : MonoBehaviourPun
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.id, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
