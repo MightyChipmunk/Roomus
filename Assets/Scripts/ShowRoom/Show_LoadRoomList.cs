@@ -59,6 +59,7 @@ public class Show_LoadRoomList : MonoBehaviour
 
         // 로컬의 방 리스트를 가져옴
         DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        int id = 0;
         foreach (FileInfo file in di.GetFiles())
         {
             if (file.Extension.ToLower().CompareTo(".txt") == 0)
@@ -67,7 +68,7 @@ public class Show_LoadRoomList : MonoBehaviour
                 byte[] imgData = File.ReadAllBytes(file.FullName.Substring(0, file.FullName.Length - 4) + ".png");
                 ArrayJson arrayJson = JsonUtility.FromJson<ArrayJson>(jsonData);
                 //string fileName = file.Name.Substring(0, file.Name.Length - 4);
-                AddContent(Random.Range(0, 1000), arrayJson.roomName, arrayJson.description, imgData, arrayJson.category);
+                AddContent(id++, arrayJson.roomName, arrayJson.description, imgData, arrayJson.category);
             }
         }
     }

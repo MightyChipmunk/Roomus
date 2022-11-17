@@ -132,13 +132,16 @@ public class Deco_Json : MonoBehaviour
             // 방 이름 변경
             arrayJson.roomName = roomName;
         }
-        
+
         // JsonData를 로컬로 저장
-        //string jsonData = JsonUtility.ToJson(arrayJson, true);
-        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+        string jsonData = JsonUtility.ToJson(arrayJson, true);
+        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+        // 스크린샷을 로컬로 저장
+        string path = Application.dataPath + "/RoomInfo/" + arrayJson.roomName + ".png";
+        File.WriteAllBytes(path, imgData);
 
         // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
-        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson, imgData));
+        //StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products", arrayJson, imgData));
     }
 
     // 방 정보와 스크린샷을 서버에 Json 형식으로 업로드
@@ -202,12 +205,6 @@ public class Deco_Json : MonoBehaviour
                 break;
         }
         arrayJson.description = desc;
-
-        //string path = Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".png";
-        //if (File.Exists(path))
-        //{
-        //    File.WriteAllBytes(Application.dataPath + "/RoomInfo" + "/" + roomName + ".png", File.ReadAllBytes(path));
-        //}
 
         SaveNewFile(roomName, imgData);
     }

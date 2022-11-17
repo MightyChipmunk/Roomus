@@ -27,7 +27,7 @@ public class Show_MoreInfoItem : MonoBehaviour
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(imgBytes);
         Rect rect = new Rect(0, 0, tex.width, tex.height);
-        transform.Find("Profile").GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
+        transform.Find("Mask").transform.Find("Profile").GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
 
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
@@ -59,7 +59,7 @@ public class Show_MoreInfoItem : MonoBehaviour
 
                 itemMoreInfo.SetActive(true);
 
-                itemMoreInfo.transform.Find("Image").GetComponent<Image>().sprite = transform.Find("Profile").GetComponent<Image>().sprite;
+                itemMoreInfo.transform.Find("Image").GetComponent<Image>().sprite = transform.Find("Mask").transform.Find("Profile").GetComponent<Image>().sprite;
                 itemMoreInfo.transform.Find("Name").GetComponent<Text>().text = fbxJson.furnitName;
                 itemMoreInfo.transform.Find("Price").GetComponent<Text>().text = fbxJson.price.ToString();
                 itemMoreInfo.transform.Find("DescriptionContent").GetComponent<Text>().text = fbxJson.information;

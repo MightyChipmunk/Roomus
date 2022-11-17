@@ -79,6 +79,7 @@ public class JH_MoreInfoManager : MonoBehaviour
             {
                 // Deco_FurnitItem
                 AddContent(info.no, info.category, www.downloadHandler.data);
+                //AddContent(info.no, info.furnitName, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }

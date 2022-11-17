@@ -58,9 +58,9 @@ public class Deco_RoomInit : MonoBehaviour
         else if (Deco_LoadRoomList.Instance != null)    
         {
             // 네트워크로 불러오기
-            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
+            //Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.ID);
             // 로컬로 불러오기
-            //Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
+            Deco_Json.Instance.LoadFile(Deco_LoadRoomList.Instance.RoomName);
             Destroy(Deco_LoadRoomList.Instance.gameObject);
         }
         // 도면 방을 생성했을 때

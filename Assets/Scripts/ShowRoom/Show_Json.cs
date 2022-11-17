@@ -28,7 +28,20 @@ public class Show_Json : MonoBehaviourPun
 
         player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
         player.name = PhotonNetwork.NickName;
+        if (player.GetComponent<PhotonView>().IsMine)
+        {
+            ChangeLayersRecursively(player.transform, "Player");
+        }
         PhotonNetwork.Instantiate("CamFollow", Vector3.zero, Quaternion.identity);
+    }
+
+    public void ChangeLayersRecursively(Transform trans, string name)
+    {
+        trans.gameObject.layer = LayerMask.NameToLayer(name);
+        foreach (Transform child in trans)
+        {
+            ChangeLayersRecursively(child, name);
+        }
     }
 
     void Start()
@@ -256,6 +269,11 @@ public class Show_Json : MonoBehaviourPun
                 Debug.Log("ArrayJson Download complete!");
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        PhotonNetwork.Disconnect();
     }
 
     #region Trilib

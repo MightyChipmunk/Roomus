@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviourPun
     Deco_Idx furnitInfo;
     GameObject player;
     GameObject infoUI;
+
+    bool thirdPers = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,11 @@ public class CameraController : MonoBehaviourPun
     // Update is called once per frame
     void LateUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            thirdPers = !thirdPers;
+        }
+
         // 마우스 위치에 따른 각도 조절
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
@@ -37,10 +44,20 @@ public class CameraController : MonoBehaviourPun
             my += mv * rotSpeed * Time.deltaTime;
             my = Mathf.Clamp(my, -60, 60);
         }
-            
-        transform.eulerAngles = new Vector3(-my, mx, 0);
 
-        transform.position = player.transform.position; 
+        transform.eulerAngles = new Vector3(-my, mx, 0);
+        transform.position = Vector3.Lerp(transform.position, player.transform.position + Vector3.up * 1.5f, Time.deltaTime * 15);
+
+        if (thirdPers)
+        {
+            transform.GetChild(0).localPosition = Vector3.Lerp(transform.GetChild(0).localPosition, new Vector3(0, -0.25f, -1.5f), Time.deltaTime * 5);
+            Camera.main.cullingMask = -1;
+        }
+        else
+        {
+            transform.GetChild(0).localPosition = Vector3.Lerp(transform.GetChild(0).localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5);
+            Camera.main.cullingMask = Camera.main.cullingMask & ~(1 << LayerMask.NameToLayer("Player"));
+        }
     }
 
     Vector3 UIPos;
