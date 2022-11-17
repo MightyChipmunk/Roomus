@@ -1,9 +1,17 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+
+[Serializable]
+public class TextData
+{
+    public string filter_text;
+}
 
 public class Show_ChatManager : MonoBehaviourPun
 {
@@ -38,9 +46,31 @@ public class Show_ChatManager : MonoBehaviourPun
     void AddContent(string s, string nickName)
     {
         GameObject obj = Instantiate(chatItem, chatContent);
-        obj.GetComponent<Text>().text = nickName + ": " + s;
-
+        obj.GetComponent<Text>().text = nickName + ": ";
         StartCoroutine(AutoScrollBottom());
+
+        StartCoroutine(filter("http://3.20.72.99:5000/filter/", s, obj, nickName));
+
+    }
+    string filterText;
+    IEnumerator filter(string url, string s, GameObject obj, string nickName)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(url + s))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                TextData textData = JsonUtility.FromJson<TextData>(www.downloadHandler.text);
+                filterText = textData.filter_text;
+                obj.GetComponent<Text>().text = nickName + ": " + filterText;
+                Debug.Log("Text DownLoad complete!");
+            }
+        }
     }
 
     IEnumerator AutoScrollBottom()
