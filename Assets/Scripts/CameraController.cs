@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviourPun
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
 
-        if (Input.GetKey(KeyCode.Z))
+        if (Cursor.visible == false)
         {
             mx += mh * rotSpeed * Time.deltaTime;
             my += mv * rotSpeed * Time.deltaTime;
@@ -65,7 +65,7 @@ public class CameraController : MonoBehaviourPun
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 15) && hit.transform.parent != null && Input.GetMouseButtonDown(0))
+        if (Physics.Raycast(ray, out hit, 15) && hit.transform.parent != null && Input.GetMouseButtonDown(0) && Cursor.visible == true)
         {
             if (hit.transform.parent.TryGetComponent<Deco_Idx>(out furnitInfo))
             {
@@ -83,6 +83,15 @@ public class CameraController : MonoBehaviourPun
         if (infoUI.gameObject.activeSelf && Vector3.Angle(UIPos - Camera.main.transform.position, Camera.main.transform.forward) > 30f)
         {
             infoUI.gameObject.SetActive(false);
+        }
+
+        //만약에 esc키를 누르면 커서 활성화
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Cursor.visible == true)
+                Cursor.visible = false;
+            else
+                Cursor.visible = true;
         }
     }
 }

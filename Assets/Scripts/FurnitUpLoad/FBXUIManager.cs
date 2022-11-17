@@ -28,7 +28,6 @@ public class FBXJson
     public int countLikes = 0;
     public bool isDelete = false;
     //public string screenShotUrl;
-    public string sellUrl = "";
 }
 
 public class FBXUIManager : MonoBehaviour
@@ -83,7 +82,6 @@ public class FBXUIManager : MonoBehaviour
         zInput.onEndEdit.AddListener(OnZchanged);
 
         infoInput.onEndEdit.AddListener(OnInfoChanged);
-        sellUrl.onEndEdit.AddListener(OnSellChanged);
     }
 
     // Update is called once per frame
@@ -135,11 +133,6 @@ public class FBXUIManager : MonoBehaviour
     void OnInfoChanged(string s)
     {
         fbxJson.information = s;
-    }
-
-    void OnSellChanged(string s)
-    {
-        fbxJson.sellUrl = s;
     }
 
     public void OnNextButtonClicked()
@@ -252,7 +245,6 @@ public class FBXUIManager : MonoBehaviour
         form.AddField("ysize", fbxJson.ysize.ToString());
         form.AddField("zsize", fbxJson.zsize.ToString());
         form.AddField("price", fbxJson.price.ToString());
-        form.AddField("sell", fbxJson.sellUrl);
 
         Debug.Log(fbxJson.xsize.ToString());
 

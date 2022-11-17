@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && Cursor.visible == false)
         {
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 yVelocity = jumpPower;
             }
         }
-        else
+        else if (!photonView.IsMine)
         {
             transform.position = Vector3.Lerp(transform.position, receivePos, 15 * Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, receiveRot, 15 * Time.deltaTime);
