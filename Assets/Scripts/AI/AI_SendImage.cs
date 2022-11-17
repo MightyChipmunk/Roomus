@@ -8,17 +8,19 @@ using System.Net;
 using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 [Serializable]
 public class Images
 {
-    public string url;
+    public List<Positions> datas;
 }
 
 [Serializable]
 public class Positions
 {
-    public List<int> crop;
+    //public List<int> crop;
+    public int[] crop = new int[3];
     public string category;
 }
 
@@ -65,7 +67,7 @@ public class AI_SendImage : MonoBehaviour
         byte[] data = File.ReadAllBytes(m_FilePaths[0]);
 
         //post
-        StartCoroutine(Post("http://3.20.72.99:5000/image_furniture_detect", data));
+        StartCoroutine(Post("http://3.20.72.99:5000/furniture_detect", data));
     }
 
     //IEnumerator Post(string url, byte[] img)
@@ -116,7 +118,7 @@ public class AI_SendImage : MonoBehaviour
     {
         WWWForm form = new WWWForm();
 
-        form.AddBinaryData("img", img, "Img", "application/jpg");
+        form.AddBinaryData("file", img, "Img", "application/jpg");
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
@@ -128,20 +130,28 @@ public class AI_SendImage : MonoBehaviour
             }
             else
             {
-                Positions[] positions = JsonHelper.FromJson<Positions>(www.downloadHandler.text);
+                Images images = JsonUtility.FromJson<Images>(www.downloadHandler.text);
+                List<Positions> positions = images.datas;
 
-                for (int i = 0; i < positions.Length; i++)
+                for (int i = 0; i < positions.Count; i++)
                 {
-                    byte[] imgBytes;
                     Texture2D tex = new Texture2D(1, 1);
                     tex.LoadImage(img);
-                    tex.ReadPixels(new Rect(positions[i].crop[0], positions[i].crop[1], positions[i].crop[2], positions[i].crop[3]), 0, 0, false);
+                    //tex.ReadPixels(new Rect(positions[i].crop[0], positions[i].crop[1], positions[i].crop[2], positions[i].crop[3]), 0, 0, false);
                     tex.Apply();
-                    imgBytes = tex.EncodeToPNG();
 
                     GameObject go = Instantiate(cropItem, content);
-                    go.GetComponent<AI_CropItem>().texture = tex;
-                    go.GetComponent<AI_CropItem>().texBytes = imgBytes;
+
+                    Rect rect = new Rect(positions[i].crop[0], positions[i].crop[1], positions[i].crop[2], positions[i].crop[3]);
+                    //Rect rect = new Rect(0, 0, 100, 100);
+                    go.GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0, 0));
+
+                    var pixData = tex.GetPixels(positions[i].crop[0], positions[i].crop[1], positions[i].crop[2], positions[i].crop[3]);
+                    var newTex = new Texture2D(positions[i].crop[2], positions[i].crop[3]);
+                    newTex.SetPixels(pixData);
+                    newTex.Apply();
+                    go.GetComponent<AI_CropItem>().texture = newTex;
+                    //go.GetComponent<AI_CropItem>().texBytes = imgBytes;
                     go.GetComponent<AI_CropItem>().category = positions[i].category;
                 }
 

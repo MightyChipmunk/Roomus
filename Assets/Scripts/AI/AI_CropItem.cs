@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class AI_CropItem : MonoBehaviour
 {
-    public Texture texture;
+    public Texture2D texture;
     public byte[] texBytes;
     public string category;
+    public Text text;
 
     // Start is called before the first frame update
     void Start()
     {
-        Rect rect = new Rect(0, 0, texture.width, texture.height);
-        GetComponent<Image>().sprite = Sprite.Create((Texture2D)texture, rect, new Vector2(0.3f, 0.3f));
-
+        texBytes = texture.EncodeToJPG();
+        text.text = category;
         GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
