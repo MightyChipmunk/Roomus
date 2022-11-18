@@ -22,14 +22,14 @@ public class AI_CropItem : MonoBehaviour
 
     void OnClick()
     {
-        StartCoroutine(OnClickPost(""));
+        StartCoroutine(OnClickPost("http://3.20.72.99:5000/furniture_detect"));
     }
 
     IEnumerator OnClickPost(string url)
     {
         WWWForm form = new WWWForm();
 
-        form.AddBinaryData("cropImage", texBytes);
+        form.AddBinaryData("file", texBytes);
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {

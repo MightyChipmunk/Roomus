@@ -47,9 +47,9 @@ public class Show_Json : MonoBehaviourPun
     void Start()
     {
         // 로컬로 방 불러오기
-        LoadFile(Show_LoadRoomList.Instance.RoomName);
+        //LoadFile(Show_LoadRoomList.Instance.RoomName);
         // 네트워크로 방 불러오기
-        //LoadFile(Show_LoadRoomList.Instance.ID);
+        LoadFile(Show_LoadRoomList.Instance.ID);
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 

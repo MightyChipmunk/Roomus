@@ -123,21 +123,15 @@ public class Deco_Json : MonoBehaviour
     // 처음 방을 생성할 때 네트워크에 방의 이름, 크기, 문 정보를 넘김
     public IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
     {
-        ArrayJson_First firstJson = new ArrayJson_First();
-        firstJson.roomName = roomName;
-        firstJson.xsize = x;
-        firstJson.ysize = y;
-        firstJson.zsize = z;
-        firstJson.door = bal;
+        WWWForm form = new WWWForm();
+        form.AddField("roomName", roomName);
+        form.AddField("xsize", x.ToString());
+        form.AddField("ysize", y.ToString());
+        form.AddField("zsize", z.ToString());
+        form.AddField("door", bal.ToString());
 
-        string jsonData = JsonUtility.ToJson(firstJson);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
-            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            www.SetRequestHeader("Content-Type", "application/json");
-
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -179,7 +173,7 @@ public class Deco_Json : MonoBehaviour
     }
 
     // 방을 포스팅 할 시 이름과 스크린샷 저장
-    public void SaveNewFile(string roomName, byte[] imgData)
+    public void SaveNewFile(string roomName)
     {
         if (roomName != null)
         {
@@ -187,52 +181,20 @@ public class Deco_Json : MonoBehaviour
             arrayJson.roomName = roomName;
         }
 
-        // JsonData를 로컬로 저장
-        string jsonData = JsonUtility.ToJson(arrayJson, true);
-        File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
-        // 스크린샷을 로컬로 저장
-        string path = Application.dataPath + "/RoomInfo/" + arrayJson.roomName + ".png";
-        File.WriteAllBytes(path, imgData);
+        //// JsonData를 로컬로 저장
+        //string jsonData = JsonUtility.ToJson(arrayJson, true);
+        //File.WriteAllText(Application.dataPath + "/RoomInfo" + "/" + arrayJson.roomName + ".txt", jsonData);
+        //// 스크린샷을 로컬로 저장
+        //string path = Application.dataPath + "/RoomInfo/" + arrayJson.roomName + ".png";
+        //File.WriteAllBytes(path, imgData);
 
         // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
-        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/rooms/", saveRoomNo.data, arrayJson, imgData));
+        StartCoroutine(OnPutJson("http://54.180.108.64:80/v1/rooms/", saveRoomNo.data, arrayJson));
     }
 
-    // 방 정보와 스크린샷을 서버에 Json 형식으로 업로드
-    IEnumerator OnPostJson(string uri, int id, ArrayJson arrayJson, byte[] imgData)
+    // 수정된 방 정보를 서버에 Json 형식으로 업로드
+    IEnumerator OnPutJson(string uri, int id, ArrayJson arrayJson)
     {
-        //WWWForm form = new WWWForm();
-
-        //SaveJsonInfo[] datas = arrayJson.datas.ToArray();
-        //string datasString = JsonHelper.ToJson(datas);
-
-        //form.AddBinaryData("screenShot", imgData);
-        //form.AddField("roomName", arrayJson.roomName);
-        //form.AddField("access", arrayJson.access.ToString());
-        //if (arrayJson.category != null)
-        //    form.AddField("category", arrayJson.category);
-        //if (arrayJson.description != null)
-        //    form.AddField("description", arrayJson.description);
-        //form.AddField("xsize", arrayJson.xsize.ToString());
-        //form.AddField("ysize", arrayJson.ysize.ToString());
-        //form.AddField("zsize", arrayJson.zsize.ToString());
-        //form.AddField("door", arrayJson.door.ToString());
-        //form.AddField("datas", datasString);
-
-        //using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
-        //{
-        //    yield return www.SendWebRequest();
-
-        //    if (www.result != UnityWebRequest.Result.Success)
-        //    {
-        //        Debug.Log(www.error);
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("Form upload complete!");
-        //    }
-        //}
-
         ArrayJson_First firstJson = new ArrayJson_First();
         firstJson.roomName = arrayJson.roomName;
         firstJson.xsize = arrayJson.xsize;
@@ -244,10 +206,10 @@ public class Deco_Json : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString(), jsonData))
         {
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
-            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-            www.SetRequestHeader("Content-Type", "application/json");
             {
+                byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+                www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+                www.SetRequestHeader("Content-Type", "application/json");
                 yield return www.SendWebRequest();
 
                 if (www.result != UnityWebRequest.Result.Success)
@@ -263,10 +225,11 @@ public class Deco_Json : MonoBehaviour
 
         SaveJsonInfo[] datas = arrayJson.datas.ToArray();
         string datasString = JsonHelper.ToJson(datas);
+        Debug.Log(datasString);
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/furniture", datasString))
         {
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(datasString);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.SetRequestHeader("Content-Type", "application/json");
             {
@@ -284,7 +247,7 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    public void PostFile(string roomName, bool access, int category, string desc, byte[] imgData)
+    public void PostFile(string roomName, bool access, int category, string desc)
     {
         arrayJson.access = access;
         switch (category)
@@ -310,7 +273,12 @@ public class Deco_Json : MonoBehaviour
         }
         arrayJson.description = desc;
 
-        SaveNewFile(roomName, imgData);
+        SaveNewFile(roomName);
+    }
+
+    public void PostScreenShot(byte[] imgBytes)
+    {
+
     }
 
     //로컬로 방 불러오기

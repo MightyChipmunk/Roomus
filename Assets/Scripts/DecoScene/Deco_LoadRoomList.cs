@@ -111,7 +111,7 @@ public class Deco_LoadRoomList : MonoBehaviour
                     // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
                     AddContent(data[i].roomNo, data[i].roomName);
                 }
-                Debug.Log("UrlList Download complete!");
+                Debug.Log("Room UrlList Download complete!");
             }
         }
     }
