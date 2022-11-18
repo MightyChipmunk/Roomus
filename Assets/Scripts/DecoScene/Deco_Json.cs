@@ -13,6 +13,16 @@ public class SaveRoomNo
     public int data;
 }
 
+
+[Serializable]
+public class LightInfo
+{
+    //
+    public Vector3 position;
+    public Vector3 eulerAngle;
+    public Vector3 localScale;
+}
+
 [Serializable]
 public class SaveJsonInfo
 {
@@ -43,8 +53,8 @@ public class ArrayJson
     public float ysize;
     public float zsize;
     public int door = 0;
-    //public byte[] imgData;
     public List<SaveJsonInfo> datas;
+    public List<LightInfo> lights;
 }
 
 [Serializable]
@@ -167,6 +177,31 @@ public class Deco_Json : MonoBehaviour
             if (info.position == go.transform.position)
             {
                 arrayJson.datas.Remove(info);
+                return;
+            }
+        }
+    }
+
+    public void SaveLightJson(GameObject go)
+    {
+        LightInfo info;
+
+        info = new LightInfo();
+        info.position = go.transform.position;
+        info.eulerAngle = go.transform.eulerAngles;
+        info.localScale = go.transform.localScale;
+
+        //ArrayJson 의 datas 에 하나씩 추가
+        arrayJson.lights.Add(info);
+    }
+
+    public void DeleteLightJson(GameObject go)
+    {
+        foreach (LightInfo info in arrayJson.lights)
+        {
+            if (info.position == go.transform.position)
+            {
+                arrayJson.lights.Remove(info);
                 return;
             }
         }
