@@ -22,14 +22,14 @@ public class AI_CropItem : MonoBehaviour
 
     void OnClick()
     {
-        StartCoroutine(OnClickPost("http://3.20.72.99:5000/furniture_detect"));
+        StartCoroutine(OnClickPost("네트워크 서버"));
     }
 
     IEnumerator OnClickPost(string url)
     {
         WWWForm form = new WWWForm();
 
-        form.AddBinaryData("file", texBytes);
+        form.AddBinaryData("file", texBytes, "Img", "application/jpg");
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {

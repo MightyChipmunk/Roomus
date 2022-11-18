@@ -6,9 +6,16 @@ using Photon.Realtime;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    public bool gender;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Start()
     {
-        CreateRoom();
+
     }
 
     //¹æ »ý¼º
@@ -63,5 +70,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         base.OnJoinRoomFailed(returnCode, message);
         print("OnJoinRoomFailed, " + returnCode + ", " + message);
+    }
+
+    public void OnClickMan()
+    {
+        gender = true;
+        CreateRoom();
+    }
+
+    public void OnClickWoman()
+    {
+        gender = false;
+        CreateRoom();
     }
 }

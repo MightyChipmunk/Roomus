@@ -26,7 +26,13 @@ public class Show_Json : MonoBehaviourPun
         else
             Destroy(gameObject);
 
-        player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        if (GameObject.Find("LobbyManager").GetComponent<LobbyManager>().gender)
+            player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        else
+            player = PhotonNetwork.Instantiate("Player_2", Vector3.zero, Quaternion.identity);
+
+        Destroy(GameObject.Find("LobbyManager").gameObject);
+
         player.name = PhotonNetwork.NickName;
         if (player.GetComponent<PhotonView>().IsMine)
         {

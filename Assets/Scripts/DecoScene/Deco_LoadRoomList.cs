@@ -108,7 +108,7 @@ public class Deco_LoadRoomList : MonoBehaviour
                 roomInfos[] data = JsonHelper.FromJson<roomInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
+                    // 가져온 url 배열을 반복문으로 순회하며 이름과 id를 가져오는 함수 실행
                     AddContent(data[i].roomNo, data[i].roomName);
                 }
                 Debug.Log("Room UrlList Download complete!");
