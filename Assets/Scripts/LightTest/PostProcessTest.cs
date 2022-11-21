@@ -58,7 +58,6 @@ public class PostProcessTest : MonoBehaviour
     public Slider saturationSlider;
     public Text satTxt;
     public GameObject colorFilterPicker;
-    Color colorFilter;
     public Button colorFilterBtn;
     FlexibleColorPicker colorPicker;
 
@@ -77,6 +76,7 @@ public class PostProcessTest : MonoBehaviour
     float saturation;
     float temp;
     float tint;
+    Color colorFilter;
 
     // Start is called before the first frame update
     void Start()
@@ -141,6 +141,7 @@ public class PostProcessTest : MonoBehaviour
         Deco_Json.Instance.advLightInfo.saturation = saturation;
         Deco_Json.Instance.advLightInfo.temp = temp;
         Deco_Json.Instance.advLightInfo.tint = tint;
+        Deco_Json.Instance.advLightInfo.colorFilter = colorFilter;
     }
 
     public void UpdateShadow()

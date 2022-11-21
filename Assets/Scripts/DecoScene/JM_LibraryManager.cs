@@ -22,6 +22,8 @@ public class JM_LibraryManager : MonoBehaviour
     {
         libraryUI.transform.position = originPos.position;
         aiUI.transform.position = originPos.position;
+
+        libraryUI.SetActive(false);
     }
 
     // Update is called once per frame

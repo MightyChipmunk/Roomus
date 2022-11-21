@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Deco_Camera : MonoBehaviour
 {
+    public GameObject library;
+
     Transform thirdCamPos;
     Camera cam;
 
@@ -20,6 +22,8 @@ public class Deco_Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (library.activeSelf)
+            return;
         switch(Deco_ChangeView.Instance.viewState)
         {
             case Deco_ChangeView.ViewState.Second_Demen:

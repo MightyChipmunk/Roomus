@@ -31,6 +31,7 @@ public class AdvLightInfo
     public float saturation = 0;
     public float temp = 0;
     public float tint = 0;
+    public Color colorFilter;
 }
 
 [Serializable]
