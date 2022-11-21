@@ -139,6 +139,7 @@ public class Deco_UIManager : MonoBehaviour
     }
 
     byte[] imgBytes;
+    public byte[] ImageBytes { get { return imgBytes; } }
     public IEnumerator WaitForScreenShot()
     {
         yield return new WaitForEndOfFrame();

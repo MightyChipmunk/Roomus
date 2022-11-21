@@ -60,7 +60,7 @@ public class ArrayJson
 [Serializable]
 public class ArrayJson_First
 {
-    public int no;
+    public int roomNo;
     public string roomName;
     public bool access = false;
     public string category = "";
@@ -112,6 +112,10 @@ public class Deco_Json : MonoBehaviour
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
 
         saveRoomNo = new SaveRoomNo();
+
+        // 방을 불러올 경우 불러온 방의 ID를 저장
+        if (Deco_LoadRoomList.Instance != null)
+            saveRoomNo.data = Deco_LoadRoomList.Instance.ID;
     }
 
     private void Start()
@@ -135,10 +139,22 @@ public class Deco_Json : MonoBehaviour
     {
         WWWForm form = new WWWForm();
         form.AddField("roomName", roomName);
+        form.AddField("access", "false");
+        form.AddField("category", "");
+        form.AddField("description", "");
         form.AddField("xsize", x.ToString());
         form.AddField("ysize", y.ToString());
         form.AddField("zsize", z.ToString());
         form.AddField("door", bal.ToString());
+
+        yield return new WaitForEndOfFrame();
+        Texture2D texture = new Texture2D(800, 800, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
+        texture.Apply();
+        byte[] img = texture.EncodeToPNG();
+
+        form.AddBinaryData("screenShot", img);
+
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
@@ -224,20 +240,24 @@ public class Deco_Json : MonoBehaviour
         //File.WriteAllBytes(path, imgData);
 
         // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
-        StartCoroutine(OnPutJson("http://54.180.108.64:80/v1/rooms/", saveRoomNo.data, arrayJson));
+        StartCoroutine(OnPutJson("http://54.180.108.64:80/v1/rooms", saveRoomNo.data, arrayJson));
     }
 
     // 수정된 방 정보를 서버에 Json 형식으로 업로드
     IEnumerator OnPutJson(string uri, int id, ArrayJson arrayJson)
     {
         ArrayJson_First firstJson = new ArrayJson_First();
+        firstJson.roomNo = id;
         firstJson.roomName = arrayJson.roomName;
+        firstJson.category = arrayJson.category;
+        firstJson.description = arrayJson.description;
         firstJson.xsize = arrayJson.xsize;
         firstJson.ysize = arrayJson.ysize;
         firstJson.zsize = arrayJson.zsize;
         firstJson.door = arrayJson.door;
 
-        string jsonData = JsonUtility.ToJson(firstJson);
+        string jsonData = JsonUtility.ToJson(firstJson, true);
+        Debug.Log(jsonData);
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString(), jsonData))
         {
@@ -256,10 +276,12 @@ public class Deco_Json : MonoBehaviour
                     Debug.Log("Room Put complete!");
                 }
             }
+
+            www.Dispose();
         }
 
         SaveJsonInfo[] datas = arrayJson.datas.ToArray();
-        string datasString = JsonHelper.ToJson(datas);
+        string datasString = JsonHelper.ToJsons(datas);
         Debug.Log(datasString);
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/furniture", datasString))
@@ -279,6 +301,26 @@ public class Deco_Json : MonoBehaviour
                     Debug.Log("Furnit Put complete!");
                 }
             }
+
+            www.Dispose();
+        }
+
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/screenShot", Deco_UIManager.Instance.ImageBytes))
+        {
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("ScreenShot Put complete!");
+                }
+            }
+
+            www.Dispose();
         }
     }
 

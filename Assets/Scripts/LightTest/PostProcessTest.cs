@@ -73,7 +73,11 @@ public class PostProcessTest : MonoBehaviour
     public Slider tintSlider;
     float tint;
     public Text tintTxt;
-    
+
+    Vector4 shadowVal;
+    Vector4 midtoneVal;
+    Vector4 highlightVal;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -135,7 +139,7 @@ public class PostProcessTest : MonoBehaviour
         shadowG = shadowColorPickCode.selectColor.g;
         shadowB = shadowColorPickCode.selectColor.b;
         shadowGamma = shadowSlider.value;
-        Vector4 shadowVal = new Vector4(shadowR, shadowG, shadowB, shadowGamma);
+        shadowVal = new Vector4(shadowR, shadowG, shadowB, shadowGamma);
         smh.shadows.Override(shadowVal);
     }
 
@@ -145,7 +149,7 @@ public class PostProcessTest : MonoBehaviour
         midtoneG = midtonePickCode.selectColor.g;
         midtoneB = midtonePickCode.selectColor.b;
         midtoneGamma = midtoneSlider.value;
-        Vector4 midtoneVal = new Vector4(midtoneR, midtoneG, midtoneB, midtoneGamma);
+        midtoneVal = new Vector4(midtoneR, midtoneG, midtoneB, midtoneGamma);
         smh.midtones.Override(midtoneVal);
     }
 
@@ -155,7 +159,7 @@ public class PostProcessTest : MonoBehaviour
         highlightG = highlightPickCode.selectColor.g;
         highlightB = highlightPickCode.selectColor.b;
         highlightGamma = highlightSlider.value;
-        Vector4 highlightVal = new Vector4(highlightR, highlightG, highlightB, highlightGamma);
+        highlightVal = new Vector4(highlightR, highlightG, highlightB, highlightGamma);
         smh.highlights.Override(highlightVal);
     }
 

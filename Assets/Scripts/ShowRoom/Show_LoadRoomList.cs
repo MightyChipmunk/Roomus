@@ -125,9 +125,8 @@ public class Show_LoadRoomList : MonoBehaviour
                 for (int i = 0; i < data.Length; i++)
                 {
                     // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
-                    //StartCoroutine(OnGetUrl(data[i]));
-                    if (data[i].access)
-                        AddContent(data[i].no, data[i].roomName, data[i].roomDescription, data[i].category);
+                    if (data[i].access && data[i].screenShotUrl != null)
+                        StartCoroutine(OnGetUrl(data[i]));
                 }
                 Debug.Log("UrlList Download complete!");
             }
@@ -142,6 +141,7 @@ public class Show_LoadRoomList : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
+                AddContent(info.no, info.roomName, info.roomDescription, info.category);
                 Debug.Log(www.error);
             }
             else
