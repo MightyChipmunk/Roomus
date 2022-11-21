@@ -53,7 +53,7 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/products"));
 
         //library.transform.parent.gameObject.SetActive(false);
 
@@ -134,8 +134,8 @@ public class Deco_UIManager : MonoBehaviour
     
     public void OnPostScreenShotClicked()
     {
-        if (imgBytes != null)
-            Deco_Json.Instance.PostScreenShot(imgBytes);
+        //if (imgBytes != null)
+        //    Deco_Json.Instance.PostScreenShot(imgBytes);
     }
 
     byte[] imgBytes;
@@ -149,6 +149,8 @@ public class Deco_UIManager : MonoBehaviour
         texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
         texture.Apply();
         imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/screenShot.png", imgBytes);
+        imgBytes = File.ReadAllBytes(Application.dataPath + "/screenShot.png");
 
         screenShotImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
     }

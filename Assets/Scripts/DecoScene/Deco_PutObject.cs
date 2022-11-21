@@ -97,7 +97,7 @@ public class Deco_PutObject : MonoBehaviour
         //StartCoroutine(WaitForObj());
 
         // 받아온 id로 서버에 가구 요청
-        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products" + "/" + id.ToString()));
+        StartCoroutine(OnPostJson(UrlInfo.url + "/products" + "/" + id.ToString()));
         isLight = false;
         //StartCoroutine(WaitForObj());
     }

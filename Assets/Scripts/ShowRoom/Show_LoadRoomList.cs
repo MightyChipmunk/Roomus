@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class showRoomInfos
 {
-    public int no;
+    public int roomNo;
     public bool access;
     public string roomName;
     public string category;
@@ -56,7 +56,7 @@ public class Show_LoadRoomList : MonoBehaviour
     void Start()
     {
         // 네트워크의 방 리스트를 가져옴
-        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/rooms"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/rooms"));
 
         // 로컬의 방 리스트를 가져옴
         //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
@@ -141,14 +141,14 @@ public class Show_LoadRoomList : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                AddContent(info.no, info.roomName, info.roomDescription, info.category);
+                AddContent(info.roomNo, info.roomName, info.roomDescription, info.category);
                 Debug.Log(www.error);
             }
             else
             {
                 // 가져온 스크린샷과 id로 라이브러리에 가구 추가
                 // Deco_FurnitItem
-                AddContent(info.no, info.roomName, info.roomDescription, info.category, www.downloadHandler.data);
+                AddContent(info.roomNo, info.roomName, info.roomDescription, info.category, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }

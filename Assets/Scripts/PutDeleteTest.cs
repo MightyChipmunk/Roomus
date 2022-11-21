@@ -8,7 +8,7 @@ public class PutDeleteTest : MonoBehaviour
     public GameObject prefab;
     public Transform trContent;
 
-    string url = "http://54.180.108.64:80/v1/products";
+    string url = UrlInfo.url + "/products";
 
     private void Start()
     {

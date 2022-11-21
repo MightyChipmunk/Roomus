@@ -35,7 +35,7 @@ public class Show_MoreInfoItem : MonoBehaviour
     void OnClick()
     {
 
-        StartCoroutine(OnClickGet("http://54.180.108.64:80/v1/products" + "/" + id.ToString()));
+        StartCoroutine(OnClickGet(UrlInfo.url + "/products" + "/" + id.ToString()));
     }
 
     FBXJson fbxJson = new FBXJson();

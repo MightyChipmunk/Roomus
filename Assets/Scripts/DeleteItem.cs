@@ -32,7 +32,7 @@ public class DeleteItem : MonoBehaviour
 
     public void OnClicked()
     {
-        StartCoroutine(Delete("http://54.180.108.64:80/v1/products/" + id.ToString()));
+        StartCoroutine(Delete(UrlInfo.url + "/products/" + id.ToString()));
     }
 
     IEnumerator Delete(string url)

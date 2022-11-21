@@ -50,7 +50,7 @@ public class Deco_RoomInit : MonoBehaviour
         {
             MakeRoom(xSize, ySize, zSize, balcony, GameObject.Find("Room").transform);
             Deco_Json.Instance.SaveRoomInfo(roomName, xSize, ySize, zSize, balcony);
-            StartCoroutine(Deco_Json.Instance.FirstPost("http://54.180.108.64:80/v1/rooms", roomName, xSize, ySize, zSize, balcony));
+            StartCoroutine(Deco_Json.Instance.FirstPost(UrlInfo.url + "/rooms", roomName, xSize, ySize, zSize, balcony));
             //Deco_Json.Instance.SaveNewFile(roomName);
             Destroy(Deco_GetXYZ.Instance.gameObject);
         }
@@ -68,7 +68,7 @@ public class Deco_RoomInit : MonoBehaviour
         {
             GameObject go = Instantiate(Resources.Load<GameObject>("Room" + JH_RoomDecoManager.Instance.SelectedRoom.ToString()));
             Deco_Json.Instance.SaveRoomInfo(roomName, -1, -1, -1, JH_RoomDecoManager.Instance.SelectedRoom);
-            StartCoroutine(Deco_Json.Instance.FirstPost("http://54.180.108.64:80/v1/rooms", roomName, xSize, ySize, zSize, balcony));
+            StartCoroutine(Deco_Json.Instance.FirstPost(UrlInfo.url + "/rooms", roomName, xSize, ySize, zSize, balcony));
             go.name = "Room";
             Destroy(JH_RoomDecoManager.Instance.gameObject);
         }

@@ -23,7 +23,7 @@ public class JH_MoreInfoManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/products"));
     }
 
     List<int> IDs = new List<int>();

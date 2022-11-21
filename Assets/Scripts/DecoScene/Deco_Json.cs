@@ -7,12 +7,31 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+public static class UrlInfo
+{
+    public static string url = "http://54.180.108.64:80/v1";
+    //public static string url = "http://172.16.20.63:8000/v1";
+}
+
 [Serializable]
 public class SaveRoomNo
 {
     public int data;
 }
 
+[Serializable]
+public class AdvLightInfo
+{
+    public Vector4 shadowVal = new Vector4();
+    public Vector4 midtoneVal = new Vector4();
+    public Vector4 highlightVal = new Vector4();
+    public float contrast = 0;
+    public float postExposure = 0;
+    public float hueShift = 0;
+    public float saturation = 0;
+    public float temp = 0;
+    public float tint = 0;
+}
 
 [Serializable]
 public class LightInfo
@@ -30,6 +49,14 @@ public class SaveJsonInfo
     public Vector3 position;
     public Vector3 eulerAngle;
     public Vector3 localScale;
+}
+
+[Serializable]
+public class ArrayJsonWrapper
+{
+    public string statusCode;
+    public string message;
+    public ArrayJson data;
 }
 
 [Serializable]
@@ -89,6 +116,7 @@ public class ArrayJson_Get
 
 public class Deco_Json : MonoBehaviour
 {
+
     public InputField saveInputField;
     public InputField loadInputField;
 
@@ -96,6 +124,7 @@ public class Deco_Json : MonoBehaviour
     ArrayJson arrayJson;
     ArrayJson arrayJsonLoad;
     SaveRoomNo saveRoomNo;
+    public AdvLightInfo advLightInfo;
 
     private void Awake()
     {
@@ -110,6 +139,7 @@ public class Deco_Json : MonoBehaviour
         arrayJson.datas = new List<SaveJsonInfo>();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
+        advLightInfo = new AdvLightInfo();
 
         saveRoomNo = new SaveRoomNo();
 
@@ -132,7 +162,6 @@ public class Deco_Json : MonoBehaviour
         arrayJson.zsize = z;
         arrayJson.door = bal;
     }
-
 
     // 처음 방을 생성할 때 네트워크에 방의 이름, 크기, 문 정보를 넘김
     public IEnumerator FirstPost(string url, string roomName, float x, float y, float z, int bal)
@@ -169,6 +198,7 @@ public class Deco_Json : MonoBehaviour
                 saveRoomNo = JsonUtility.FromJson<SaveRoomNo>(www.downloadHandler.text);
                 Debug.Log("roomInfo Upload complete!");
             }
+            www.Dispose();
         }
     }
 
@@ -240,7 +270,7 @@ public class Deco_Json : MonoBehaviour
         //File.WriteAllBytes(path, imgData);
 
         // 방을 포스팅할 때 방의 정보와 가구 배치 정보를 담은 jsonData와 스크린샷을 네트워크로 전달
-        StartCoroutine(OnPutJson("http://54.180.108.64:80/v1/rooms", saveRoomNo.data, arrayJson));
+        StartCoroutine(OnPutJson(UrlInfo.url + "/rooms", saveRoomNo.data, arrayJson));
     }
 
     // 수정된 방 정보를 서버에 Json 형식으로 업로드
@@ -248,9 +278,12 @@ public class Deco_Json : MonoBehaviour
     {
         ArrayJson_First firstJson = new ArrayJson_First();
         firstJson.roomNo = id;
-        firstJson.roomName = arrayJson.roomName;
+        if (arrayJson.roomName != null)
+            firstJson.roomName = arrayJson.roomName;
+        firstJson.access = arrayJson.access;
         firstJson.category = arrayJson.category;
-        firstJson.description = arrayJson.description;
+        if (arrayJson.description != null)
+            firstJson.description = arrayJson.description;
         firstJson.xsize = arrayJson.xsize;
         firstJson.ysize = arrayJson.ysize;
         firstJson.zsize = arrayJson.zsize;
@@ -305,7 +338,10 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
-        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/screenShot", Deco_UIManager.Instance.ImageBytes))
+        WWWForm form = new WWWForm();
+        form.AddBinaryData("screenShot", Deco_UIManager.Instance.ImageBytes);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/screenShot", form))
         {
             {
                 yield return www.SendWebRequest();
@@ -322,6 +358,9 @@ public class Deco_Json : MonoBehaviour
 
             www.Dispose();
         }
+
+        string lightInfo = JsonUtility.ToJson(advLightInfo, true);
+        File.WriteAllText(Application.dataPath + "/lightText.txt", lightInfo);
     }
 
     public void PostFile(string roomName, bool access, int category, string desc)
@@ -351,11 +390,6 @@ public class Deco_Json : MonoBehaviour
         arrayJson.description = desc;
 
         SaveNewFile(roomName);
-    }
-
-    public void PostScreenShot(byte[] imgBytes)
-    {
-
     }
 
     //로컬로 방 불러오기
@@ -411,7 +445,96 @@ public class Deco_Json : MonoBehaviour
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson("http://54.180.108.64:80/v1/rooms/" + id.ToString()));
+        StartCoroutine(LoadJson(UrlInfo.url + "/rooms/" + id.ToString()));
+    }
+
+    void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
+    {
+        StartCoroutine(WaitForDownLoad(UrlInfo.url + "/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
+    }
+
+    // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
+    IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
+    {
+        FBXJson fbxJson = new FBXJson();
+
+        // 가구 ID로 요청해서 가구의 정보를 받아옴
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
+                fbxJson = wrapper.data;
+
+                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
+                Debug.Log("FBXJson Download complete!");
+            }
+            www.Dispose();
+        }
+
+        // 받아온 가구 정보를 사용해서 가구 생성
+        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
+                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+
+                if (!File.Exists(path))
+                    File.WriteAllBytes(path, www.downloadHandler.data);
+
+                while (!File.Exists(path))
+                {
+                    yield return null;
+                }
+
+                GameObject wrapper = new GameObject();
+                wrapper.transform.parent = room;
+                wrapper.transform.localPosition = position;
+                wrapper.transform.localEulerAngles = eulerAngle;
+                wrapper.transform.localScale = localScale;
+                Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
+                wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
+                AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
+                    null, null);
+                Debug.Log("FBX.zip Download complete!");
+            }
+            www.Dispose();
+        }
+    }
+
+    // 서버에 방 id로 요청해서 방의 정보를 Json 형식으로 받아오는 함수
+    IEnumerator LoadJson(string uri)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(uri))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                ArrayJsonWrapper wrapper = JsonUtility.FromJson<ArrayJsonWrapper>(www.downloadHandler.text);
+                arrayJsonLoad = wrapper.data;
+                Debug.Log("ArrayJson Download complete!");
+            }
+            www.Dispose();
+        }
+
         //ArrayJson의 데이터로 방 생성
         if (arrayJsonLoad.xsize > 0)
         {
@@ -450,90 +573,6 @@ public class Deco_Json : MonoBehaviour
             }
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
-    }
-
-    void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
-    {
-        StartCoroutine(WaitForDownLoad("http://54.180.108.64:80/v1/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
-    }
-
-    // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
-    IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
-    {
-        FBXJson fbxJson = new FBXJson();
-
-        // 가구 ID로 요청해서 가구의 정보를 받아옴
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                FBXWrapper wrapper = JsonUtility.FromJson<FBXWrapper>(www.downloadHandler.text);
-                fbxJson = wrapper.data;
-
-                //FBXJson[] data = JsonHelper.FromJson<FBXJson>(www.downloadHandler.text);
-                Debug.Log("FBXJson Download complete!");
-            }
-        }
-
-        // 받아온 가구 정보를 사용해서 가구 생성
-        using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
-
-                if (!File.Exists(path))
-                    File.WriteAllBytes(path, www.downloadHandler.data);
-
-                while (!File.Exists(path))
-                {
-                    yield return null;
-                }
-
-                GameObject wrapper = new GameObject();
-                wrapper.transform.parent = room;
-                wrapper.transform.localPosition = position;
-                wrapper.transform.localEulerAngles = eulerAngle;
-                wrapper.transform.localScale = localScale;
-                Deco_WrapperData wrapperData = wrapper.AddComponent<Deco_WrapperData>();
-                wrapperData.jsonData = JsonUtility.ToJson(fbxJson);
-                AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, wrapper, assetLoaderOptions,
-                    null, null);
-                Debug.Log("FBX.zip Download complete!");
-            }
-        }
-    }
-
-    // 서버에 방 id로 요청해서 방의 정보를 Json 형식으로 받아오는 함수
-    IEnumerator LoadJson(string uri)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get(uri))
-        {
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(www.downloadHandler.text);
-                Debug.Log("ArrayJson Download complete!");
-            }
-        }
     }
 
     #region Trilib
