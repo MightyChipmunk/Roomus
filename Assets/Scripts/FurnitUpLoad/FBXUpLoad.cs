@@ -172,6 +172,9 @@ public class FBXUpLoad : MonoBehaviour
 
     public void OnFBXButtonOpenFolder() // 버튼에 추가할 메서드
     {
+        if (fileName == null)
+            return;
+
         if (fbd.ShowDialog() == DialogResult.OK)
         {
             f_FilePath = fbd.SelectedPath;
@@ -185,6 +188,9 @@ public class FBXUpLoad : MonoBehaviour
 
     void OpenFolder()
     {
+        if (fileName == null)
+            return;
+
         DirectoryInfo di = new DirectoryInfo(f_FilePath);
         Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
         foreach (FileInfo file in di.GetFiles())
@@ -271,6 +277,8 @@ public class FBXUpLoad : MonoBehaviour
         //    obj.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
         //}
         obj.name = fileName;
+
+        MaterialLoader.Instance.ChangeMat(obj.transform, UnityEngine.Application.dataPath + "/LocalServer/" + fileName);
 
         //for (int i = 0; i < obj.transform.childCount; i++)
         //{

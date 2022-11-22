@@ -615,8 +615,15 @@ public class Deco_Json : MonoBehaviour
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
         col.isTrigger = true;
-        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
+        //col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+
+        if (go.transform.up.x > 0)
+            col.center += go.transform.up * fbxJson.xsize / 2;
+        else if (go.transform.up.y > 0)
+            col.center += go.transform.up * fbxJson.ysize / 2;
+        else if (go.transform.up.z > 0)
+            col.center += go.transform.up * fbxJson.zsize / 2;
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
@@ -624,7 +631,7 @@ public class Deco_Json : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
         else if (!fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
+        //go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
