@@ -534,8 +534,9 @@ public class Deco_PutObject : MonoBehaviour
                 {
                     yield return null;
                 }
-                
-                ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
                 AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);

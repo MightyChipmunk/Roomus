@@ -501,6 +501,9 @@ public class Deco_Json : MonoBehaviour
                     yield return null;
                 }
 
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
                 wrapper.transform.localPosition = position;
@@ -638,6 +641,8 @@ public class Deco_Json : MonoBehaviour
         decoIdx.Category = fbxJson.category;
         
         SaveJson(obj, fbxJson.no);
+
+        MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
 
         Destroy(assetLoaderContext.WrapperGameObject);
     }

@@ -193,6 +193,9 @@ public class Show_Json : MonoBehaviourPun
                     yield return null;
                 }
 
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
                 wrapper.transform.localPosition = position;
@@ -347,6 +350,8 @@ public class Show_Json : MonoBehaviourPun
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
+
+        MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
 
         Destroy(assetLoaderContext.WrapperGameObject);
     }
