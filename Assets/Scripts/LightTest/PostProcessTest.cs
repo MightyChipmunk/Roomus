@@ -50,33 +50,33 @@ public class PostProcessTest : MonoBehaviour
 
     ColorAdjustments ca;
     public Slider postExposureSlider;
-    float postExposure;
     public Text peTxt;
     public Slider contrastSlider;
-    float contrast;
     public Text contTxt;
     public Slider hueShiftSlider;
-    float hueShift;
     public Text hueTxt;
     public Slider saturationSlider;
-    float saturation;
     public Text satTxt;
     public GameObject colorFilterPicker;
-    Color colorFilter;
     public Button colorFilterBtn;
     FlexibleColorPicker colorPicker;
 
     WhiteBalance wbe;
     public Slider tempSlider;
-    float temp;
     public Text tempTxt;
     public Slider tintSlider;
-    float tint;
     public Text tintTxt;
 
     Vector4 shadowVal;
     Vector4 midtoneVal;
     Vector4 highlightVal;
+    float contrast;
+    float postExposure;
+    float hueShift;
+    float saturation;
+    float temp;
+    float tint;
+    Color colorFilter;
 
     // Start is called before the first frame update
     void Start()
@@ -131,6 +131,17 @@ public class PostProcessTest : MonoBehaviour
         UpdateSaturation();
         UpdateTemp();
         UpdateTint();
+
+        Deco_Json.Instance.advLightInfo.shadowVal = shadowVal;
+        Deco_Json.Instance.advLightInfo.midtoneVal = midtoneVal;
+        Deco_Json.Instance.advLightInfo.highlightVal = highlightVal;
+        Deco_Json.Instance.advLightInfo.postExposure = postExposure;
+        Deco_Json.Instance.advLightInfo.contrast = contrast;
+        Deco_Json.Instance.advLightInfo.hueShift = hueShift;
+        Deco_Json.Instance.advLightInfo.saturation = saturation;
+        Deco_Json.Instance.advLightInfo.temp = temp;
+        Deco_Json.Instance.advLightInfo.tint = tint;
+        Deco_Json.Instance.advLightInfo.colorFilter = colorFilter;
     }
 
     public void UpdateShadow()

@@ -185,7 +185,7 @@ public class FBXUIManager : MonoBehaviour
     public void OnEndClicked()
     {
         // 스크린샷을 찍고 가구 파일, 스크린샷 파일, 가구 정보 Json 데이터를 서버에 전달
-        StartCoroutine(capture("http://54.180.108.64:80/v1/products"));
+        StartCoroutine(capture(UrlInfo.url + "/products"));
     }
 
     public void OnImageOpenFile() // 버튼에 추가할 메서드
@@ -245,8 +245,6 @@ public class FBXUIManager : MonoBehaviour
         form.AddField("ysize", fbxJson.ysize.ToString());
         form.AddField("zsize", fbxJson.zsize.ToString());
         form.AddField("price", fbxJson.price.ToString());
-
-        Debug.Log(fbxJson.xsize.ToString());
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
         {
