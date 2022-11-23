@@ -178,6 +178,7 @@ public class JM_MyPageManager : MonoBehaviour
         {
             isPWMove = true;
             isPWEdit = true;
+            editPWTxt.text = pw;
             enterPWCaution.SetActive(false);
         }
         else enterPWCaution.SetActive(true);

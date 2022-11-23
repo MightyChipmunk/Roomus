@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dictionaryBoolKeys:
   - StandardMaterialMapper
-  - UniversalRPMaterialMapper
-  - HDRPMaterialMapper
+  - 
+  - 
   - 
   - 
   - 
@@ -78,4 +78,4 @@ MonoBehaviour:
   - 
   - 
   _dictionaryBoolValues: 01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  _settingsCount: 3
+  _settingsCount: 1
