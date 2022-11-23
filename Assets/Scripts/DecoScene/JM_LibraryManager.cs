@@ -98,5 +98,11 @@ public class JM_LibraryManager : MonoBehaviour
         isAIMove = true;
     }
 
+    public void OnScreenShot()
+    {
+        isLibraryMove = true;
+        isLibShow = false;
+    }
+
     
 }
