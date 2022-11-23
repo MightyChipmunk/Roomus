@@ -87,7 +87,7 @@ public class SignInManager : MonoBehaviour
 
             yield return loginAPI.SendWebRequest();
 
-            if (loginAPI.isNetworkError || loginAPI.isHttpError)
+            if (loginAPI.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(loginAPI.error);
             }

@@ -9,10 +9,10 @@ using UnityEngine.UI;
 
 public static class UrlInfo
 {
-    //public const string url = "http://54.180.108.64:80/v1";
-    //public const string _url = "http://54.180.108.64:80/";
-    public const string url = "http://192.168.0.243:8000/v1";
-    public const string _url = "http://192.168.0.243:8000/";
+    public const string url = "http://54.180.108.64:80/v1";
+    public const string _url = "http://54.180.108.64:80/";
+    //public const string url = "http://192.168.0.243:8000/v1";
+    //public const string _url = "http://192.168.0.243:8000/";
     //public const string url = "http://172.16.20.63:8000/v1";
 }
 
