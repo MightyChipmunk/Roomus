@@ -46,6 +46,8 @@ public class JH_MoreInfoManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -69,6 +71,8 @@ public class JH_MoreInfoManager : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

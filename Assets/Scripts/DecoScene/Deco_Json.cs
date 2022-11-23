@@ -9,7 +9,10 @@ using UnityEngine.UI;
 
 public static class UrlInfo
 {
-    public const string url = "http://54.180.108.64:80/v1";
+    //public const string url = "http://54.180.108.64:80/v1";
+    //public const string _url = "http://54.180.108.64:80/";
+    public const string url = "http://192.168.0.243:8000/v1";
+    public const string _url = "http://192.168.0.243:8000/";
     //public const string url = "http://172.16.20.63:8000/v1";
 }
 
@@ -188,6 +191,8 @@ public class Deco_Json : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -296,6 +301,8 @@ public class Deco_Json : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString(), jsonData))
         {
             {
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
                 byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
                 www.uploadHandler = new UploadHandlerRaw(jsonToSend);
                 www.SetRequestHeader("Content-Type", "application/json");
@@ -320,6 +327,8 @@ public class Deco_Json : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/furniture", datasString))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(datasString);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.SetRequestHeader("Content-Type", "application/json");
@@ -345,6 +354,8 @@ public class Deco_Json : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/screenShot", form))
         {
             {
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
                 yield return www.SendWebRequest();
 
                 if (www.result != UnityWebRequest.Result.Success)
@@ -462,6 +473,8 @@ public class Deco_Json : MonoBehaviour
         // 가구 ID로 요청해서 가구의 정보를 받아옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -482,6 +495,8 @@ public class Deco_Json : MonoBehaviour
         // 받아온 가구 정보를 사용해서 가구 생성
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -524,6 +539,8 @@ public class Deco_Json : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
