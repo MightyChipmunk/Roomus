@@ -49,7 +49,7 @@ public class Show_ChatManager : MonoBehaviourPun
         obj.GetComponent<Text>().text = nickName + ": ";
         StartCoroutine(AutoScrollBottom());
 
-        StartCoroutine(filter("http://3.20.72.99:5000/filter/", s, obj, nickName));
+        StartCoroutine(filter("http://34.27.186.152:5000/filter/", s, obj, nickName));
 
     }
     string filterText;

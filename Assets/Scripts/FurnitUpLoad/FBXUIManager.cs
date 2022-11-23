@@ -248,6 +248,8 @@ public class FBXUIManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri, form))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

@@ -154,6 +154,8 @@ public class Show_Json : MonoBehaviourPun
         // 가구 ID로 요청해서 가구의 정보를 받아옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -174,6 +176,8 @@ public class Show_Json : MonoBehaviourPun
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -192,6 +196,10 @@ public class Show_Json : MonoBehaviourPun
                 {
                     yield return null;
                 }
+
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no + "/");
+                ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
@@ -212,6 +220,8 @@ public class Show_Json : MonoBehaviourPun
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -262,13 +272,13 @@ public class Show_Json : MonoBehaviourPun
             GameObject newRoom = Instantiate(Resources.Load<GameObject>("Room" + arrayJsonLoad.door.ToString()));
             newRoom.name = "Room";
 
-            player.transform.position = new Vector3(1.2f, 0, 2f);
+            //player.transform.position = new Vector3(1.2f, 0, 2f);
 
             //ArrayJson의 데이터를 가지고 오브젝트 생성
             for (int i = 0; i < arrayJsonLoad.datas.Count; i++)
             {
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
-                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale * 10, newRoom.transform);
+                LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
             newRoom.AddComponent<PhotonView>();
@@ -322,10 +332,19 @@ public class Show_Json : MonoBehaviourPun
         obj.transform.localEulerAngles = assetLoaderContext.WrapperGameObject.transform.localEulerAngles;
         obj.transform.localScale = assetLoaderContext.WrapperGameObject.transform.localScale;
         GameObject go = obj.transform.GetChild(0).gameObject;
+
         BoxCollider col = go.AddComponent<BoxCollider>();
         col.isTrigger = true;
-        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
+        //col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+
+        if (go.transform.up.x > 0)
+            col.center += go.transform.up * fbxJson.xsize / 2;
+        else if (go.transform.up.y > 0)
+            col.center += go.transform.up * fbxJson.ysize / 2;
+        else if (go.transform.up.z > 0)
+            col.center += go.transform.up * fbxJson.zsize / 2;
+
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
@@ -333,11 +352,13 @@ public class Show_Json : MonoBehaviourPun
             go.transform.localPosition = Vector3.zero;
         else if (!fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
+        //go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
+
+        MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
 
         Destroy(assetLoaderContext.WrapperGameObject);
     }

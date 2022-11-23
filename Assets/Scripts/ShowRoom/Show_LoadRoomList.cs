@@ -112,6 +112,8 @@ public class Show_LoadRoomList : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -137,6 +139,8 @@ public class Show_LoadRoomList : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

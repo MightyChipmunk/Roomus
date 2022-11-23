@@ -9,8 +9,11 @@ using UnityEngine.UI;
 
 public static class UrlInfo
 {
-    public static string url = "http://54.180.108.64:80/v1";
-    //public static string url = "http://172.16.20.63:8000/v1";
+    public const string url = "http://54.180.108.64:80/v1";
+    public const string _url = "http://54.180.108.64:80/";
+    //public const string url = "http://192.168.0.243:8000/v1";
+    //public const string _url = "http://192.168.0.243:8000/";
+    //public const string url = "http://172.16.20.63:8000/v1";
 }
 
 [Serializable]
@@ -188,6 +191,8 @@ public class Deco_Json : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -296,6 +301,8 @@ public class Deco_Json : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString(), jsonData))
         {
             {
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
                 byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
                 www.uploadHandler = new UploadHandlerRaw(jsonToSend);
                 www.SetRequestHeader("Content-Type", "application/json");
@@ -320,6 +327,8 @@ public class Deco_Json : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/furniture", datasString))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(datasString);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.SetRequestHeader("Content-Type", "application/json");
@@ -345,6 +354,8 @@ public class Deco_Json : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/screenShot", form))
         {
             {
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
                 yield return www.SendWebRequest();
 
                 if (www.result != UnityWebRequest.Result.Success)
@@ -462,6 +473,8 @@ public class Deco_Json : MonoBehaviour
         // 가구 ID로 요청해서 가구의 정보를 받아옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -482,6 +495,8 @@ public class Deco_Json : MonoBehaviour
         // 받아온 가구 정보를 사용해서 가구 생성
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -500,6 +515,9 @@ public class Deco_Json : MonoBehaviour
                 {
                     yield return null;
                 }
+
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
@@ -521,6 +539,8 @@ public class Deco_Json : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -615,8 +635,15 @@ public class Deco_Json : MonoBehaviour
         GameObject go = obj.transform.GetChild(0).gameObject;
         BoxCollider col = go.AddComponent<BoxCollider>();
         col.isTrigger = true;
-        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
+        //col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+
+        if (go.transform.up.x > 0)
+            col.center += go.transform.up * fbxJson.xsize / 2;
+        else if (go.transform.up.y > 0)
+            col.center += go.transform.up * fbxJson.ysize / 2;
+        else if (go.transform.up.z > 0)
+            col.center += go.transform.up * fbxJson.zsize / 2;
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
         rb.velocity = Vector3.zero;
@@ -624,13 +651,15 @@ public class Deco_Json : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
         else if (!fbxJson.location)
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
+        //go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
         
         SaveJson(obj, fbxJson.no);
+
+        MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
 
         Destroy(assetLoaderContext.WrapperGameObject);
     }

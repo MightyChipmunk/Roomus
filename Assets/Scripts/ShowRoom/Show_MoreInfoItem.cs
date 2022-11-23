@@ -43,6 +43,8 @@ public class Show_MoreInfoItem : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

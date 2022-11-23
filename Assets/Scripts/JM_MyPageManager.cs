@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class JM_MyPageManager : MonoBehaviour
@@ -139,20 +142,59 @@ public class JM_MyPageManager : MonoBehaviour
     // network connection needed
     public void GetPW()
     {
-        originPW = originPW = donePWOriginTxt.GetComponent<Text>().text;
-        print(originPW);
+        originPW = donePWOriginTxt.GetComponent<Text>().text;
+
+    }
+
+    IEnumerator OnGetPW(string url, string pw)
+    {
+        // 폼데이터 생성
+        WWWForm form = new WWWForm();
+        // 폼데이터에 string값 pw 추가
+        form.AddField("confirmPass", pw);
+        
+        bool confirm = false;
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            // 토큰을 헤더에 설정
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                confirm = Convert.ToBoolean(www.downloadHandler.text);
+                Debug.Log("Confirm Password complete!");
+            }
+            www.Dispose();
+        }
+
+        if (confirm)
+        {
+            isPWMove = true;
+            isPWEdit = true;
+            enterPWCaution.SetActive(false);
+        }
+        else enterPWCaution.SetActive(true);
     }
 
     public void OnClickEditPW()
     {
         isPWEnterMove = true;
         isPWEnter = true;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickDoneEnterPW()
     {
         print(pwInput);
         CheckPW(pwInput);
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void UpdateEnterPW(string input)
@@ -168,7 +210,7 @@ public class JM_MyPageManager : MonoBehaviour
             enterPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Password;
         }
         else enterPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
-
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickShowEnterPW()
@@ -178,6 +220,7 @@ public class JM_MyPageManager : MonoBehaviour
             newPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Password;
         }
         else newPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickShowRePW()
@@ -187,17 +230,14 @@ public class JM_MyPageManager : MonoBehaviour
             reEnterPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Password;
         }
         else reEnterPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void CheckPW(string input)
     {
-        if (input == originPW)
-        {
-            isPWMove = true;
-            isPWEdit = true;
-            enterPWCaution.SetActive(false);
-        }
-        else enterPWCaution.SetActive(true);
+        
+
+        StartCoroutine(OnGetPW(UrlInfo._url + "member/passcheck", input));
     }
     
     public void UpdatePW(string input)
@@ -226,6 +266,7 @@ public class JM_MyPageManager : MonoBehaviour
         UpdatePWInfo(newPW);
         isPWDoneMove = true;
         isPWGood = true;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickBackPW()
@@ -234,13 +275,15 @@ public class JM_MyPageManager : MonoBehaviour
         isPWEnter = false;
         
         isPWMove = true;
-        isPWEdit = false;             
+        isPWEdit = false;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickBackPWEnter()
     {
         isPWEnterMove = true;
-        isPWEnter = false;       
+        isPWEnter = false;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     void RefreshPWEnter()
@@ -248,6 +291,7 @@ public class JM_MyPageManager : MonoBehaviour
         enterPWInput.Select();
         enterPWInput.text = "";
         enterPWCaution.SetActive(false);
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickClosePW()
@@ -258,6 +302,7 @@ public class JM_MyPageManager : MonoBehaviour
         isPWGood = false;
         isPWEnterMove = true;
         isPWEnter = false;
+        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     void UpdatePWInfo(string pw)
