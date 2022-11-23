@@ -90,6 +90,11 @@ public class MaterialLoader : MonoBehaviour
                 m.SetFloat("_SmoothnessTextureChannel", GetSigle(matLines[i]));
             }
 
+            if (matLines[i].Contains("OcclusionStrength:"))
+            {
+                m.SetFloat("_OcclusionStrength", GetSigle(matLines[i]));
+            }
+
             //if (matLines[i].Contains("Blend:"))
             //{
             //    m.SetFloat("_Blend", GetSigle(matLines[i]));
