@@ -690,6 +690,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToolBarCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5077376040923006752, guid: a3aff83f7e7334f00b5a83fc6f64c3c3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8913034604908216343, guid: a3aff83f7e7334f00b5a83fc6f64c3c3,
         type: 3}
       propertyPath: m_Pivot.x

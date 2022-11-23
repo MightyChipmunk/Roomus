@@ -56,7 +56,12 @@ public class ColorUIManager : MonoBehaviour
         if (advColor.transform.position == originPos.position)
         {
             isLibShow = true;
-
         }
+    }
+
+    public void OnScreenShot()
+    {
+        isLibraryMove = true;
+        isLibShow = false;
     }
 }
