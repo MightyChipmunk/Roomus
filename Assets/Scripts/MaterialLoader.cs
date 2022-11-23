@@ -49,7 +49,7 @@ public class MaterialLoader : MonoBehaviour
 
     void InitMaterial(string path)
     {
-        string[] filePaths = Directory.GetFiles(path, "*.jpg.meta");
+        string[] filePaths = Directory.GetFiles(path, "*.meta");
         
         for (int i = 0; i < filePaths.Length; i++)
         {
@@ -74,14 +74,42 @@ public class MaterialLoader : MonoBehaviour
 
     void SetMaterialInfo(Material m, string path)
     {
-        //Material m = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-
+        bool noMetal = false;
         string matString = File.ReadAllText(path);
         string[] matLines = matString.Split("\n");
-        m.SetFloat("_WorkflowMode", 1);
         m.SetFloat("_SmoothnessTextureChannel", 1);
         for (int i = 0; i < matLines.Length; i++)
         {
+            if (matLines[i].Contains("WorkflowMode:"))
+            {
+                m.SetFloat("_WorkflowMode", GetSigle(matLines[i]));
+            }
+
+            if (matLines[i].Contains("SmoothnessTextureChannel:"))
+            {
+                m.SetFloat("_SmoothnessTextureChannel", GetSigle(matLines[i]));
+            }
+
+            //if (matLines[i].Contains("Blend:"))
+            //{
+            //    m.SetFloat("_Blend", GetSigle(matLines[i]));
+            //}
+
+            if (matLines[i].Contains("Surface:"))
+            {
+                m.SetFloat("_Surface", GetSigle(matLines[i]));
+            }
+
+            if (matLines[i].Contains("AlphaClip:"))
+            {
+                m.SetFloat("_AlphaClip", GetSigle(matLines[i]));
+            }
+
+            if (matLines[i].Contains("ReceiveShadows:"))
+            {
+                m.SetFloat("_ReceiveShadows", GetSigle(matLines[i]));
+            }
+
             //Metallic
             if (matLines[i].Contains("Metallic:"))
             {
@@ -106,29 +134,37 @@ public class MaterialLoader : MonoBehaviour
 
                 if (matLines[i + 2].Contains("Scale"))
                 {
-                    m.mainTextureScale = GetScale(matLines[i + 2]);
+                    //m.mainTextureScale = GetScale(matLines[i + 2]);
+                    m.SetTextureScale("_BaseMap", GetScale(matLines[i + 2]));
                 }                
             }
             //BumpMap (Normal)
             //else if (matLines[i].Contains("BumpMap:"))
             //{
-                //m.SetTexture("_BumpMap", GetTexture(matLines[i + 1]));
+            //    m.SetTexture("_BumpMap", GetTexture(matLines[i + 1]));
             //}
             //MetallicMap
-            //else if (matLines[i].Contains("MetallicGlossMap"))
-            //{
-            //    m.SetTexture("_MetallicGlossMap", GetTexture(matLines[i + 1]));
-            //    m.SetFloat("_Metallic", 0);
-            //    m.SetFloat("_Smoothness", 0.5f);
-            //}
+            else if (matLines[i].Contains("MetallicGlossMap"))
+            {
+                if (GetTexture(matLines[i + 1]) == null)
+                {
+                    noMetal = true;
+                    continue;
+                }
+                m.SetTexture("_MetallicGlossMap", GetTexture(matLines[i + 1]));
+            }
             //ParallaxMap (Height)
             else if (matLines[i].Contains("ParallaxMap:"))
             {
+                if (GetTexture(matLines[i + 1]) == null)
+                    continue;
                 m.SetTexture("_ParallaxMap", GetTexture(matLines[i + 1]));
             }
             //OcclusionMap 
             else if (matLines[i].Contains("OcclusionMap:"))
             {
+                if (GetTexture(matLines[i + 1]) == null)
+                    continue;
                 m.SetTexture("_OcclusionMap", GetTexture(matLines[i + 1]));
             }
             //BaseColor
@@ -149,7 +185,9 @@ public class MaterialLoader : MonoBehaviour
 
 
         }
-       // mat.CopyPropertiesFromMaterial(m);
+
+        if (noMetal)
+            m.SetFloat("_SmoothnessTextureChannel", 1);
     }
 
     Texture2D GetTexture(string line)
@@ -163,6 +201,7 @@ public class MaterialLoader : MonoBehaviour
             byte[] img = null;
             if (dicImage.ContainsKey(guid))
                 img = File.ReadAllBytes(dicImage[guid]);
+            Debug.Log(dicImage[guid]);
             map = new Texture2D(2, 2, TextureFormat.RGB24, false);
             if (img != null)
             {

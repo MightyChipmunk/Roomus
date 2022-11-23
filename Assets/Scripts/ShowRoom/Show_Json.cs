@@ -194,7 +194,8 @@ public class Show_Json : MonoBehaviourPun
                 }
 
                 if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
-                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+                    Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no + "/");
+                ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;

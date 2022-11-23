@@ -5639,6 +5639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0491c705b93274381dd3efa15d7712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
 --- !u!4 &1581393716
 Transform:
   m_ObjectHideFlags: 0
@@ -7941,12 +7942,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca8f9e70a0022143b20e11020323130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 811126416}
-  - {fileID: 1994749625}
-  - {fileID: 1508323983}
-  - {fileID: 1279736213}
-  - {fileID: 1396744863}
 --- !u!4 &2085085048
 Transform:
   m_ObjectHideFlags: 0
