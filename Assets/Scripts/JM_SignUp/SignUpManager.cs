@@ -146,6 +146,10 @@ public class SignUpManager : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Post(url, data))
         {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
