@@ -5,6 +5,7 @@ using System.IO;
 using TriLibCore;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public static class UrlInfo
@@ -314,7 +315,10 @@ public class Deco_Json : MonoBehaviour
                 }
                 else
                 {
+                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false);
                     Debug.Log("Room Put complete!");
+                    yield return new WaitForSeconds(1f);
+                    SceneManager.LoadScene("Main");
                 }
             }
 

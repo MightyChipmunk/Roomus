@@ -9,6 +9,7 @@ using System.Linq;
 using Ookii.Dialogs;
 using System.Windows.Forms;
 using Screen = UnityEngine.Screen;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class FBXJson
@@ -260,6 +261,8 @@ public class FBXUIManager : MonoBehaviour
             {
                 JH_PopUpUI.Instance.SetUI("", "Furniture Upload Complete!");
                 Debug.Log("Form upload complete!");
+                yield return new WaitForSeconds(1f);
+                SceneManager.LoadScene("Main");
             }
         }
     }

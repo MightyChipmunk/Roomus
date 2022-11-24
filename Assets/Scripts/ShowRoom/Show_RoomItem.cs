@@ -71,6 +71,7 @@ public class Show_RoomItem : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
+                JH_PopUpUI.Instance.SetUI("", "Already Liked", true, 0.5f);
                 Debug.Log(id.ToString() + www.error);
             }
             else

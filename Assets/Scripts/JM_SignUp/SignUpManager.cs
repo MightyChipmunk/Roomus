@@ -160,6 +160,7 @@ public class SignUpManager : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Sign Up Complete!", false);
                 Debug.Log("SignUp complete!");
             }
             www.Dispose();

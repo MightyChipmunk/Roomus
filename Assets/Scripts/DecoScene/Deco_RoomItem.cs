@@ -71,6 +71,7 @@ public class Deco_RoomItem : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Room Delete Complete!", false);
                 Debug.Log("Delete complete!");
                 Destroy(gameObject);
             }

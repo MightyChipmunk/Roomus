@@ -50,7 +50,8 @@ public class Show_FurnitInfo : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(id.ToString() + www.error);
+                JH_PopUpUI.Instance.SetUI("", "Already Liked", true, 0.5f);
+                Debug.Log(www.error);
             }
             else
             {
