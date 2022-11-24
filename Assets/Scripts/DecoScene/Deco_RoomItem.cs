@@ -60,17 +60,20 @@ public class Deco_RoomItem : MonoBehaviour
 
     IEnumerator Delete(string url)
     {
-        UnityWebRequest www = UnityWebRequest.Delete(url);
-
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
+        using (UnityWebRequest www = UnityWebRequest.Delete(url))
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log("Delete complete!");
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Delete complete!");
+                Destroy(gameObject);
+            }
         }
     }
 }
