@@ -12,6 +12,8 @@ public static class UrlInfo
 {
     public const string url = "http://54.180.108.64:80/v1";
     public const string _url = "http://54.180.108.64:80/";
+    public const string chatUrl = "http://34.64.60.123:5000/";
+    public const string cropUrl = "http://34.64.70.4:5000/";
     //public const string url = "http://192.168.0.243:8000/v1";
     //public const string _url = "http://192.168.0.243:8000/";
     //public const string url = "http://172.16.20.63:8000/v1";
@@ -283,6 +285,12 @@ public class Deco_Json : MonoBehaviour
     // 수정된 방 정보를 서버에 Json 형식으로 업로드
     IEnumerator OnPutJson(string uri, int id, ArrayJson arrayJson)
     {
+        if (Deco_UIManager.Instance.ImageBytes == null)
+        {
+            JH_PopUpUI.Instance.SetUI("Warning!", "ScreenShot is not Captured!", false);
+            yield break;
+        }
+
         ArrayJson_First firstJson = new ArrayJson_First();
         firstJson.roomNo = id;
         if (arrayJson.roomName != null)
@@ -315,10 +323,9 @@ public class Deco_Json : MonoBehaviour
                 }
                 else
                 {
-                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false);
+                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false, 0.5f, "Main");
                     Debug.Log("Room Put complete!");
                     yield return new WaitForSeconds(1f);
-                    SceneManager.LoadScene("Main");
                 }
             }
 

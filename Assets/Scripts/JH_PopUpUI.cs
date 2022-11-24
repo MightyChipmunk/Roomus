@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class JH_PopUpUI : MonoBehaviour
@@ -8,6 +9,8 @@ public class JH_PopUpUI : MonoBehaviour
     Text title;
     Text desc;
     Button button;
+
+    string sceneName;
 
     public static JH_PopUpUI Instance { get; private set; }
     // Start is called before the first frame update
@@ -35,10 +38,11 @@ public class JH_PopUpUI : MonoBehaviour
         
     }
 
-    public void SetUI(string title, string desc, bool auto = true, float time = 0.5f)
+    public void SetUI(string title, string desc, bool auto = true, float time = 0.5f, string sceneName = "")
     {
         this.title.text = title;
         this.desc.text = desc;
+        this.sceneName = sceneName;
         iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 1, "y", 1, "time", time, "easetype", iTween.EaseType.easeOutQuint));
         if (auto)
         {
@@ -49,5 +53,9 @@ public class JH_PopUpUI : MonoBehaviour
     void OnClick()
     {
         iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 0, "y", 0, "time", 0.5f, "easetype", iTween.EaseType.easeOutQuint));
+        if (sceneName.Length > 0)
+        {
+            SceneManager.LoadScene(sceneName); 
+        }
     }
 }
