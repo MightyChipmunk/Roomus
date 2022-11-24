@@ -176,7 +176,7 @@ public class Show_Json : MonoBehaviourPun
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
 
@@ -354,6 +354,7 @@ public class Show_Json : MonoBehaviourPun
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         //go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+        decoIdx.Id = fbxJson.no;
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;

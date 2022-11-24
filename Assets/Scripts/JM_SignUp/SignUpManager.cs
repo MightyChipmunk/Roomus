@@ -99,11 +99,13 @@ public class SignUpManager : MonoBehaviour
         myInfo.pwd = pw;
         myInfo.memberId = id;
 
-        string jsonRegisterInfo = JsonUtility.ToJson(myInfo);
+        string jsonRegisterInfo = JsonUtility.ToJson(myInfo, true);
+
+        File.WriteAllText(Application.dataPath + "/asdf.txt", jsonRegisterInfo);
 
         StartCoroutine(OnSignUp(UrlInfo._url + "guest/signup", jsonRegisterInfo));
 
-        // file path
+        // file path{
         //string path = Application.dataPath + "/" + "UserInfoFile" + ".txt";
         //string jsonMyInfo = JsonUtility.ToJson(myInfo);
         //print(jsonMyInfo);

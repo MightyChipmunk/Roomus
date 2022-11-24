@@ -90,6 +90,7 @@ public class SignInManager : MonoBehaviour
             if (loginAPI.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(loginAPI.error);
+                JH_PopUpUI.Instance.SetUI("Login Error", "ID or Password Incorrect", false);
             }
             else
             {
@@ -102,12 +103,13 @@ public class SignInManager : MonoBehaviour
                 //UserReturnInfo returnInfo = JsonUtility.FromJson<UserReturnInfo>(loginAPIs)
 
                 TokenManager.Instance.Token = token;
+                TokenManager.Instance.ID = id;
 
                 loginAPI.Dispose();
 
+                SceneManager.LoadScene("Main");
             }
         }
-        SceneManager.LoadScene("Main");
     }   
 }
 

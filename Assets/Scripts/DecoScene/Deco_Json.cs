@@ -495,7 +495,7 @@ public class Deco_Json : MonoBehaviour
         // 받아온 가구 정보를 사용해서 가구 생성
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         {
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
 

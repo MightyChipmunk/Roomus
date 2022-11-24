@@ -63,6 +63,8 @@ public class Show_MoreInfoItem : MonoBehaviour
 
                 itemMoreInfo.transform.Find("Image").GetComponent<Image>().sprite = transform.Find("Mask").transform.Find("Profile").GetComponent<Image>().sprite;
                 itemMoreInfo.transform.Find("Name").GetComponent<Text>().text = fbxJson.furnitName;
+                itemMoreInfo.transform.Find("DimensionContent").GetComponent<Text>().text =
+                    (fbxJson.xsize * 100).ToString() + " x " + (fbxJson.zsize * 100).ToString() + " x " + (fbxJson.ysize * 100).ToString();
                 itemMoreInfo.transform.Find("Price").GetComponent<Text>().text = fbxJson.price.ToString();
                 itemMoreInfo.transform.Find("DescriptionContent").GetComponent<Text>().text = fbxJson.information;
             }
