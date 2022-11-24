@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -23,6 +24,7 @@ public class Show_RoomItem : MonoBehaviour
     public Image roomImage;
 
     public Button button;
+    public Button likeButton;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,7 @@ public class Show_RoomItem : MonoBehaviour
             roomImage.sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
         }
         button.onClick.AddListener(OnClicked);
+        likeButton.onClick.AddListener(OnClickLike);
     }
 
     // Update is called once per frame
@@ -49,5 +52,31 @@ public class Show_RoomItem : MonoBehaviour
         Show_LoadRoomList.Instance.ID = ID;
         Show_LoadRoomList.Instance.localTest = localTest;
         SceneManager.LoadScene("Test_Connect");
+    }
+
+    public void OnClickLike()
+    {
+        StartCoroutine(Like(UrlInfo.url + "/rooms/" + ID.ToString() + "/likes", ID));
+    }
+
+    IEnumerator Like(string url, int id)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("roomNo", id.ToString());
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(id.ToString() + www.error);
+            }
+            else
+            {
+                Debug.Log("Room Like complete!");
+            }
+        }
     }
 }
