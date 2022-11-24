@@ -616,6 +616,9 @@ public class Deco_PutObject : MonoBehaviour
 
         obj.transform.parent = transform;
         obj.SetActive(false);
+
+
+        JH_PopUpUI.Instance.SetUI("", "Furniture Download Complete!", true, 0.5f);
     }
 
     /// <summary>

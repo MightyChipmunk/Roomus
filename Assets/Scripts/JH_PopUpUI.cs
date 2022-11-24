@@ -35,14 +35,14 @@ public class JH_PopUpUI : MonoBehaviour
         
     }
 
-    public void SetUI(string title, string desc, bool auto = true)
+    public void SetUI(string title, string desc, bool auto = true, float time = 0.5f)
     {
         this.title.text = title;
         this.desc.text = desc;
-        iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.5f, "easetype", iTween.EaseType.easeOutQuint));
+        iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 1, "y", 1, "time", time, "easetype", iTween.EaseType.easeOutQuint));
         if (auto)
         {
-            iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 0, "y", 0, "time", 0.5f, "delay", 1f, "easetype", iTween.EaseType.easeOutQuint));
+            iTween.ScaleTo(transform.Find("PopUpUI").gameObject, iTween.Hash("x", 0, "y", 0, "time", time, "delay", time * 2, "easetype", iTween.EaseType.easeOutQuint));
         }
     }
 

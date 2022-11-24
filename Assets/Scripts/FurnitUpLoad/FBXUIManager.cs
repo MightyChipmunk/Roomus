@@ -258,6 +258,7 @@ public class FBXUIManager : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Furniture Upload Complete!");
                 Debug.Log("Form upload complete!");
             }
         }
