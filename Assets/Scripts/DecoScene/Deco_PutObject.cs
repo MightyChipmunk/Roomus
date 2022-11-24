@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using TriLibCore;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Linq;
 
 public class FBXWrapper
 {
@@ -16,6 +18,8 @@ public class Deco_PutObject : MonoBehaviour
 {
     public static Deco_PutObject Instance;
 
+    public GameObject lightPrefab;
+    bool isLight;
     public FBXJson fbxJson = new FBXJson();
 
     GameObject obj;
@@ -58,7 +62,11 @@ public class Deco_PutObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
+        if (isLight)
+        {
+            LightPut();
+        }
+        else if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
         {
             SecondPut();
         }
@@ -90,9 +98,15 @@ public class Deco_PutObject : MonoBehaviour
         //StartCoroutine(WaitForObj());
 
         // 받아온 id로 서버에 가구 요청
-        StartCoroutine(OnPostJson("http://54.180.108.64:80/v1/products" + "/" + id.ToString()));
-        
+        //Directory.Delete(Application.dataPath + "/LocalServer/", true);
+        StartCoroutine(OnPostJson(UrlInfo.url + "/products" + "/" + id.ToString()));
+        isLight = false;
         //StartCoroutine(WaitForObj());
+    }
+
+    public void LoadLight()
+    {
+        isLight = true;
     }
 
     IEnumerator WaitForObj()
@@ -104,6 +118,74 @@ public class Deco_PutObject : MonoBehaviour
 
         obj.transform.parent = transform;
         obj.SetActive(false);
+    }
+
+    void LightPut()
+    {
+        // 키를 누르면 오브젝트 미리보기 생성
+        if (Input.GetKeyDown(KeyCode.G) && Deco_ChangeView.Instance.viewState != Deco_ChangeView.ViewState.First)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 16f))
+            {
+                obj = lightPrefab;
+                obj.transform.position = hit.point;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.G))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor", "Wall")))
+            {
+                obj = lightPrefab;
+                obj.transform.position = hit.point;
+            }
+        }
+        // 누르고 있는 동안 오브젝트 이동
+        else if (Input.GetKey(KeyCode.G) && obj)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 16f))
+            {
+                obj.transform.position = hit.point;
+                canPut = true;
+            }
+            else
+                canPut = false;
+        }
+        // 배치 가능할 시 키를 떼면 생성
+        else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
+        {
+            GameObject loadObj = Instantiate(obj, transform);
+            loadObj.transform.localPosition = obj.transform.localPosition;
+            loadObj.transform.localEulerAngles = obj.transform.localEulerAngles;
+            loadObj.transform.localScale = obj.transform.localScale;
+            loadObj.name = obj.name;
+            Deco_Json.Instance.SaveLightJson(loadObj);
+            loadObj.transform.parent = GameObject.Find("Room").transform;
+        }
+        // 배치 불가능 할 시 키를 떼면 제거
+        else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
+        {
+            obj = null;
+            canPut = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 16f))
+            {
+                Light light;
+                if (hit.transform.TryGetComponent<Light>(out light))
+                {
+                    Deco_Json.Instance.DeleteLightJson(hit.transform.gameObject);
+                    Destroy(hit.transform.gameObject);
+                }
+            }
+        }
     }
 
     void SecondPut()
@@ -410,6 +492,8 @@ public class Deco_PutObject : MonoBehaviour
         // id로 요청해서 Json 형식으로 정보를 가져옴
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -435,6 +519,8 @@ public class Deco_PutObject : MonoBehaviour
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -443,13 +529,19 @@ public class Deco_PutObject : MonoBehaviour
             }
             else
             {
-                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
+                string path = Application.dataPath + "/LocalServer/" + fbxJson.no.ToString() + "/furnit.zip";
+                //string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
                 File.WriteAllBytes(path, www.downloadHandler.data);
 
                 while (!File.Exists(path))
                 {
                     yield return null;
                 }
+
+                if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
+                    Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no + "/");
+                ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
                 AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
@@ -486,41 +578,39 @@ public class Deco_PutObject : MonoBehaviour
     private void OnMaterialsLoad(AssetLoaderContext assetLoaderContext)
     {
         Debug.Log("Materials loaded. Model fully loaded.");
+
         obj = assetLoaderContext.RootGameObject;
         GameObject go = obj.transform.GetChild(0).gameObject;
+
         if (fbxJson.location)
             go.transform.localPosition = Vector3.zero;
         else
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
-        go.transform.localRotation = Quaternion.identity;
+        //go.transform.localRotation = Quaternion.identity;
+
         BoxCollider col = go.AddComponent<BoxCollider>();
         objCol = go.AddComponent<Deco_ObjectCol>();
-        col.center = new Vector3(0, fbxJson.ysize / 2, 0);
         col.size = new Vector3(fbxJson.xsize, fbxJson.ysize, fbxJson.zsize);
+        //col.center = new Vector3(0, fbxJson.ysize / 2, 0);
+
+        if (go.transform.up.x > 0)
+            col.center += go.transform.up * fbxJson.xsize / 2;
+        else if (go.transform.up.y > 0)
+            col.center += go.transform.up * fbxJson.ysize / 2;
+        else if (go.transform.up.z > 0)
+            col.center += go.transform.up * fbxJson.zsize / 2;
+
         Rigidbody rb = go.AddComponent<Rigidbody>();
         rb.useGravity = false;
+
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;
-        //decoIdx.Idx = fbxJson.id;
-
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    go.transform.GetChild(i).GetComponent<Renderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        //}
 
         obj.name = fbxJson.furnitName;
 
-        //for (int i = 0; i < go.transform.childCount; i++)
-        //{
-        //    if (File.Exists(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"))
-        //    {
-        //        Texture2D tex = new Texture2D(2, 2);
-        //        tex.LoadImage(File.ReadAllBytes(Application.dataPath + "/LocalServer/" + fbxJson.furnitName + "Tex" + i.ToString() + ".jpg"));
-        //        go.transform.GetChild(i).GetComponent<Renderer>().material.mainTexture = tex;
-        //    }
-        //}
+        MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
 
         AddOrigMats();
 

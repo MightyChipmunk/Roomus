@@ -53,10 +53,9 @@ public class SignInManager : MonoBehaviour
         string jsonLoginInfo = JsonUtility.ToJson(loginInfo);
         print(jsonLoginInfo);
 
-        SceneManager.LoadScene("Main");
 
         // login network connection
-        //StartCoroutine(UploadLoginInfo("http://192.168.0.6:8000/login"));
+        StartCoroutine(UploadLoginInfo(UrlInfo._url + "login"));
         
         
         //UnityWebRequest loginAPI = UnityWebRequest.Post("http://192.168.0.6:8000/login", jsonLoginInfo);
@@ -88,7 +87,7 @@ public class SignInManager : MonoBehaviour
 
             yield return loginAPI.SendWebRequest();
 
-            if (loginAPI.isNetworkError || loginAPI.isHttpError)
+            if (loginAPI.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log(loginAPI.error);
             }
@@ -103,8 +102,12 @@ public class SignInManager : MonoBehaviour
                 //UserReturnInfo returnInfo = JsonUtility.FromJson<UserReturnInfo>(loginAPIs)
 
                 TokenManager.Instance.Token = token;
+
+                loginAPI.Dispose();
+
             }
         }
+        SceneManager.LoadScene("Main");
     }   
 }
 

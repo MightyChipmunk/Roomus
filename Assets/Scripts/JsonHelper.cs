@@ -23,4 +23,23 @@ public static class JsonHelper
     {
         public T[] data;
     }
+
+    public static T[] FromJsons<T>(string json)
+    {
+        Wrappers<T> wrapper = UnityEngine.JsonUtility.FromJson<Wrappers<T>>(json);
+        return wrapper.datas;
+    }
+
+    public static string ToJsons<T>(T[] array)
+    {
+        Wrappers<T> wrapper = new Wrappers<T>();
+        wrapper.datas = array;
+        return JsonUtility.ToJson(wrapper);
+    }
+
+    [Serializable]
+    private class Wrappers<T>
+    {
+        public T[] datas;
+    }
 }

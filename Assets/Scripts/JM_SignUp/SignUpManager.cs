@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class SignUpManager : MonoBehaviour
 {
@@ -88,14 +89,19 @@ public class SignUpManager : MonoBehaviour
         allInfo.datas = new List<UserInfo>();
 
         UserInfo myInfo = new UserInfo();
-        myInfo.fName = fName;
-        myInfo.lName = lName;
-        myInfo.email = email;
-        myInfo.id = id;
-        myInfo.pw = pw;
+        //myInfo.fName = fName;
+        //myInfo.lName = lName;
+        //myInfo.email = email;
+        //myInfo.id = id;
+        //myInfo.pw = pw;
+        myInfo.memberName = fName + " " + lName;
+        myInfo.memberEmail = email;
+        myInfo.pwd = pw;
+        myInfo.memberId = id;
 
         string jsonRegisterInfo = JsonUtility.ToJson(myInfo);
-        print(jsonRegisterInfo);
+
+        StartCoroutine(OnSignUp(UrlInfo._url + "guest/signup", jsonRegisterInfo));
 
         // file path
         //string path = Application.dataPath + "/" + "UserInfoFile" + ".txt";
@@ -134,6 +140,24 @@ public class SignUpManager : MonoBehaviour
         screenCode.isStart = true;
         screenCode.alpha = 1;
         screenCode.screen.SetActive(true);
+    }
+
+    IEnumerator OnSignUp(string url, string data)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post(url, data))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("SignUp complete!");
+            }
+            www.Dispose();
+        }
     }
 
     public void OnSignInNextClick()
@@ -181,11 +205,16 @@ public class SignUpManager : MonoBehaviour
 
 public class UserInfo
 {
-    public string fName;
-    public string lName;
-    public string email;
-    public string id;
-    public string pw;   
+    //public string fName;
+    //public string lName;
+    //public string email;
+    //public string id;
+    //public string pw;   
+
+    public string memberId;
+    public string pwd;
+    public string memberName;
+    public string memberEmail;
 }
 
 public class AllUserInfo

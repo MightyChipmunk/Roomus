@@ -13,7 +13,7 @@ public class Deco_FurnitItem : MonoBehaviour
     public int ID { get { return id; } set { id = value; } }
 
     [SerializeField]
-    string category = "";
+    protected string category = "";
     public string Category { get { return category; } set { category = value; } }
 
     byte[] imgBytes;

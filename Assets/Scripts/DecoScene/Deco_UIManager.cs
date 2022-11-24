@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 public class furnitInfos
 {
     public int no;
+    public string furnitName;
     public string category;
     public string screenShotUrl;
 }
@@ -26,6 +27,7 @@ public class Deco_UIManager : MonoBehaviour
     public Toggle privateToggle;
     public Dropdown category;
     public InputField descriptField;
+    public Image screenShotImage;
 
     string roomName;
     public string RoomName { get { return roomName; } set { roomName = value; } }
@@ -51,7 +53,7 @@ public class Deco_UIManager : MonoBehaviour
         posting.SetActive(false);
         trContent = (RectTransform)library.transform.Find("Viewport").transform.Find("Content");
 
-        StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/products"));
 
         //library.transform.parent.gameObject.SetActive(false);
 
@@ -112,35 +114,45 @@ public class Deco_UIManager : MonoBehaviour
         }
     }
 
-    public void EndScreenShot()
-    {
-        posting.SetActive(true);
-        screenCode.screen.SetActive(true);
-        screenCode.isDark = true;
-        screenCode.isStart = true;
-    }
+    //public void EndScreenShot()
+    //{
+    //    posting.SetActive(true);
+    //    screenCode.screen.SetActive(true);
+    //    screenCode.isDark = true;
+    //    screenCode.isStart = true;
+    //}
 
     public void OnUploadClicked()
     {
-        StartCoroutine(WaitForScreenShot());
+        Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description);
     }
 
+    public void OnScreenShotClicked()
+    {
+        StartCoroutine(WaitForScreenShot());
+    }
+    
+    public void OnPostScreenShotClicked()
+    {
+        //if (imgBytes != null)
+        //    Deco_Json.Instance.PostScreenShot(imgBytes);
+    }
+
+    byte[] imgBytes;
+    public byte[] ImageBytes { get { return imgBytes; } }
     public IEnumerator WaitForScreenShot()
     {
-        posting.SetActive(false);
-
         yield return new WaitForEndOfFrame();
 
         // 방의 스크린샷을 찍어서 바이너리 데이터로 저장
-        byte[] imgBytes;
         Texture2D texture = new Texture2D(800, 800, TextureFormat.RGB24, false);
         texture.ReadPixels(new Rect(560, 140, 800, 800), 0, 0, false);
         texture.Apply();
         imgBytes = texture.EncodeToPNG();
+        File.WriteAllBytes(Application.dataPath + "/screenShot.png", imgBytes);
+        imgBytes = File.ReadAllBytes(Application.dataPath + "/screenShot.png");
 
-        Deco_Json.Instance.PostFile(roomName, publicToggle.isOn, category.value, description, imgBytes);
-
-        EndScreenShot();
+        screenShotImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
     }
 
     void OnNameSubmit(string s)
@@ -164,11 +176,13 @@ public class Deco_UIManager : MonoBehaviour
         }
     }
 
-    // url�� �迭�� �������� �޾ƿ��� �Լ�
+    // 가구들의 리스트를 url을 통해 요청함
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -177,23 +191,25 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
-                // url �迭�� json���� �޾Ƽ� ������
+                // 가구들의 데이터를 받아옴
                 furnitInfos[] data = JsonHelper.FromJson<furnitInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    // ������ url �迭�� �ݺ������� ��ȸ�ϸ� ��ũ������ id�� �������� �Լ� ����
+                    // 가구들의 데이터에 있는 스크린샷 url로 다시 Get 요청을 보냄
                     StartCoroutine(OnGetUrl(data[i]));
                 }
-                Debug.Log("UrlList Download complete!");
+                Debug.Log("Furnit UrlList Download complete!");
             }
         }
     }
 
-    // ������ ��ũ������ id�� �޾ƿ��� �Լ�
+    // 가구 정보의 스크린샷 url로 Get 요청을 보냄
     IEnumerator OnGetUrl(furnitInfos info)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -202,7 +218,7 @@ public class Deco_UIManager : MonoBehaviour
             }
             else
             {
-                // ������ ��ũ������ id�� ���̺귯���� ���� �߰�
+                // 받아온 스크린샷과 미리 받은 정보를 이용해 라이브러리에 추가
                 // Deco_FurnitItem
                 AddContent(info.category, info.no, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");

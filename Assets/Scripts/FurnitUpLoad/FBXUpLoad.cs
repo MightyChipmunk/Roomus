@@ -12,22 +12,13 @@ using UnityEngine.Networking;
 
 public class FBXUpLoad : MonoBehaviour
 {
-    private VistaOpenFileDialog m_OpenFileDialog = new VistaOpenFileDialog();
-
-    private string[] m_FilePaths; // 파일 패스
-
-    int idx = 0;
     string fileName;
     public string FileName
     {
         get { return fileName; }
         set { fileName = value; }
     }
-    GameObject obj;
-
-    Texture2D currentTex;
-
-    public List<Button> buttons = new List<Button>();
+    Transform obj;
 
     public static FBXUpLoad Instance;
 
@@ -43,127 +34,12 @@ public class FBXUpLoad : MonoBehaviour
 
     private void Start()
     {
-
-        //Directory.CreateDirectory(UnityEngine.Application.dataPath + "/LocalServer");
-        //DirectoryInfo dir = new DirectoryInfo(UnityEngine.Application.dataPath + "/LocalServer");
-
-        //FileInfo[] files = dir.GetFiles("*.*", SearchOption.AllDirectories);
-
-        //foreach (FileInfo file in files)
-        //    file.Attributes = FileAttributes.Normal;
-
-        //Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
+        
     }
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out hit, 50f) && currentTex)
-        {
-            ChangeMat(hit.transform, currentTex);
-        }
-    }
 
-    public void OnFBXButtonOpenFile() // 버튼에 추가할 메서드
-    {
-        SetOpenFBXFileDialog();
-        m_FilePaths = FileOpen(m_OpenFileDialog);
-
-        if (m_FilePaths.Length > 0)
-            OpenFBXFile();
-    }
-
-    public void OnImageButtonOpenFile(int buttonIdx) // 버튼에 추가할 메서드
-    {
-        if (buttons[buttonIdx].transform.GetChild(0).gameObject.activeSelf)
-        {
-            SetOpenImageFileDialog();
-            m_FilePaths = FileOpen(m_OpenFileDialog);
-
-            if (m_FilePaths.Length > 0)
-                OpenImageFile(buttonIdx);
-        }
-        else
-        {
-            currentTex = buttons[buttonIdx].GetComponent<Image>().mainTexture as Texture2D;
-            idx = buttonIdx;
-        }
-    }
-
-    public void OnDeleteButton(int buttonIdx)
-    {
-        if (!buttons[buttonIdx].transform.GetChild(0).gameObject.activeSelf)
-        {
-            buttons[buttonIdx].transform.GetChild(0).gameObject.SetActive(true);
-            buttons[buttonIdx].GetComponent<Image>().sprite = Resources.Load<Sprite>("BtnUI");
-        }
-    }
-
-    string[] FileOpen(VistaOpenFileDialog openFileDialog)
-    {
-        var result = openFileDialog.ShowDialog();
-        var filenames = result == DialogResult.OK ?
-            openFileDialog.FileNames :
-            new string[0];
-        openFileDialog.Dispose();
-        return filenames;
-    }
-
-    void SetOpenFBXFileDialog()
-    {
-        m_OpenFileDialog.Title = "파일 열기";
-        m_OpenFileDialog.Filter = "Fbx 파일| *.fbx";
-        m_OpenFileDialog.FilterIndex = 1;
-        m_OpenFileDialog.Multiselect = false;
-    }
-
-    void SetOpenImageFileDialog()
-    {
-        m_OpenFileDialog.Title = "파일 열기";
-        m_OpenFileDialog.Filter = "Image 파일| *.jpg";
-        m_OpenFileDialog.FilterIndex = 1;
-        m_OpenFileDialog.Multiselect = false;
-    }
-
-    public void OpenFBXFile()
-    {
-        //fileName = Path.GetFileName(m_FilePaths[0]).Substring(0, Path.GetFileName(m_FilePaths[0]).Length - 4);
-        string path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
-        byte[] data = File.ReadAllBytes(m_FilePaths[0]);
-
-        //post
-        File.WriteAllBytes(path, data);
-        FBXUIManager.Instance.fbxData = data;
-
-        //path = UnityEngine.Application.persistentDataPath + "/" + fileName + ".fbx";
-        //File.WriteAllBytes(path, data);
-
-        StartCoroutine(WaitForFile(path)); 
-    }
-
-    public void OpenImageFile(int buttonIdx)
-    {
-        byte[] data = File.ReadAllBytes(m_FilePaths[0]);
-        string path = UnityEngine.Application.persistentDataPath + "/Pallet" + buttonIdx.ToString() + ".jpg";
-        File.WriteAllBytes(path, data);
-
-        Texture2D tex = new Texture2D(2, 2);
-        tex.LoadImage(data);
-        Rect rect = new Rect(0, 0, tex.width, tex.height);
-        buttons[buttonIdx].GetComponent<Image>().sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
-        buttons[buttonIdx].transform.GetChild(0).gameObject.SetActive(false);
-    }
-
-    void ChangeMat(Transform obj, Texture2D texture)
-    {
-        obj.GetComponent<Renderer>().material.mainTexture = texture;
-        byte[] data = File.ReadAllBytes(UnityEngine.Application.persistentDataPath + "/Pallet" + idx.ToString() + ".jpg");
-        int objIdx = obj.GetSiblingIndex();
-        //post
-        string path = UnityEngine.Application.dataPath + "/LocalServer/" + fileName + "Tex" + objIdx.ToString() + ".jpg";
-        //File.WriteAllBytes(path, data);
-        FBXUIManager.Instance.fbxTextures.Add(data);
     }
 
     FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -172,6 +48,9 @@ public class FBXUpLoad : MonoBehaviour
 
     public void OnFBXButtonOpenFolder() // 버튼에 추가할 메서드
     {
+        if (fileName == null)
+            return;
+
         if (fbd.ShowDialog() == DialogResult.OK)
         {
             f_FilePath = fbd.SelectedPath;
@@ -185,6 +64,9 @@ public class FBXUpLoad : MonoBehaviour
 
     void OpenFolder()
     {
+        if (fileName == null)
+            return;
+
         DirectoryInfo di = new DirectoryInfo(f_FilePath);
         Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
         foreach (FileInfo file in di.GetFiles())
@@ -210,19 +92,6 @@ public class FBXUpLoad : MonoBehaviour
 
         var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
         AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
-    }
-
-    IEnumerator WaitForFile(string path)
-    {
-        while(true)
-        {
-            if (File.Exists(path))
-                break;
-            yield return null;
-        }
-
-        var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-        AssetLoader.LoadModelFromFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
     }
 
     #region Trilib
@@ -263,24 +132,12 @@ public class FBXUpLoad : MonoBehaviour
     {
         Debug.Log("Materials loaded. Model fully loaded.");
 
-        obj = assetLoaderContext.RootGameObject.transform.GetChild(0).gameObject;
-        //obj.transform.parent = null;
-        //Destroy(assetLoaderContext.RootGameObject);
-        //for (int i = 0; i < obj.transform.childCount; i++)
-        //{
-        //    obj.transform.GetChild(i).GetComponent<MeshRenderer>().material.shader = Shader.Find("Universal Render Pipeline/Lit");
-        //}
-        obj.name = fileName;
+        obj = assetLoaderContext.RootGameObject.transform.GetChild(0);
 
-        //for (int i = 0; i < obj.transform.childCount; i++)
-        //{
-        //    Rigidbody rig = obj.transform.GetChild(i).gameObject.AddComponent<Rigidbody>();
-        //    rig.useGravity = false;
-        //    rig.isKinematic = true;
-        //    MeshCollider col = obj.transform.GetChild(i).gameObject.AddComponent<MeshCollider>();
-        //}
+        MaterialLoader.Instance.ChangeMat(obj, UnityEngine.Application.dataPath + "/LocalServer/" + fileName);
 
-        GameObject.Find("CamPos").GetComponent<FBXCamController>().target = obj;
+
+        GameObject.Find("CamPos").GetComponent<FBXCamController>().target = obj.gameObject;
     }
 
     /// <summary>

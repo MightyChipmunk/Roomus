@@ -9,7 +9,8 @@ using UnityEngine.UI;
 [System.Serializable]
 public class roomInfos
 {
-    public int no;
+    public int roomNo;
+    public bool access;
     public string category;
     public string roomName;
 }
@@ -52,18 +53,18 @@ public class Deco_LoadRoomList : MonoBehaviour
     void Start()
     {
         // 네트워크로 방 리스트를 가져옴
-        //StartCoroutine(OnGetJson("http://54.180.108.64:80/v1/products"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/rooms"));
 
         // 로컬로 방 리스트를 가져옴
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
-        foreach (FileInfo File in di.GetFiles())
-        {
-            if (File.Extension.ToLower().CompareTo(".txt") == 0)
-            {
-                string fileName = File.Name.Substring(0, File.Name.Length - 4);
-                AddContent(Random.Range(0, 1000), fileName);
-            }
-        }
+        //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");
+        //foreach (FileInfo File in di.GetFiles())
+        //{
+        //    if (File.Extension.ToLower().CompareTo(".txt") == 0)
+        //    {
+        //        string fileName = File.Name.Substring(0, File.Name.Length - 4);
+        //        AddContent(Random.Range(0, 1000), fileName);
+        //    }
+        //}
     }
 
     // Update is called once per frame
@@ -95,6 +96,8 @@ public class Deco_LoadRoomList : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -107,10 +110,10 @@ public class Deco_LoadRoomList : MonoBehaviour
                 roomInfos[] data = JsonHelper.FromJson<roomInfos>(www.downloadHandler.text);
                 for (int i = 0; i < data.Length; i++)
                 {
-                    // 가져온 url 배열을 반복문으로 순회하며 스크린샷과 id를 가져오는 함수 실행
-                    AddContent(data[i].no, data[i].roomName);
+                    // 가져온 url 배열을 반복문으로 순회하며 이름과 id를 가져오는 함수 실행
+                    AddContent(data[i].roomNo, data[i].roomName);
                 }
-                Debug.Log("UrlList Download complete!");
+                Debug.Log("Room UrlList Download complete!");
             }
         }
     }

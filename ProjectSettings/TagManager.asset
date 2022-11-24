@@ -38,7 +38,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Player
   - Wall
   - Floor
   m_SortingLayers:

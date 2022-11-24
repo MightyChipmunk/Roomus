@@ -6,9 +6,16 @@ using Photon.Realtime;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
+    public bool gender;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     private void Start()
     {
-        CreateRoom();
+
     }
 
     //방 생성
@@ -22,7 +29,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         roomOptions.IsVisible = true;
 
         // 방 생성 요청 (해당 옵션을 이용해서)
-        PhotonNetwork.CreateRoom("Room", roomOptions);
+        PhotonNetwork.CreateRoom("Room" + Show_LoadRoomList.Instance.ID.ToString(), roomOptions);
     }
 
     //방이 생성되면 호출 되는 함수
@@ -43,7 +50,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     //방 참가 요청
     public void JoinRoom()
     {
-        PhotonNetwork.JoinRoom("Room");
+        PhotonNetwork.JoinRoom("Room" + Show_LoadRoomList.Instance.ID.ToString());
     }
 
     //방 참가가 완료 되었을 때 호출 되는 함수
@@ -63,5 +70,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         base.OnJoinRoomFailed(returnCode, message);
         print("OnJoinRoomFailed, " + returnCode + ", " + message);
+    }
+
+    public void OnClickMan()
+    {
+        gender = true;
+        CreateRoom();
+    }
+
+    public void OnClickWoman()
+    {
+        gender = false;
+        CreateRoom();
     }
 }

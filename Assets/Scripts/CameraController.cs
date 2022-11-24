@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviourPun
     Deco_Idx furnitInfo;
     GameObject player;
     GameObject infoUI;
+
+    bool thirdPers = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,20 +29,35 @@ public class CameraController : MonoBehaviourPun
     // Update is called once per frame
     void LateUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            thirdPers = !thirdPers;
+        }
+
         // 마우스 위치에 따른 각도 조절
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
 
-        if (Input.GetKey(KeyCode.Z))
+        if (Cursor.visible == false)
         {
             mx += mh * rotSpeed * Time.deltaTime;
             my += mv * rotSpeed * Time.deltaTime;
             my = Mathf.Clamp(my, -60, 60);
         }
-            
-        transform.eulerAngles = new Vector3(-my, mx, 0);
 
-        transform.position = player.transform.position; 
+        transform.eulerAngles = new Vector3(-my, mx, 0);
+        transform.position = Vector3.Lerp(transform.position, player.transform.position + Vector3.up * 1.5f, Time.deltaTime * 15);
+
+        if (thirdPers)
+        {
+            transform.GetChild(0).localPosition = Vector3.Lerp(transform.GetChild(0).localPosition, new Vector3(0, -0.25f, -1.5f), Time.deltaTime * 5);
+            Camera.main.cullingMask = -1;
+        }
+        else
+        {
+            transform.GetChild(0).localPosition = Vector3.Lerp(transform.GetChild(0).localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5);
+            Camera.main.cullingMask = Camera.main.cullingMask & ~(1 << LayerMask.NameToLayer("Player"));
+        }
     }
 
     Vector3 UIPos;
@@ -48,7 +65,7 @@ public class CameraController : MonoBehaviourPun
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 15) && hit.transform.parent != null && Input.GetMouseButtonDown(0))
+        if (Physics.Raycast(ray, out hit, 15) && hit.transform.parent != null && Input.GetMouseButtonDown(0) && Cursor.visible == true)
         {
             if (hit.transform.parent.TryGetComponent<Deco_Idx>(out furnitInfo))
             {
@@ -66,6 +83,15 @@ public class CameraController : MonoBehaviourPun
         if (infoUI.gameObject.activeSelf && Vector3.Angle(UIPos - Camera.main.transform.position, Camera.main.transform.forward) > 30f)
         {
             infoUI.gameObject.SetActive(false);
+        }
+
+        //만약에 esc키를 누르면 커서 활성화
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Cursor.visible == true)
+                Cursor.visible = false;
+            else
+                Cursor.visible = true;
         }
     }
 }
