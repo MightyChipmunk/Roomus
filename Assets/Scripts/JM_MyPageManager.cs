@@ -70,7 +70,11 @@ public class JM_MyPageManager : MonoBehaviour
 
         pwDoneBtn.interactable = false;
 
-        //StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + TokenManager.Instance.ID));
+        ID.text = TokenManager.Instance.ID;
+        Name.text = TokenManager.Instance.MyInfo.userName;
+        Email.text = TokenManager.Instance.MyInfo.userName;
+        Status.text = TokenManager.Instance.MyInfo.userRole;
+        //StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + "123123"));
     }
 
     // Update is called once per frame
@@ -212,7 +216,6 @@ public class JM_MyPageManager : MonoBehaviour
 
     public void OnClickShowPW()
     {
-        print("123123");
         if (enterPWInput.GetComponent<InputField>().contentType == InputField.ContentType.Standard)
         {
             enterPWInput.GetComponent<InputField>().contentType = InputField.ContentType.Password;
@@ -291,38 +294,11 @@ public class JM_MyPageManager : MonoBehaviour
                 isPWDoneMove = true;
                 isPWGood = true;
                 Debug.Log("Change Password complete!");
-
-                StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + ID));
             }
             www.Dispose();
         }
     }
 
-    IEnumerator SetMyInfo(string url)
-    {
-        using (UnityWebRequest www = UnityWebRequest.Get(url))
-        {
-            // 토큰을 헤더에 설정
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
-
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                UserInfo userInfo = JsonUtility.FromJson<UserInfo>(www.downloadHandler.text);
-                ID.text = userInfo.memberId;
-                Name.text = userInfo.memberName;
-                Email.text = userInfo.memberEmail;
-                //Status.text = userInfo.memberId;
-                Debug.Log("Confirm Password complete!");
-            }
-            www.Dispose();
-        }
-    }
 
     public void OnClickDonePW()
     {
@@ -383,7 +359,7 @@ public class JM_MyPageManager : MonoBehaviour
 
     public void OnClickChangeStatus()
     {
-        StartCoroutine(OnChangeStatus(UrlInfo._url + "/member/rankUp"));
+        StartCoroutine(OnChangeStatus(UrlInfo._url + "member/rankUp"));
     }
 
     IEnumerator OnChangeStatus(string url)
@@ -404,6 +380,7 @@ public class JM_MyPageManager : MonoBehaviour
             }
             else
             {
+                Status.text = "SELLER";
                 Debug.Log("Change Status complete!");
             }
             www.Dispose();

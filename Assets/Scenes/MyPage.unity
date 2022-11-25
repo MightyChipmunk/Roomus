@@ -1498,10 +1498,10 @@ MonoBehaviour:
   reCheckPWCaution: {fileID: 395645357}
   reEnterPWCaution: {fileID: 1993165819}
   pwDoneUI: {fileID: 134864683}
-  ID: {fileID: 0}
-  Name: {fileID: 0}
-  Email: {fileID: 0}
-  Status: {fileID: 0}
+  ID: {fileID: 1558812342}
+  Name: {fileID: 114425173}
+  Email: {fileID: 1996207906}
+  Status: {fileID: 1749615404}
 --- !u!4 &336755283
 Transform:
   m_ObjectHideFlags: 0
