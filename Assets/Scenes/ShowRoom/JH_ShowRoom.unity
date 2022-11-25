@@ -9546,6 +9546,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14006597431ac9240a9d939db2da9116, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ptLight: {fileID: 2795768956177828787, guid: 8eee14aa0d1054bd6a30f7f38dbd0760, type: 3}
+  sptLight: {fileID: 6892942645193297506, guid: 734bb46a093914cdf9edfcedba2ea51e,
+    type: 3}
 --- !u!4 &1043869142
 Transform:
   m_ObjectHideFlags: 0
@@ -13034,6 +13037,17 @@ MonoBehaviour:
     door: 0
     datas: []
     lights: []
+    filter:
+      shadowVal: {x: 0, y: 0, z: 0, w: 0}
+      midtoneVal: {x: 0, y: 0, z: 0, w: 0}
+      highlightVal: {x: 0, y: 0, z: 0, w: 0}
+      contrast: 0
+      postExposure: 0
+      hueShift: 0
+      saturation: 0
+      temp: 0
+      tint: 0
+      colorFilter: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1603142146
 GameObject:
   m_ObjectHideFlags: 0

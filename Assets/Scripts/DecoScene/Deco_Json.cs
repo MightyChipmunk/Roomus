@@ -94,6 +94,7 @@ public class ArrayJson
     public int door = 0;
     public List<SaveJsonInfo> datas;
     public List<LightInfo> lights;
+    public AdvLightInfo filter;
 }
 
 [Serializable]
@@ -131,6 +132,9 @@ public class Deco_Json : MonoBehaviour
 
     public InputField saveInputField;
     public InputField loadInputField;
+
+    public GameObject ptLight;
+    public GameObject sptLight;
 
     public static Deco_Json Instance { get; set; }
     ArrayJson arrayJson;
@@ -517,6 +521,39 @@ public class Deco_Json : MonoBehaviour
         StartCoroutine(WaitForDownLoad(UrlInfo.url + "/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
+    void LoadLight(LightInfo info)
+    {
+        GameObject go;
+        if (info.spot)
+        {
+            go = Instantiate(sptLight);
+            Light light = go.GetComponent<Light>();
+            light.innerSpotAngle = info.innerAngle;
+            light.spotAngle = info.outerAngle;
+            light.color = info.color;
+            light.intensity = info.intensity;
+            light.range = info.range;
+            go.transform.position = info.position;
+            go.transform.eulerAngles = info.eulerAngle;
+            go.transform.localScale = info.localScale;
+        }
+        else
+        {
+            go = Instantiate(ptLight);
+            Light light = go.GetComponent<Light>();
+            //light.innerSpotAngle = info.innerAngle;
+            //light.spotAngle = info.outerAngle;
+            light.color = info.color;
+            light.intensity = info.intensity;
+            light.range = info.range;
+            go.transform.position = info.position;
+            go.transform.eulerAngles = info.eulerAngle;
+            go.transform.localScale = info.localScale;
+        }
+
+        SaveLightJson(info);
+    }
+
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
     IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
     {
@@ -630,6 +667,15 @@ public class Deco_Json : MonoBehaviour
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
+
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.filter;
+            arrayJson.filter = filter;
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
         else
@@ -645,6 +691,15 @@ public class Deco_Json : MonoBehaviour
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
+
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.filter;
+            arrayJson.filter = filter;
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
     }

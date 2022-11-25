@@ -2582,7 +2582,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00031280518, y: 0.00021362305}
+  m_AnchoredPosition: {x: -0.0000076293945, y: 0.00021362305}
   m_SizeDelta: {x: -183, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &96822080
@@ -3307,7 +3307,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 353258764}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.98644114
+  m_Size: 0.9999866
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11678,6 +11678,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveInputField: {fileID: 292187781}
   loadInputField: {fileID: 915089673}
+  ptLight: {fileID: 2795768956177828787, guid: 8eee14aa0d1054bd6a30f7f38dbd0760, type: 3}
+  sptLight: {fileID: 6892942645193297506, guid: 734bb46a093914cdf9edfcedba2ea51e,
+    type: 3}
   advLightInfo:
     shadowVal: {x: 0, y: 0, z: 0, w: 0}
     midtoneVal: {x: 0, y: 0, z: 0, w: 0}
@@ -25713,7 +25716,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 268435456
+    m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
