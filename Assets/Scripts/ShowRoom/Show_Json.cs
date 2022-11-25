@@ -11,8 +11,7 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
-    public GameObject ptLight;
-    public GameObject sptLight;
+    public GameObject lightPrefab;
 
     int id;
     public int ID { get { return id; } }
@@ -149,8 +148,9 @@ public class Show_Json : MonoBehaviourPun
         GameObject go;
         if (info.spot)
         {
-            go = Instantiate(sptLight);
+            go = Instantiate(lightPrefab);
             Light light = go.GetComponent<Light>();
+            light.type = LightType.Spot;
             light.innerSpotAngle = info.innerAngle;
             light.spotAngle = info.outerAngle;
             light.color = info.color;
@@ -162,10 +162,11 @@ public class Show_Json : MonoBehaviourPun
         }
         else
         {
-            go = Instantiate(ptLight);
+            go = Instantiate(lightPrefab);
             Light light = go.GetComponent<Light>();
             //light.innerSpotAngle = info.innerAngle;
             //light.spotAngle = info.outerAngle;
+            light.type = LightType.Point;
             light.color = info.color;
             light.intensity = info.intensity;
             light.range = info.range;
@@ -304,8 +305,8 @@ public class Show_Json : MonoBehaviourPun
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
-            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            //JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
@@ -338,8 +339,8 @@ public class Show_Json : MonoBehaviourPun
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
-            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            //JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();

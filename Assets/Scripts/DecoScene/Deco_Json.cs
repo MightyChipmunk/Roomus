@@ -252,8 +252,20 @@ public class Deco_Json : MonoBehaviour
 
     public void SaveLightJson(LightInfo info)
     {
-        //ArrayJson 의 datas 에 하나씩 추가
+        //ArrayJson 의 lights 에 하나씩 추가
         arrayJson.lights.Add(info);
+    }
+
+    public void DeleteLightJson(GameObject go)
+    {
+        foreach (LightInfo info in arrayJson.lights)
+        {
+            if (info.position == go.transform.position)
+            {
+                arrayJson.lights.Remove(info);
+                return;
+            }
+        }
     }
 
     // 방을 포스팅 할 시 이름과 스크린샷 저장
@@ -317,9 +329,7 @@ public class Deco_Json : MonoBehaviour
                 }
                 else
                 {
-                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false, 0.5f, "Main");
                     Debug.Log("Room Put complete!");
-                    yield return new WaitForSeconds(1f);
                 }
             }
 
@@ -423,6 +433,7 @@ public class Deco_Json : MonoBehaviour
                 }
                 else
                 {
+                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false, 0.5f, "Main");
                     Debug.Log("Filter Put complete!");
                 }
             }
@@ -523,35 +534,14 @@ public class Deco_Json : MonoBehaviour
 
     void LoadLight(LightInfo info)
     {
-        GameObject go;
         if (info.spot)
         {
-            go = Instantiate(sptLight);
-            Light light = go.GetComponent<Light>();
-            light.innerSpotAngle = info.innerAngle;
-            light.spotAngle = info.outerAngle;
-            light.color = info.color;
-            light.intensity = info.intensity;
-            light.range = info.range;
-            go.transform.position = info.position;
-            go.transform.eulerAngles = info.eulerAngle;
-            go.transform.localScale = info.localScale;
+            JM_LightManager.instance.LoadSptLight(info);
         }
         else
         {
-            go = Instantiate(ptLight);
-            Light light = go.GetComponent<Light>();
-            //light.innerSpotAngle = info.innerAngle;
-            //light.spotAngle = info.outerAngle;
-            light.color = info.color;
-            light.intensity = info.intensity;
-            light.range = info.range;
-            go.transform.position = info.position;
-            go.transform.eulerAngles = info.eulerAngle;
-            go.transform.localScale = info.localScale;
+            JM_LightManager.instance.LoadPtLight(info);
         }
-
-        SaveLightJson(info);
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수

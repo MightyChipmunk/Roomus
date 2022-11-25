@@ -25,8 +25,8 @@ public class JM_LightManager : MonoBehaviour
 
     public GameObject spotLight;
 
-    JM_PointLight pointLightCode;
-    JM_SpotLight spotLightCode;
+    public JM_PointLight pointLightCode;
+    public JM_SpotLight spotLightCode;
 
     [SerializeField]
     public List<GameObject> spotLightList = new List<GameObject>();
@@ -161,6 +161,30 @@ public class JM_LightManager : MonoBehaviour
         spotLightCode.range = 25;
     }
 
+    public void LoadSptLight(LightInfo info)
+    {
+        GameObject newLight = Instantiate(spotLightFactory);
+        activeLight = newLight;
+
+        gizmoManager.targetObject = newLight;
+        gizmoManager.isMove = true;
+
+        Button btn = Instantiate(sptLightBtn, sptLightContent);
+        sptLightBtnList.Add(btn);
+
+        spotLightList.Add(newLight);
+        spotLightCode = newLight.GetComponent<JM_SpotLight>();
+
+        newLight.transform.position = info.position;
+        newLight.transform.eulerAngles = info.eulerAngle;
+        newLight.transform.localScale = info.localScale;
+        spotLightCode.innerAngle = info.innerAngle;
+        spotLightCode.outerAngle = info.outerAngle;
+        spotLightCode.color = info.color;
+        spotLightCode.intensity = info.intensity;
+        spotLightCode.range = info.range;
+    }
+
     // new point light
     public void OnClickNewPtLightBtn()
     {
@@ -180,6 +204,30 @@ public class JM_LightManager : MonoBehaviour
         pointLightCode.color = Color.white;
         pointLightCode.intensity = 1;
         pointLightCode.range = 10;
+    }
+
+    public void LoadPtLight(LightInfo info)
+    {
+        GameObject newLight = Instantiate(pointLightFactory);
+        activeLight = newLight;
+
+        gizmoManager.targetObject = newLight;
+        gizmoManager.isMove = true;
+
+        Button btn = Instantiate(ptLightBtn, ptLightContent);
+        ptLightBtnList.Add(btn);
+
+        pointLightList.Add(newLight);
+        pointLightCode = newLight.GetComponent<JM_PointLight>();
+
+        newLight.transform.position = info.position;
+        newLight.transform.eulerAngles = info.eulerAngle;
+        newLight.transform.localScale = info.localScale;
+        //spotLightCode.innerAngle = info.innerAngle;
+        //spotLightCode.outerAngle = info.outerAngle;
+        pointLightCode.color = info.color;
+        pointLightCode.intensity = info.intensity;
+        pointLightCode.range = info.range;
     }
 
     public void OnClickDupSptLightBtn()
@@ -233,7 +281,6 @@ public class JM_LightManager : MonoBehaviour
         {
             if (activeLight == spotLightList[i])
             {
-                print("123123123");
                 Destroy(activeLight);
                 spotLightList.RemoveAt(i);
                 spotLightInfoList.RemoveAt(i);
@@ -241,6 +288,7 @@ public class JM_LightManager : MonoBehaviour
                 // need to delete button in context as well
                 Destroy(sptLightContent.GetChild(i).gameObject);
                 gizmoManager.GizmoOff();
+                Deco_Json.Instance.DeleteLightJson(activeLight);
             }
         }
     }
@@ -259,6 +307,7 @@ public class JM_LightManager : MonoBehaviour
                 ptLightBtnList.RemoveAt(i);
                 Destroy(ptLightContent.GetChild(i).gameObject);
                 gizmoManager.GizmoOff();
+                Deco_Json.Instance.DeleteLightJson(activeLight);
             }
         }
     }   
