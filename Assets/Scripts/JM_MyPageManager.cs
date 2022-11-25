@@ -74,7 +74,6 @@ public class JM_MyPageManager : MonoBehaviour
         Name.text = TokenManager.Instance.MyInfo.userName;
         Email.text = TokenManager.Instance.MyInfo.userName;
         Status.text = TokenManager.Instance.MyInfo.userRole;
-        //StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + "123123"));
     }
 
     // Update is called once per frame
