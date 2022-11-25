@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class JM_LibraryManager : MonoBehaviour
 {
+    public static JM_LibraryManager instance;
+
     public GameObject libraryUI;
     public GameObject aiUI;
     public Transform originPos;
@@ -12,7 +14,7 @@ public class JM_LibraryManager : MonoBehaviour
 
     public bool isLibraryMove;
     [SerializeField]
-    bool isLibShow;
+    public bool isLibShow;
 
     public bool isAIMove;
     bool isAIShow;
@@ -20,6 +22,9 @@ public class JM_LibraryManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+
         libraryUI.transform.position = originPos.position;
         aiUI.transform.position = originPos.position;
 

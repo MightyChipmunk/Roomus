@@ -9,6 +9,9 @@ public class ColorUIManager : MonoBehaviour
     public Transform originPos;
     public Transform showPos;
 
+    bool isAdvUIMove;
+    bool isAdvUIShow;
+
     public bool isLibraryMove;
     bool isLibShow;
 
@@ -21,9 +24,9 @@ public class ColorUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLibraryMove)
+        if (isAdvUIMove)
         {
-            if (isLibShow)
+            if (isAdvUIShow)
             {
                 advColor.transform.position = Vector3.Lerp(advColor.transform.position, showPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(advColor.transform.position, showPos.position) < 0.5f)
@@ -32,7 +35,7 @@ public class ColorUIManager : MonoBehaviour
                     isLibraryMove = false;
                 }
             }
-            if (!isLibShow)
+            if (!isAdvUIShow)
             {
                 advColor.transform.position = Vector3.Lerp(advColor.transform.position, originPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(advColor.transform.position, originPos.position) < 0.5f)
@@ -43,7 +46,7 @@ public class ColorUIManager : MonoBehaviour
             }
         }
     }
-
+    /*
     public void OnClickLibrary()
     {
         isLibraryMove = true;
@@ -57,6 +60,21 @@ public class ColorUIManager : MonoBehaviour
         {
             isLibShow = true;
         }
+    }
+    */
+
+    public void OnClickAdvUI()
+    {
+        isAdvUIMove = true;
+        isAdvUIShow = true;
+    }
+
+    public void OnClickDone()
+    {
+        isAdvUIMove = true;
+        isAdvUIShow = false;
+        JM_LibraryManager.instance.isLibraryMove = true;
+        JM_LibraryManager.instance.isLibShow = true;
     }
 
     public void OnScreenShot()
