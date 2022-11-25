@@ -14,7 +14,14 @@ public class MainScreenManager : MonoBehaviour
     void Start()
     {
         Directory.CreateDirectory(Application.dataPath + "/LocalServer");
+        Directory.Delete(UnityEngine.Application.dataPath + "/LocalServer", true);
+        DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);
+        FileInfo[] files = dir.GetFiles("*.zip");
 
+        foreach (FileInfo file in files)
+        {
+            file.Delete();
+        }
         screenCode = screenManager.GetComponent<JM_ScreenManager>();
 
         if (JH_RoomDecoManager.Instance != null)
@@ -54,7 +61,7 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickTravel()
     {
-        SceneManager.LoadScene("Test_Connect");
+        SceneManager.LoadScene("PutDeleteTest");
     }
 
     public void OnClickShop()

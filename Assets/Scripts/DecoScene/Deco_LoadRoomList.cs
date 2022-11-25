@@ -13,6 +13,7 @@ public class roomInfos
     public bool access;
     public string category;
     public string roomName;
+    public string screenShotUrl;
 }
 
 public class Deco_LoadRoomList : MonoBehaviour
@@ -84,12 +85,14 @@ public class Deco_LoadRoomList : MonoBehaviour
             SceneManager.LoadScene("RoomDecoScene");
     }
 
-    void AddContent(int id, string s)
+    void AddContent(int id, string s, bool access, byte[] imgData)
     {
         GameObject item = Instantiate(roomItem, trContent);
         item.name = s;
-        item.GetComponentInChildren<Text>().text = s;
         item.GetComponent<Deco_RoomItem>().ID = id;
+        item.GetComponent<Deco_RoomItem>().roomName = s;
+        item.GetComponent<Deco_RoomItem>().access = access;
+        item.GetComponent<Deco_RoomItem>().imgData = imgData;
     }
 
     IEnumerator OnGetJson(string uri)
@@ -111,9 +114,32 @@ public class Deco_LoadRoomList : MonoBehaviour
                 for (int i = 0; i < data.Length; i++)
                 {
                     // 가져온 url 배열을 반복문으로 순회하며 이름과 id를 가져오는 함수 실행
-                    AddContent(data[i].roomNo, data[i].roomName);
+                    StartCoroutine(OnGetUrl(data[i]));
                 }
                 Debug.Log("Room UrlList Download complete!");
+            }
+        }
+    }
+
+    IEnumerator OnGetUrl(roomInfos info)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
+        {
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                AddContent(info.roomNo, info.roomName, info.access, www.downloadHandler.data);
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // 가져온 스크린샷과 id로 라이브러리에 가구 추가
+                // Deco_FurnitItem
+                AddContent(info.roomNo, info.roomName, info.access, www.downloadHandler.data);
+                Debug.Log("ScreenShot Download complete!");
             }
         }
     }

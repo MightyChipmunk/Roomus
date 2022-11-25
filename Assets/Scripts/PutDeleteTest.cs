@@ -35,11 +35,11 @@ public class PutDeleteTest : MonoBehaviour
         string jsonData = JsonUtility.ToJson(fbxJson);
 
         UnityWebRequest www = UnityWebRequest.Put(url, jsonData);
+        www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
         www.uploadHandler = new UploadHandlerRaw(jsonToSend);
         www.SetRequestHeader("Content-Type", "application/json");
-
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success)
@@ -55,7 +55,7 @@ public class PutDeleteTest : MonoBehaviour
     IEnumerator Delete(string url)
     {
         UnityWebRequest www = UnityWebRequest.Delete(url);
-
+        www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success)
@@ -72,6 +72,7 @@ public class PutDeleteTest : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -96,6 +97,9 @@ public class PutDeleteTest : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
+
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

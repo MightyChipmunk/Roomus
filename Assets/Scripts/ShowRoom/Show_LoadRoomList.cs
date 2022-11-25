@@ -12,7 +12,7 @@ public class showRoomInfos
     public bool access;
     public string roomName;
     public string category;
-    public string roomDescription;
+    public string description;
     public string screenShotUrl;
 }
 
@@ -139,20 +139,20 @@ public class Show_LoadRoomList : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                AddContent(info.roomNo, info.roomName, info.roomDescription, info.category);
+                AddContent(info.roomNo, info.roomName, info.description, info.category);
                 Debug.Log(www.error);
             }
             else
             {
                 // 가져온 스크린샷과 id로 라이브러리에 가구 추가
                 // Deco_FurnitItem
-                AddContent(info.roomNo, info.roomName, info.roomDescription, info.category, www.downloadHandler.data);
+                AddContent(info.roomNo, info.roomName, info.description, info.category, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }

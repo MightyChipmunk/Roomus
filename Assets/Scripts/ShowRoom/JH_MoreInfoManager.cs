@@ -18,6 +18,9 @@ public class JH_MoreInfoManager : MonoBehaviour
             Instance = this;
         else
             Destroy(Instance.gameObject);
+
+        arrayJson = new ArrayJson();
+        arrayJson.roomNo = -1;
     }
 
     // Start is called before the first frame update
@@ -37,7 +40,7 @@ public class JH_MoreInfoManager : MonoBehaviour
 
     IEnumerator OnGetJson(string uri)
     {
-        while(arrayJson == null)
+        while(arrayJson.roomNo < 0)
         {
             yield return null;
         }
@@ -46,6 +49,7 @@ public class JH_MoreInfoManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Get(uri))
         {
+            //전체 불러오기로 바꿔야함
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
@@ -71,7 +75,7 @@ public class JH_MoreInfoManager : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(info.screenShotUrl))
         {
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
 

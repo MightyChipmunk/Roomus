@@ -26,7 +26,7 @@ public class Show_ChatManager : MonoBehaviourPun
 
     void OnSubmit(string s)
     {
-        photonView.RPC("AddContent", RpcTarget.All, s, PhotonNetwork.NickName);
+        photonView.RPC("AddContent", RpcTarget.All, s, TokenManager.Instance.ID);
         chatInput.text = "";
         chatInput.ActivateInputField();
     }
@@ -49,7 +49,7 @@ public class Show_ChatManager : MonoBehaviourPun
         obj.GetComponent<Text>().text = nickName + ": ";
         StartCoroutine(AutoScrollBottom());
 
-        StartCoroutine(filter("http://34.27.186.152:5000/filter/", s, obj, nickName));
+        StartCoroutine(filter(UrlInfo.chatUrl + "filter/", s, obj, nickName));
 
     }
     string filterText;

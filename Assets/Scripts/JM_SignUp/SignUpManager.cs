@@ -99,11 +99,13 @@ public class SignUpManager : MonoBehaviour
         myInfo.pwd = pw;
         myInfo.memberId = id;
 
-        string jsonRegisterInfo = JsonUtility.ToJson(myInfo);
+        string jsonRegisterInfo = JsonUtility.ToJson(myInfo, true);
+
+        File.WriteAllText(Application.dataPath + "/asdf.txt", jsonRegisterInfo);
 
         StartCoroutine(OnSignUp(UrlInfo._url + "guest/signup", jsonRegisterInfo));
 
-        // file path
+        // file path{
         //string path = Application.dataPath + "/" + "UserInfoFile" + ".txt";
         //string jsonMyInfo = JsonUtility.ToJson(myInfo);
         //print(jsonMyInfo);
@@ -146,6 +148,10 @@ public class SignUpManager : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Post(url, data))
         {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -154,6 +160,7 @@ public class SignUpManager : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Sign Up Complete!", false);
                 Debug.Log("SignUp complete!");
             }
             www.Dispose();

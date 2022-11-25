@@ -72,9 +72,10 @@ public class CameraController : MonoBehaviourPun
                 infoUI.gameObject.SetActive(true);
                 infoUI.transform.position = Input.mousePosition + Vector3.down * 150;
                 UIPos = hit.transform.position;
-                infoUI.transform.Find("FurnitName").GetComponent<Text>().text = furnitInfo.Name;
-                infoUI.transform.Find("Price").GetComponent<Text>().text = furnitInfo.Price.ToString();
-                infoUI.transform.Find("Category").GetComponent<Text>().text = furnitInfo.Category;
+                //infoUI.transform.Find("FurnitName").GetComponent<Text>().text = furnitInfo.Name;
+                //infoUI.transform.Find("Price").GetComponent<Text>().text = furnitInfo.Price.ToString();
+                //infoUI.transform.Find("Category").GetComponent<Text>().text = furnitInfo.Category;
+                infoUI.GetComponent<Show_FurnitInfo>().furnitInfo = furnitInfo;
             }
         }
         else if (hit.transform != null && Input.GetMouseButtonDown(0))

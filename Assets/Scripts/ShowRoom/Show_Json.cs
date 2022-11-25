@@ -11,6 +11,9 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
+    int id;
+    public int ID { get { return id; } }
+
     GameObject player;
 
     //public Objects objects;
@@ -56,6 +59,7 @@ public class Show_Json : MonoBehaviourPun
         //LoadFile(Show_LoadRoomList.Instance.RoomName);
         // 네트워크로 방 불러오기
         LoadFile(Show_LoadRoomList.Instance.ID);
+        id = Show_LoadRoomList.Instance.ID;
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 
@@ -94,6 +98,7 @@ public class Show_Json : MonoBehaviourPun
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
             infoUI.x = arrayJsonLoad.xsize;
             infoUI.y = arrayJsonLoad.ysize;
+            infoUI.roomName = arrayJsonLoad.roomName;
             infoUI.category = arrayJsonLoad.category;
             infoUI.description = arrayJsonLoad.description;
         }
@@ -176,7 +181,7 @@ public class Show_Json : MonoBehaviourPun
         using (UnityWebRequest www = UnityWebRequest.Get(fbxJson.fileUrl))
         //using (UnityWebRequest www = UnityWebRequest.Get("https://s3.ap-northeast-2.amazonaws.com/roomus-s3/product/zip/p_6ae2e248-91c5-4d9a-bc53-396346bcec04.octet-stream"))
         {
-            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+            //www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
 
@@ -187,7 +192,7 @@ public class Show_Json : MonoBehaviourPun
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                string path = Application.persistentDataPath + "/" + fbxJson.no + ".zip";
 
                 if (!File.Exists(path))
                     File.WriteAllBytes(path, www.downloadHandler.data);
@@ -232,6 +237,7 @@ public class Show_Json : MonoBehaviourPun
             {
                 ArrayJsonWrapper wrapper = JsonUtility.FromJson<ArrayJsonWrapper>(www.downloadHandler.text);
                 arrayJsonLoad = wrapper.data;
+                JH_MoreInfoManager.Instance.arrayJson = arrayJsonLoad;
                 Debug.Log("ArrayJson Download complete!");
             }
         }
@@ -354,6 +360,7 @@ public class Show_Json : MonoBehaviourPun
             go.transform.localPosition = Vector3.zero + Vector3.forward * (fbxJson.zsize / 2 + 0.01f);
         //go.transform.localRotation = Quaternion.identity;
         Deco_Idx decoIdx = obj.AddComponent<Deco_Idx>();
+        decoIdx.Id = fbxJson.no;
         decoIdx.Name = fbxJson.furnitName;
         decoIdx.Price = fbxJson.price;
         decoIdx.Category = fbxJson.category;

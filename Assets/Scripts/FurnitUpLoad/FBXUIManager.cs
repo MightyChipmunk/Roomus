@@ -9,6 +9,7 @@ using System.Linq;
 using Ookii.Dialogs;
 using System.Windows.Forms;
 using Screen = UnityEngine.Screen;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class FBXJson
@@ -98,7 +99,14 @@ public class FBXUIManager : MonoBehaviour
 
     void OnPriceChanged(string s)
     {
-        fbxJson.price = Int32.Parse(s);
+        try
+        {
+            fbxJson.price = Int32.Parse(s);
+        }
+        catch (FormatException e)
+        {
+            JH_PopUpUI.Instance.SetUI("Warning!", "Input was not in a correct format.", false);
+        }
     }
 
     void OnFloorChanged(bool value)
@@ -119,15 +127,36 @@ public class FBXUIManager : MonoBehaviour
 
     void OnXchanged(string s)
     {
-        fbxJson.xsize = float.Parse(s);
+        try
+        {
+            fbxJson.xsize = float.Parse(s);
+        }
+        catch (FormatException e)
+        {
+            JH_PopUpUI.Instance.SetUI("Warning!", "Input was not in a correct format.", false);
+        }
     }
     void OnYchanged(string s)
     {
-        fbxJson.ysize = float.Parse(s);
+        try
+        {
+            fbxJson.ysize = float.Parse(s);
+        }
+        catch (FormatException e)
+        {
+            JH_PopUpUI.Instance.SetUI("Warning!", "Input was not in a correct format.", false);
+        }
     }
     void OnZchanged(string s)
     {
-        fbxJson.zsize = float.Parse(s);
+        try
+        {
+            fbxJson.zsize = float.Parse(s);
+        }
+        catch (FormatException e)
+        {
+            JH_PopUpUI.Instance.SetUI("Warning!", "Input was not in a correct format.", false);
+        }
     }
 
     void OnInfoChanged(string s)
@@ -258,6 +287,7 @@ public class FBXUIManager : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Furniture Upload Complete!", false, 0.5f, "Main");
                 Debug.Log("Form upload complete!");
             }
         }
