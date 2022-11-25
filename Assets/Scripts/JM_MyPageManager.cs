@@ -45,6 +45,11 @@ public class JM_MyPageManager : MonoBehaviour
     bool isPWDoneMove;
     bool isPWGood;
 
+    public Text ID;
+    public Text Name;
+    public Text Email;
+    public Text Status;
+
     void Start()
     {
         isEnterPWShow = false;
@@ -180,6 +185,7 @@ public class JM_MyPageManager : MonoBehaviour
             isPWEdit = true;
             editPWTxt.text = pw;
             enterPWCaution.SetActive(false);
+            originPW = pw;
         }
         else enterPWCaution.SetActive(true);
     }
@@ -236,8 +242,6 @@ public class JM_MyPageManager : MonoBehaviour
 
     public void CheckPW(string input)
     {
-        
-
         StartCoroutine(OnGetPW(UrlInfo._url + "member/passcheck", input));
     }
     
@@ -262,11 +266,65 @@ public class JM_MyPageManager : MonoBehaviour
         else reEnterPWCaution.SetActive(true);        
     }
 
+    IEnumerator OnNewPassword(string url, string newPW)
+    {
+        // 폼데이터 생성
+        WWWForm form = new WWWForm();
+        // 폼데이터에 string값 pw 추가
+        form.AddField("changePass", newPW);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            // 토큰을 헤더에 설정
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                UpdatePWInfo(newPW);
+                isPWDoneMove = true;
+                isPWGood = true;
+                Debug.Log("Change Password complete!");
+            }
+            www.Dispose();
+        }
+    }
+
+    IEnumerator SetMyInfo(string url)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            // 토큰을 헤더에 설정
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                UserInfo userInfo = JsonUtility.FromJson<UserInfo>(www.downloadHandler.text);
+                ID.text = userInfo.memberId;
+                Name.text = userInfo.memberName;
+                Email.text = userInfo.memberEmail;
+                //Status.text = userInfo.memberId;
+                Debug.Log("Confirm Password complete!");
+            }
+            www.Dispose();
+        }
+    }
+
     public void OnClickDonePW()
-    { 
-        UpdatePWInfo(newPW);
-        isPWDoneMove = true;
-        isPWGood = true;
+    {
+        if (!reEnterPWCaution.activeSelf)
+            StartCoroutine(OnNewPassword(UrlInfo._url + "member/passChange", newPW));
         Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
@@ -292,7 +350,6 @@ public class JM_MyPageManager : MonoBehaviour
         enterPWInput.Select();
         enterPWInput.text = "";
         enterPWCaution.SetActive(false);
-        Debug.Log(MethodBase.GetCurrentMethod().Name);
     }
 
     public void OnClickClosePW()
@@ -319,5 +376,31 @@ public class JM_MyPageManager : MonoBehaviour
         reEnterPWInput.Select();
         newPWInput.text = "";
         reEnterPWInput.text = "";
+    }
+
+    public void OnClickChangeStatus()
+    {
+        StartCoroutine(OnChangeStatus(UrlInfo.url + "/member/rankUp"));
+    }
+
+    IEnumerator OnChangeStatus(string url)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post(url, (string)null))
+        {
+            // 토큰을 헤더에 설정
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Change Status complete!");
+            }
+            www.Dispose();
+        }
     }
 }

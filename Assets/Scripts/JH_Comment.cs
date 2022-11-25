@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class CommentPutDelete
 {
     public int commentNo;
+    public string comment;
     public string password;
 }
 
@@ -22,8 +23,10 @@ public class JH_Comment : MonoBehaviour
     Button delBtn;
 
     InputField pwInput;
+    InputField commentInput;
 
     string pw = "";
+    string comment = "";
     
     // Start is called before the first frame update
     void Start()
@@ -32,12 +35,17 @@ public class JH_Comment : MonoBehaviour
         transform.Find("ID").GetComponent<Text>().text = ID;
 
         modBtn = transform.Find("ModBtn").GetComponent<Button>();
+        modBtn.onClick.AddListener(OnClickMod);
         delBtn = transform.Find("DelBtn").GetComponent<Button>();
         delBtn.onClick.AddListener(OnClickDelete);
 
-        pwInput = transform.Find("Input").GetComponent<InputField>();
+        pwInput = transform.Find("PWInput").GetComponent<InputField>();
         pwInput.onSubmit.AddListener(OnSubmit);
         pwInput.gameObject.SetActive(false);
+
+        commentInput = transform.Find("ModInput").GetComponent<InputField>();
+        commentInput.onSubmit.AddListener(OnSubmitComment);
+        commentInput.gameObject.SetActive(false);
     }
 
     void OnSubmit(string s)
@@ -46,13 +54,19 @@ public class JH_Comment : MonoBehaviour
         pwInput.gameObject.SetActive(false);
     }
 
+    void OnSubmitComment(string s)
+    {
+        comment = s;
+        commentInput.gameObject.SetActive(false);
+    }
+
     void OnClickMod()
     {
         pwInput.gameObject.SetActive(true);
 
         CommentPutDelete com = new CommentPutDelete();
         StopAllCoroutines();
-        StartCoroutine(OnDeleteComment(UrlInfo.url + "/rooms/" + Show_Json.Instance.ID.ToString() + "/comments", com));
+        StartCoroutine(OnPutComment(UrlInfo.url + "/rooms/" + Show_Json.Instance.ID.ToString() + "/comments", com));
     }
 
     void OnClickDelete()
@@ -94,40 +108,50 @@ public class JH_Comment : MonoBehaviour
             else
             {
                 Debug.Log("Comment Delete complete!");
+                Destroy(gameObject);
             }
         }
     }
 
-    //IEnumerator OnPutComment(string url, CommentPutDelete com)
-    //{
-    //    while (pw.Length <= 0)
-    //    {
-    //        yield return null;
-    //    }
+    IEnumerator OnPutComment(string url, CommentPutDelete com)
+    {
+        while (pw.Length <= 0)
+        {
+            yield return null;
+        }
 
-    //    com.password = pw;
-    //    com.commentNo = commentId;
+        commentInput.gameObject.SetActive(true);
 
-    //    string jsonData = JsonUtility.ToJson(com);
+        while (comment.Length <= 0)
+        {
+            yield return null;
+        }
 
-    //    using (UnityWebRequest www = UnityWebRequest.Put(url, ))
-    //    {
-    //        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
-    //        www.uploadHandler = new UploadHandlerRaw(jsonToSend);
-    //        www.SetRequestHeader("Content-Type", "application/json");
-    //        www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+        com.password = pw;
+        com.comment = comment;
+        com.commentNo = commentId;
 
-    //        yield return www.SendWebRequest();
+        string jsonData = JsonUtility.ToJson(com);
 
-    //        if (www.result != UnityWebRequest.Result.Success)
-    //        {
-    //            JH_PopUpUI.Instance.SetUI("Warning!", "Wrong Password!", false);
-    //            Debug.Log(www.error);
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Comment Delete complete!");
-    //        }
-    //    }
-    //}
+        using (UnityWebRequest www = UnityWebRequest.Put(url, jsonData))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                JH_PopUpUI.Instance.SetUI("Warning!", "Wrong Password!", false);
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Comment Modify complete!");
+                transform.Find("Text").GetComponent<Text>().text = comment;
+            }
+        }
+    }
 }

@@ -138,7 +138,8 @@ public class Show_RoomItem : MonoBehaviour
 
                 foreach (CommentInfo info in infos)
                 {
-                    AddContent(info.memberId, info.comment);
+                    if (!info.delete)
+                        AddContent(info.memberId, info.comment);
                 }
 
                 Debug.Log("Comment Get complete!");

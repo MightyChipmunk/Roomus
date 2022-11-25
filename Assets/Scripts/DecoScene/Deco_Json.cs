@@ -43,7 +43,12 @@ public class AdvLightInfo
 [Serializable]
 public class LightInfo
 {
-    //
+    public bool isSpot;
+    public float innerAngle;
+    public float outerAngle;
+    public Color color;
+    public float intensity;
+    public float range;
     public Vector3 position;
     public Vector3 eulerAngle;
     public Vector3 localScale;
@@ -157,6 +162,9 @@ public class Deco_Json : MonoBehaviour
 
     private void Start()
     {
+        //LightInfo light = new LightInfo();
+        //string test = JsonUtility.ToJson(light, true);
+        //File.WriteAllText(Application.dataPath + "/test.txt", test);
         Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
     }
 
