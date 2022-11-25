@@ -153,7 +153,7 @@ public class Show_Json : MonoBehaviourPun
             light.type = LightType.Spot;
             light.innerSpotAngle = info.innerAngle;
             light.spotAngle = info.outerAngle;
-            light.color = info.color;
+            light.color = info.lightColor;
             light.intensity = info.intensity;
             light.range = info.range;
             go.transform.position = info.position;
@@ -167,7 +167,7 @@ public class Show_Json : MonoBehaviourPun
             //light.innerSpotAngle = info.innerAngle;
             //light.spotAngle = info.outerAngle;
             light.type = LightType.Point;
-            light.color = info.color;
+            light.color = info.lightColor;
             light.intensity = info.intensity;
             light.range = info.range;
             go.transform.position = info.position;
@@ -304,9 +304,9 @@ public class Show_Json : MonoBehaviourPun
                 LoadLight(info);
             }
 
-            AdvLightInfo filter = arrayJsonLoad.filter;
-            //JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
@@ -338,9 +338,9 @@ public class Show_Json : MonoBehaviourPun
                 LoadLight(info);
             }
 
-            AdvLightInfo filter = arrayJsonLoad.filter;
-            //JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();

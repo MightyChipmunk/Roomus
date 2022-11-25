@@ -38,11 +38,40 @@ public class AdvLightInfo
     public float saturation = 0;
     public float temp = 0;
     public float tint = 0;
+    public Color color;
+}
+
+[Serializable]
+public class AdvLightInfo_
+{
+    public Vector4 shadowVal = new Vector4();
+    public Vector4 midtoneVal = new Vector4();
+    public Vector4 highlightVal = new Vector4();
+    public float contrast = 0;
+    public float postExposure = 0;
+    public float hueShift = 0;
+    public float saturation = 0;
+    public float temp = 0;
+    public float tint = 0;
     public Color colorFilter;
 }
 
 [Serializable]
 public class LightInfo
+{
+    public bool spot;
+    public float innerAngle;
+    public float outerAngle;
+    public Color lightColor;
+    public float intensity;
+    public float range;
+    public Vector3 position;
+    public Vector3 eulerAngle;
+    public Vector3 localScale;
+}
+
+[Serializable]
+public class LightInfo_
 {
     public bool spot;
     public float innerAngle;
@@ -95,7 +124,7 @@ public class ArrayJson
     public int door = 0;
     public List<SaveJsonInfo> datas;
     public List<LightInfo> lights;
-    public AdvLightInfo filter;
+    public AdvLightInfo roomFilter;
 }
 
 [Serializable]
@@ -365,7 +394,22 @@ public class Deco_Json : MonoBehaviour
         }
 
         LightInfo[] lights = arrayJson.lights.ToArray();
-        string lightsString = JsonHelper.ToJsonl(lights);
+        List<LightInfo_> lightsList = new List<LightInfo_>();
+        foreach (LightInfo light in lights) 
+        {
+            LightInfo_ light_ = new LightInfo_();
+            light_.spot = light.spot;
+            light_.position = light.position;
+            light_.eulerAngle = light.eulerAngle;
+            light_.localScale = light.localScale;
+            light_.innerAngle = light.innerAngle;
+            light_.outerAngle = light.outerAngle;
+            light_.intensity = light.intensity;
+            light_.range = light.range;
+            light_.color = light.lightColor;
+            lightsList.Add(light_);
+        }
+        string lightsString = JsonHelper.ToJsonl(lightsList.ToArray());
         Debug.Log(lightsString);
 
         using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/lightings", lightsString))
@@ -414,7 +458,18 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
-        string filterinfo = JsonUtility.ToJson(advLightInfo, true);
+        AdvLightInfo_ advLightInfo_ = new AdvLightInfo_();
+        advLightInfo_.shadowVal = advLightInfo.shadowVal;
+        advLightInfo_.midtoneVal = advLightInfo.midtoneVal;
+        advLightInfo_.highlightVal = advLightInfo.highlightVal;
+        advLightInfo_.contrast = advLightInfo.contrast;
+        advLightInfo_.postExposure = advLightInfo.postExposure;
+        advLightInfo_.hueShift = advLightInfo.hueShift;
+        advLightInfo_.saturation = advLightInfo.saturation;
+        advLightInfo_.temp = advLightInfo.temp;
+        advLightInfo_.tint = advLightInfo.tint;
+        advLightInfo_.colorFilter = advLightInfo.color;
+        string filterinfo = JsonUtility.ToJson(advLightInfo_, true);
         Debug.Log(filterinfo);
 
         using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/filter", filterinfo))
@@ -665,10 +720,10 @@ public class Deco_Json : MonoBehaviour
                 LoadLight(info);
             }
 
-            AdvLightInfo filter = arrayJsonLoad.filter;
-            //PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
-            arrayJson.filter = filter;
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
+            arrayJson.roomFilter = filter;
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
         else
@@ -691,10 +746,10 @@ public class Deco_Json : MonoBehaviour
                 LoadLight(info);
             }
 
-            AdvLightInfo filter = arrayJsonLoad.filter;
-            //PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal, 
-            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
-            arrayJson.filter = filter;
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
+            arrayJson.roomFilter = filter;
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
     }

@@ -153,7 +153,7 @@ public class PostProcessTest : MonoBehaviour
         Deco_Json.Instance.advLightInfo.saturation = saturation;
         Deco_Json.Instance.advLightInfo.temp = temp;
         Deco_Json.Instance.advLightInfo.tint = tint;
-        Deco_Json.Instance.advLightInfo.colorFilter = colorFilter;
+        Deco_Json.Instance.advLightInfo.color = colorFilter;
     }
 
     public void UpdateShadow()
@@ -278,7 +278,34 @@ public class PostProcessTest : MonoBehaviour
         ca.colorFilter.Override(color);
 
         // set white balance
-        wb.temperature.Override(temp);
-        wb.tint.Override(tint);
+        //wb.temperature.Override(temp);
+        //wb.tint.Override(tint);
+
+        shadowColorPickCode.selectColor.r = shadow.x;
+        shadowColorPickCode.selectColor.g = shadow.y;
+        shadowColorPickCode.selectColor.b = shadow.z;
+        shadowSlider.value = shadow.w;
+
+        midtonePickCode.selectColor.r = midtone.x;
+        midtonePickCode.selectColor.g = midtone.y;
+        midtonePickCode.selectColor.b = midtone.z;
+        midtoneSlider.value = midtone.w;
+
+        highlightPickCode.selectColor.r = highlight.x;
+        highlightPickCode.selectColor.g = highlight.y;
+        highlightPickCode.selectColor.b = highlight.z;
+        highlightSlider.value = highlight.w;
+
+        postExposureSlider.value = postExposure;
+        contrastSlider.value = contrast;
+        hueShiftSlider.value = hueShift;
+        saturationSlider.value = saturation;
+
+        colorFilter = color;
+        colorFilterBtn.GetComponent<Image>().color = colorFilter;
+        colorPicker.startingColor = colorFilter;
+
+        tempSlider.value = temp;
+        tintSlider.value = tint;
     }
 }

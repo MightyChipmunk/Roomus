@@ -180,7 +180,7 @@ public class JM_LightManager : MonoBehaviour
         newLight.transform.localScale = info.localScale;
         spotLightCode.innerAngle = info.innerAngle;
         spotLightCode.outerAngle = info.outerAngle;
-        spotLightCode.color = info.color;
+        spotLightCode.color = info.lightColor;
         spotLightCode.intensity = info.intensity;
         spotLightCode.range = info.range;
     }
@@ -225,7 +225,7 @@ public class JM_LightManager : MonoBehaviour
         newLight.transform.localScale = info.localScale;
         //spotLightCode.innerAngle = info.innerAngle;
         //spotLightCode.outerAngle = info.outerAngle;
-        pointLightCode.color = info.color;
+        pointLightCode.color = info.lightColor;
         pointLightCode.intensity = info.intensity;
         pointLightCode.range = info.range;
     }
@@ -360,7 +360,7 @@ public class JM_LightManager : MonoBehaviour
             info.localScale = spotLightInfoList[i].lightScale;
             info.innerAngle = spotLightInfoList[i].innerAngle;
             info.outerAngle = spotLightInfoList[i].outerAngle; 
-            info.color = spotLightInfoList[i].color;
+            info.lightColor = spotLightInfoList[i].color;
             info.range = spotLightInfoList[i].range;
             info.intensity = spotLightInfoList[i].intensity;
             info.range = spotLightInfoList[i].range;
@@ -382,7 +382,7 @@ public class JM_LightManager : MonoBehaviour
             info.localScale = pointLightInfoList[i].lightScale;
             //info.innerAngle = pointLightInfoList[i].innerAngle;
             //info.outerAngle = pointLightInfoList[i].outerAngle;
-            info.color = pointLightInfoList[i].color;
+            info.lightColor = pointLightInfoList[i].color;
             info.range = pointLightInfoList[i].range;
             info.intensity = pointLightInfoList[i].intensity;
             info.range = pointLightInfoList[i].range;
