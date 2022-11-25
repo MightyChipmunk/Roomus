@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class CameraController : MonoBehaviourPun
 {
@@ -23,6 +24,10 @@ public class CameraController : MonoBehaviourPun
             transform.GetChild(0).gameObject.SetActive(false);
         }
         infoUI = GameObject.Find("Canvas").transform.Find("FurnitInfo").gameObject;
+
+        // JM - camera post processing on
+        var camData = Camera.main.GetUniversalAdditionalCameraData();
+        camData.renderPostProcessing = true;
     }
     float mx;
     float my;
@@ -34,7 +39,7 @@ public class CameraController : MonoBehaviourPun
             thirdPers = !thirdPers;
         }
 
-        // ¸¶¿ì½º À§Ä¡¿¡ µû¸¥ °¢µµ Á¶Àý
+        // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         float mh = Input.GetAxis("Mouse X");
         float mv = Input.GetAxis("Mouse Y");
 
@@ -86,7 +91,7 @@ public class CameraController : MonoBehaviourPun
             infoUI.gameObject.SetActive(false);
         }
 
-        //¸¸¾à¿¡ escÅ°¸¦ ´©¸£¸é Ä¿¼­ È°¼ºÈ­
+        //ï¿½ï¿½ï¿½à¿¡ escÅ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ È°ï¿½ï¿½È­
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Cursor.visible == true)
