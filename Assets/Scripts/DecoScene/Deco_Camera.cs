@@ -6,6 +6,7 @@ public class Deco_Camera : MonoBehaviour
 {
     public GameObject library;
     public GameObject lightLibrary;
+    public GameObject filterLibrary;
 
     Transform thirdCamPos;
     Camera cam;
@@ -23,7 +24,7 @@ public class Deco_Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (library.activeSelf || lightLibrary.activeSelf)
+        if (library.activeSelf || lightLibrary.activeSelf || filterLibrary.activeSelf)
             return;
         switch(Deco_ChangeView.Instance.viewState)
         {

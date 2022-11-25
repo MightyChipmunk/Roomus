@@ -18,6 +18,7 @@ public class ColorUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        advColor.gameObject.SetActive(false);
         advColor.transform.position = originPos.position;
     }
 
@@ -28,6 +29,7 @@ public class ColorUIManager : MonoBehaviour
         {
             if (isAdvUIShow)
             {
+                advColor.gameObject.SetActive(true);
                 advColor.transform.position = Vector3.Lerp(advColor.transform.position, showPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(advColor.transform.position, showPos.position) < 0.5f)
                 {
@@ -41,6 +43,7 @@ public class ColorUIManager : MonoBehaviour
                 if (Vector3.Distance(advColor.transform.position, originPos.position) < 0.5f)
                 {
                     advColor.transform.position = originPos.position;
+                    advColor.gameObject.SetActive(false);
                     isLibraryMove = false;
                 }
             }

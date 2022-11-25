@@ -63,11 +63,11 @@ public class JM_LightUIManager : MonoBehaviour
             }
             if (!isLightSelectionUIShow)
             {
-                lightSelectionUI.SetActive(false);
                 lightSelectionUI.transform.position = Vector3.Lerp(lightSelectionUI.transform.position, lightSelectionUIOriginPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(lightSelectionUI.transform.position, lightSelectionUIOriginPos.position) < 0.5f)
                 {
                     lightSelectionUI.transform.position = lightSelectionUIOriginPos.position;
+                    lightSelectionUI.SetActive(false);
                     isLightSelectionUIMove = false;
                 }
             }
