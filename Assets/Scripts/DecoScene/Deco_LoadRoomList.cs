@@ -14,6 +14,7 @@ public class roomInfos
     public string category;
     public string roomName;
     public string screenShotUrl;
+    public int cntLikes;
 }
 
 public class Deco_LoadRoomList : MonoBehaviour

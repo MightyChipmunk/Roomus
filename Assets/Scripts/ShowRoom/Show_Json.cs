@@ -304,6 +304,8 @@ public class Show_Json : MonoBehaviourPun
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
@@ -336,6 +338,8 @@ public class Show_Json : MonoBehaviourPun
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();

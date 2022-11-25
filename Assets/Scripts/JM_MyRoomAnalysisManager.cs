@@ -55,14 +55,6 @@ public class JM_MyRoomAnalysisManager : MonoBehaviour
     float ninethLikes;
     float tenthLikes;
 
-    float firstVal;
-    float secondVal;
-    float thirdVal;
-    float fourthVal;
-    float fifthVal;
-
-
-
     // Start is called before the first frame update
     void Start()
     {       

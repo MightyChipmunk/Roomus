@@ -54,7 +54,7 @@ public class JM_FilterManager : MonoBehaviour
             wb = demo3;
         }
 
-        SetRoomFilter(new Vector4(0, 0, 0, 1), new Vector4(0, 0, 0, 1), new Vector4(0, 0, 0, 1), 0, 0, 0, 0, Color.green, 0, 0);
+        //SetRoomFilter(new Vector4(0, 0, 0, 1), new Vector4(0, 0, 0, 1), new Vector4(0, 0, 0, 1), 0, 0, 0, 0, Color.green, 0, 0);
 
 
     }
