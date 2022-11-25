@@ -11,6 +11,8 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
+    public int ID;
+
     GameObject player;
 
     //public Objects objects;
@@ -56,6 +58,7 @@ public class Show_Json : MonoBehaviourPun
         //LoadFile(Show_LoadRoomList.Instance.RoomName);
         // 네트워크로 방 불러오기
         LoadFile(Show_LoadRoomList.Instance.ID);
+        ID = Show_LoadRoomList.Instance.ID;
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 
@@ -94,6 +97,7 @@ public class Show_Json : MonoBehaviourPun
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
             infoUI.x = arrayJsonLoad.xsize;
             infoUI.y = arrayJsonLoad.ysize;
+            infoUI.roomName = arrayJsonLoad.roomName;
             infoUI.category = arrayJsonLoad.category;
             infoUI.description = arrayJsonLoad.description;
         }
@@ -187,7 +191,7 @@ public class Show_Json : MonoBehaviourPun
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                string path = Application.persistentDataPath + "/" + fbxJson.no + ".zip";
 
                 if (!File.Exists(path))
                     File.WriteAllBytes(path, www.downloadHandler.data);
@@ -232,6 +236,7 @@ public class Show_Json : MonoBehaviourPun
             {
                 ArrayJsonWrapper wrapper = JsonUtility.FromJson<ArrayJsonWrapper>(www.downloadHandler.text);
                 arrayJsonLoad = wrapper.data;
+                JH_MoreInfoManager.Instance.arrayJson = arrayJsonLoad;
                 Debug.Log("ArrayJson Download complete!");
             }
         }

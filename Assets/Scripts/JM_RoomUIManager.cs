@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class JM_RoomUIManager : MonoBehaviour
@@ -52,7 +53,7 @@ public class JM_RoomUIManager : MonoBehaviour
     {
         if (isInfoMove)
         {
-            print(Vector3.Distance(moreInfo.transform.position, infoShowPos.position));
+            //print(Vector3.Distance(moreInfo.transform.position, infoShowPos.position));
             if (isInfoShow)
             {
                 moreInfo.SetActive(true);
@@ -189,6 +190,48 @@ public class JM_RoomUIManager : MonoBehaviour
         }
         else isLike = true;
         
+
+        StartCoroutine(Like(UrlInfo.url + "/rooms/" + Show_Json.Instance.ID.ToString() + "/likes", Show_Json.Instance.ID));
     }
 
+    IEnumerator Like(string url, int id)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("roomNo", id.ToString());
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                StartCoroutine(UnLike(url, id));
+                Debug.Log(id.ToString() + www.error);
+            }
+            else
+            {
+                Debug.Log("Room Like complete!");
+            }
+        }
+    }
+
+    IEnumerator UnLike(string url, int id)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Delete(url))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Furnit UnLike complete!");
+            }
+        }
+    }
 }

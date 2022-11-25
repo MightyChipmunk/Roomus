@@ -4868,7 +4868,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 514018274}
         m_TargetAssemblyTypeName: MainScreenManager, Assembly-CSharp
-        m_MethodName: OnClickRoomCustom
+        m_MethodName: OnClickTravel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

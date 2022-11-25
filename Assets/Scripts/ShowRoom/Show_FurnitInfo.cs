@@ -50,15 +50,35 @@ public class Show_FurnitInfo : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                JH_PopUpUI.Instance.SetUI("", "Already Liked", true, 0.5f);
+                StartCoroutine(UnLike(url, id));
                 Debug.Log(www.error);
             }
             else
             {
                 iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1.2f, "y", 1.2f, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
-                iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.3f, "delay", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
 
                 Debug.Log("Furnit Like complete!");
+            }
+        }
+    }
+
+    IEnumerator UnLike(string url, int id)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Delete(url))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
+
+                Debug.Log("Furnit UnLike complete!");
             }
         }
     }

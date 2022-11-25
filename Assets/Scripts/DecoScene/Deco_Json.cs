@@ -517,7 +517,7 @@ public class Deco_Json : MonoBehaviour
             else
             {
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
-                string path = Application.persistentDataPath + fbxJson.furnitName + ".zip";
+                string path = Application.persistentDataPath + "/" +fbxJson.no.ToString() + ".zip";
 
                 if (!File.Exists(path))
                     File.WriteAllBytes(path, www.downloadHandler.data);
@@ -528,7 +528,8 @@ public class Deco_Json : MonoBehaviour
                 }
 
                 if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
-                    ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+                    Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no + "/");
+                ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
 
                 GameObject wrapper = new GameObject();
                 wrapper.transform.parent = room;
