@@ -149,6 +149,7 @@ public class Deco_Json : MonoBehaviour
 
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
+        arrayJson.lights = new List<LightInfo>();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
         advLightInfo = new AdvLightInfo();
@@ -245,29 +246,10 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    public void SaveLightJson(GameObject go)
+    public void SaveLightJson(LightInfo info)
     {
-        LightInfo info;
-
-        info = new LightInfo();
-        info.position = go.transform.position;
-        info.eulerAngle = go.transform.eulerAngles;
-        info.localScale = go.transform.localScale;
-
         //ArrayJson 의 datas 에 하나씩 추가
         arrayJson.lights.Add(info);
-    }
-
-    public void DeleteLightJson(GameObject go)
-    {
-        foreach (LightInfo info in arrayJson.lights)
-        {
-            if (info.position == go.transform.position)
-            {
-                arrayJson.lights.Remove(info);
-                return;
-            }
-        }
     }
 
     // 방을 포스팅 할 시 이름과 스크린샷 저장
@@ -367,6 +349,33 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
+        LightInfo[] lights = arrayJson.lights.ToArray();
+        string lightsString = JsonHelper.ToJsonl(lights);
+        Debug.Log(lightsString);
+
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/lightings", lightsString))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(datasString);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Lights Put complete!");
+                }
+            }
+
+            www.Dispose();
+        }
+
         WWWForm form = new WWWForm();
         form.AddBinaryData("screenShot", Deco_UIManager.Instance.ImageBytes);
 
@@ -390,8 +399,31 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
-        string lightInfo = JsonUtility.ToJson(advLightInfo, true);
-        File.WriteAllText(Application.dataPath + "/lightText.txt", lightInfo);
+        string filterinfo = JsonUtility.ToJson(advLightInfo, true);
+        Debug.Log(filterinfo);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/filter", filterinfo))
+        {
+            {
+                byte[] jsonSend = new System.Text.UTF8Encoding().GetBytes(filterinfo);
+                www.uploadHandler = new UploadHandlerRaw(jsonSend);
+                www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+                www.SetRequestHeader("Content-Type", "application/json");
+
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Filter Put complete!");
+                }
+            }
+
+            www.Dispose();
+        }
     }
 
     public void PostFile(string roomName, bool access, int category, string desc)

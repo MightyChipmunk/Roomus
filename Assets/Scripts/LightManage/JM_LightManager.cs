@@ -302,23 +302,57 @@ public class JM_LightManager : MonoBehaviour
             spotLightList[i].GetComponent<JM_SpotLight>().UpdateSptLightInfo(i);
         }
 
+        for (int i = 0; i < spotLightInfoList.Count; i++)
+        {
+            LightInfo info = new LightInfo();
+            info.isSpot = true;
+            info.position = spotLightInfoList[i].lightPos;
+            info.eulerAngle = spotLightInfoList[i].lightRot;
+            info.localScale = spotLightInfoList[i].lightScale;
+            info.innerAngle = spotLightInfoList[i].innerAngle;
+            info.outerAngle = spotLightInfoList[i].outerAngle; 
+            info.color = spotLightInfoList[i].color;
+            info.range = spotLightInfoList[i].range;
+            info.intensity = spotLightInfoList[i].intensity;
+            info.range = spotLightInfoList[i].range;
+
+            Deco_Json.Instance.SaveLightJson(info);
+        }
+
         for (int i = 0; i < pointLightList.Count; i++)
         {
             pointLightList[i].GetComponent<JM_PointLight>().UpdatePtLightInfo(i);
         }
 
-        // test
-        AllLightInfo test = new AllLightInfo();
-        test.spotLightInfo = spotLightInfoList;
-        test.pointLightInfo = pointLightInfoList;
-        string jsonInfo = JsonUtility.ToJson(test);
-        print(jsonInfo);
-        string fileName = "test";
-        string path = Application.dataPath + "/" + fileName + ".Json";
-        File.WriteAllText(path, jsonInfo);
-    }
-    
+        for (int i = 0; i < pointLightInfoList.Count; i++)
+        {
+            LightInfo info = new LightInfo();
+            info.isSpot = false;
+            info.position = pointLightInfoList[i].lightPos;
+            info.eulerAngle = pointLightInfoList[i].lightRot;
+            info.localScale = pointLightInfoList[i].lightScale;
+            //info.innerAngle = pointLightInfoList[i].innerAngle;
+            //info.outerAngle = pointLightInfoList[i].outerAngle;
+            info.color = pointLightInfoList[i].color;
+            info.range = pointLightInfoList[i].range;
+            info.intensity = pointLightInfoList[i].intensity;
+            info.range = pointLightInfoList[i].range;
 
+            Deco_Json.Instance.SaveLightJson(info);
+        }
+
+        // test
+        //AllLightInfo test = new AllLightInfo();
+        //test.spotLightInfo = spotLightInfoList;
+        //test.pointLightInfo = pointLightInfoList;
+        //string jsonInfo = JsonUtility.ToJson(test);
+        //print(jsonInfo);
+        //string fileName = "test";
+        //string path = Application.dataPath + "/" + fileName + ".Json";
+        //File.WriteAllText(path, jsonInfo);
+
+
+    }
 }
 
 [System.Serializable]

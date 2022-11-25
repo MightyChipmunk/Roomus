@@ -18,8 +18,6 @@ public class Deco_PutObject : MonoBehaviour
 {
     public static Deco_PutObject Instance;
 
-    public GameObject lightPrefab;
-    bool isLight;
     public FBXJson fbxJson = new FBXJson();
 
     GameObject obj;
@@ -54,11 +52,7 @@ public class Deco_PutObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLight)
-        {
-            LightPut();
-        }
-        else if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
+        if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
         {
             SecondPut();
         }
@@ -92,13 +86,7 @@ public class Deco_PutObject : MonoBehaviour
         // 받아온 id로 서버에 가구 요청
         //Directory.Delete(Application.dataPath + "/LocalServer/", true);
         StartCoroutine(OnPostJson(UrlInfo.url + "/products" + "/" + id.ToString()));
-        isLight = false;
         //StartCoroutine(WaitForObj());
-    }
-
-    public void LoadLight()
-    {
-        isLight = true;
     }
 
     IEnumerator WaitForObj()
@@ -110,74 +98,6 @@ public class Deco_PutObject : MonoBehaviour
 
         obj.transform.parent = transform;
         obj.SetActive(false);
-    }
-
-    void LightPut()
-    {
-        // 키를 누르면 오브젝트 미리보기 생성
-        if (Input.GetKeyDown(KeyCode.G) && Deco_ChangeView.Instance.viewState != Deco_ChangeView.ViewState.First)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 16f))
-            {
-                obj = lightPrefab;
-                obj.transform.position = hit.point;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.G))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 50f, LayerMask.GetMask("Floor", "Wall")))
-            {
-                obj = lightPrefab;
-                obj.transform.position = hit.point;
-            }
-        }
-        // 누르고 있는 동안 오브젝트 이동
-        else if (Input.GetKey(KeyCode.G) && obj)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 16f))
-            {
-                obj.transform.position = hit.point;
-                canPut = true;
-            }
-            else
-                canPut = false;
-        }
-        // 배치 가능할 시 키를 떼면 생성
-        else if (Input.GetKeyUp(KeyCode.G) && canPut && obj)
-        {
-            GameObject loadObj = Instantiate(obj, transform);
-            loadObj.transform.localPosition = obj.transform.localPosition;
-            loadObj.transform.localEulerAngles = obj.transform.localEulerAngles;
-            loadObj.transform.localScale = obj.transform.localScale;
-            loadObj.name = obj.name;
-            Deco_Json.Instance.SaveLightJson(loadObj);
-            loadObj.transform.parent = GameObject.Find("Room").transform;
-        }
-        // 배치 불가능 할 시 키를 떼면 제거
-        else if (Input.GetKeyUp(KeyCode.G) && !canPut && obj)
-        {
-            obj = null;
-            canPut = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 16f))
-            {
-                Light light;
-                if (hit.transform.TryGetComponent<Light>(out light))
-                {
-                    Deco_Json.Instance.DeleteLightJson(hit.transform.gameObject);
-                    Destroy(hit.transform.gameObject);
-                }
-            }
-        }
     }
 
     void SecondPut()

@@ -43,6 +43,7 @@ public class JM_LightUIManager : MonoBehaviour
         ptLightUI.transform.position = lightUIOriginPos.position;
         sptlightLibUI.transform.position = lightLibOriginPos.position;
         ptlightLibUI.transform.position = lightLibOriginPos.position;
+        lightSelectionUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -52,6 +53,7 @@ public class JM_LightUIManager : MonoBehaviour
         {
             if (isLightSelectionUIShow)
             {
+                lightSelectionUI.SetActive(true);
                 lightSelectionUI.transform.position = Vector3.Lerp(lightSelectionUI.transform.position, lightSelectionUIShowPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(lightSelectionUI.transform.position, lightSelectionUIShowPos.position) < 0.5f)
                 {
@@ -61,6 +63,7 @@ public class JM_LightUIManager : MonoBehaviour
             }
             if (!isLightSelectionUIShow)
             {
+                lightSelectionUI.SetActive(false);
                 lightSelectionUI.transform.position = Vector3.Lerp(lightSelectionUI.transform.position, lightSelectionUIOriginPos.position, Time.deltaTime * 4);
                 if (Vector3.Distance(lightSelectionUI.transform.position, lightSelectionUIOriginPos.position) < 0.5f)
                 {

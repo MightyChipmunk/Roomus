@@ -72,7 +72,7 @@ public class JM_MyPageManager : MonoBehaviour
 
         ID.text = TokenManager.Instance.ID;
         Name.text = TokenManager.Instance.MyInfo.userName;
-        Email.text = TokenManager.Instance.MyInfo.userName;
+        Email.text = TokenManager.Instance.MyInfo.memberEmail;
         Status.text = TokenManager.Instance.MyInfo.userRole;
     }
 

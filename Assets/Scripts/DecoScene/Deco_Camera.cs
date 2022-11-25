@@ -5,6 +5,7 @@ using UnityEngine;
 public class Deco_Camera : MonoBehaviour
 {
     public GameObject library;
+    public GameObject lightLibrary;
 
     Transform thirdCamPos;
     Camera cam;
@@ -22,7 +23,7 @@ public class Deco_Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (library.activeSelf)
+        if (library.activeSelf || lightLibrary.activeSelf)
             return;
         switch(Deco_ChangeView.Instance.viewState)
         {

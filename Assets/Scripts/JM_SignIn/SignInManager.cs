@@ -12,6 +12,7 @@ public class MyInfo
     public string userName;
     public int userNo;
     public string userRole;
+    public string memberEmail;
 }
 
 
