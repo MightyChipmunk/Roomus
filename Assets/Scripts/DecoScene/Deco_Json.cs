@@ -675,8 +675,8 @@ public class Deco_Json : MonoBehaviour
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
-            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
-                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            //PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
             arrayJson.filter = filter;
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
@@ -701,8 +701,8 @@ public class Deco_Json : MonoBehaviour
             }
 
             AdvLightInfo filter = arrayJsonLoad.filter;
-            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal, 
-                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
+            //PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal, 
+            //    filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.colorFilter, filter.temp, filter.tint);
             arrayJson.filter = filter;
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);

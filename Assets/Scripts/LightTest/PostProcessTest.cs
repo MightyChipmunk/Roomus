@@ -128,7 +128,7 @@ public class PostProcessTest : MonoBehaviour
         temp = (float)wbe.temperature;
         tint = (float)wbe.tint;
 
-        SetRoomFilter(shadowVal, midtoneVal, highlightVal, contrast, postExposure, hueShift, saturation, colorFilter, temp, tint);
+        //SetRoomFilter(shadowVal, midtoneVal, highlightVal, contrast, postExposure, hueShift, saturation, colorFilter, temp, tint);
     }
 
     // Update is called once per frame
