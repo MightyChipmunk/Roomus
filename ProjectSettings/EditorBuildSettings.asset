@@ -68,4 +68,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ShowRoom/JH_ShowRoom.unity
     guid: 9375382ec77b335468e26468bae19ab9
+  - enabled: 1
+    path: Assets/Scenes/PutDeleteTest.unity
+    guid: bad5767ebb77a4145906e2a4c025d2aa
   m_configObjects: {}

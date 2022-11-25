@@ -11,7 +11,8 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
-    public int ID;
+    int id;
+    public int ID { get { return id; } }
 
     GameObject player;
 
@@ -58,7 +59,7 @@ public class Show_Json : MonoBehaviourPun
         //LoadFile(Show_LoadRoomList.Instance.RoomName);
         // 네트워크로 방 불러오기
         LoadFile(Show_LoadRoomList.Instance.ID);
-        ID = Show_LoadRoomList.Instance.ID;
+        id = Show_LoadRoomList.Instance.ID;
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 

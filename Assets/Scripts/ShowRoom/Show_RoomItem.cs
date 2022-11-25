@@ -26,6 +26,10 @@ public class Show_RoomItem : MonoBehaviour
     public Button button;
     public Button likeButton;
 
+    public InputField commentInput;
+    public Transform commentContent;
+    public GameObject commentUI;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,12 +42,27 @@ public class Show_RoomItem : MonoBehaviour
         }
         button.onClick.AddListener(OnClicked);
         likeButton.onClick.AddListener(OnClickLike);
+        commentInput.onSubmit.AddListener(SubmitComment);
+
+        StartCoroutine(OnGetComment(UrlInfo.url + "/rooms/" + ID.ToString() + "/comments"));
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void SubmitComment(string input)
+    {
+        StartCoroutine(OnPostComment(UrlInfo.url + "/rooms/" + ID.ToString() + "/comments", ID, input));
+        Refresh();
+    }
+
+    void Refresh()
+    {
+        commentInput.Select();
+        commentInput.text = "";
     }
 
     public void OnClicked()
@@ -100,5 +119,63 @@ public class Show_RoomItem : MonoBehaviour
                 Debug.Log("Furnit UnLike complete!");
             }
         }
+    }
+    IEnumerator OnGetComment(string url)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                CommentInfo[] infos = JsonHelper.FromJson<CommentInfo>(www.downloadHandler.text);
+
+                foreach (CommentInfo info in infos)
+                {
+                    AddContent(info.memberId, info.comment);
+                }
+
+                Debug.Log("Comment Get complete!");
+            }
+        }
+    }
+
+    IEnumerator OnPostComment(string url, int id, string comment)
+    {
+        CommentInfo info = new CommentInfo();
+        info.comment = comment;
+        string jsonData = JsonUtility.ToJson(info);
+        using (UnityWebRequest www = UnityWebRequest.Post(url, jsonData))
+        {
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonData);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(id.ToString() + www.error);
+            }
+            else
+            {
+                AddContent(TokenManager.Instance.ID, comment);
+                Debug.Log("Comment Post complete!");
+            }
+        }
+    }
+
+    void AddContent(string id, string text)
+    {
+        GameObject obj = Instantiate(commentUI, commentContent.transform);
+        obj.transform.Find("Text").GetComponent<Text>().text = text;
+        obj.transform.Find("ID").GetComponent<Text>().text = id;
     }
 }
