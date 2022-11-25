@@ -18,6 +18,8 @@ public class Deco_PutObject : MonoBehaviour
 {
     public static Deco_PutObject Instance;
 
+    public GameObject post;
+
     public FBXJson fbxJson = new FBXJson();
 
     GameObject obj;
@@ -52,6 +54,9 @@ public class Deco_PutObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (post.activeSelf)
+            return;
+
         if (Deco_ChangeView.Instance.viewState == Deco_ChangeView.ViewState.Second_Demen && fbxJson.location)
         {
             SecondPut();

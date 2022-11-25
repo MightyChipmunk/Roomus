@@ -305,7 +305,7 @@ public class JM_LightManager : MonoBehaviour
         for (int i = 0; i < spotLightInfoList.Count; i++)
         {
             LightInfo info = new LightInfo();
-            info.isSpot = true;
+            info.spot = true;
             info.position = spotLightInfoList[i].lightPos;
             info.eulerAngle = spotLightInfoList[i].lightRot;
             info.localScale = spotLightInfoList[i].lightScale;
@@ -327,7 +327,7 @@ public class JM_LightManager : MonoBehaviour
         for (int i = 0; i < pointLightInfoList.Count; i++)
         {
             LightInfo info = new LightInfo();
-            info.isSpot = false;
+            info.spot = false;
             info.position = pointLightInfoList[i].lightPos;
             info.eulerAngle = pointLightInfoList[i].lightRot;
             info.localScale = pointLightInfoList[i].lightScale;

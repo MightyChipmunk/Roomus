@@ -43,7 +43,7 @@ public class AdvLightInfo
 [Serializable]
 public class LightInfo
 {
-    public bool isSpot;
+    public bool spot;
     public float innerAngle;
     public float outerAngle;
     public Color color;
@@ -353,11 +353,11 @@ public class Deco_Json : MonoBehaviour
         string lightsString = JsonHelper.ToJsonl(lights);
         Debug.Log(lightsString);
 
-        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/lightings", lightsString))
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/lightings", lightsString))
         {
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
-            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(datasString);
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(lightsString);
             www.uploadHandler = new UploadHandlerRaw(jsonToSend);
             www.SetRequestHeader("Content-Type", "application/json");
             {
@@ -402,13 +402,14 @@ public class Deco_Json : MonoBehaviour
         string filterinfo = JsonUtility.ToJson(advLightInfo, true);
         Debug.Log(filterinfo);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/filter", filterinfo))
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/filter", filterinfo))
         {
             {
                 byte[] jsonSend = new System.Text.UTF8Encoding().GetBytes(filterinfo);
                 www.uploadHandler = new UploadHandlerRaw(jsonSend);
                 www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
                 www.SetRequestHeader("Content-Type", "application/json");
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
                 yield return www.SendWebRequest();
 
