@@ -70,6 +70,7 @@ public class JM_MyPageManager : MonoBehaviour
 
         pwDoneBtn.interactable = false;
 
+        //StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + TokenManager.Instance.ID));
     }
 
     // Update is called once per frame
@@ -290,6 +291,8 @@ public class JM_MyPageManager : MonoBehaviour
                 isPWDoneMove = true;
                 isPWGood = true;
                 Debug.Log("Change Password complete!");
+
+                StartCoroutine(SetMyInfo(UrlInfo.url + "/member/" + ID));
             }
             www.Dispose();
         }
@@ -380,12 +383,15 @@ public class JM_MyPageManager : MonoBehaviour
 
     public void OnClickChangeStatus()
     {
-        StartCoroutine(OnChangeStatus(UrlInfo.url + "/member/rankUp"));
+        StartCoroutine(OnChangeStatus(UrlInfo._url + "/member/rankUp"));
     }
 
     IEnumerator OnChangeStatus(string url)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post(url, (string)null))
+        WWWForm form = new WWWForm();
+        form.AddField("empty", "empty");
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url, form))
         {
             // 토큰을 헤더에 설정
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
