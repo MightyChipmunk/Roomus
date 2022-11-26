@@ -10,6 +10,9 @@ public class TokenManager : MonoBehaviour
     string id;
     public string ID { get { return id; } set { id = value; } }
 
+    MyInfo myInfo;
+    public MyInfo MyInfo { get { return myInfo; } set { myInfo = value; } }
+
     public static TokenManager Instance;
 
     private void Awake()

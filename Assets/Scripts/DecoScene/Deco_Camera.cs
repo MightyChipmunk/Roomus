@@ -5,6 +5,8 @@ using UnityEngine;
 public class Deco_Camera : MonoBehaviour
 {
     public GameObject library;
+    public GameObject lightLibrary;
+    public GameObject filterLibrary;
 
     Transform thirdCamPos;
     Camera cam;
@@ -22,7 +24,7 @@ public class Deco_Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (library.activeSelf)
+        if (library.activeSelf || filterLibrary.activeSelf)
             return;
         switch(Deco_ChangeView.Instance.viewState)
         {
@@ -60,7 +62,7 @@ public class Deco_Camera : MonoBehaviour
         dir = h * Vector3.right + v * Vector3.forward;
         dir.Normalize();
         // 마우스 좌클릭으로 캠 위치 이동
-        if (Input.GetMouseButton(0))
+        if (!lightLibrary.activeSelf && Input.GetMouseButton(0))
             dir = (-mh * Vector3.right + -mv * Vector3.forward) * 2;
         transform.position += dir * speed * 5 * Time.deltaTime;
     }
@@ -80,7 +82,7 @@ public class Deco_Camera : MonoBehaviour
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
         dir = h * transform.right + v * transform.forward;
         // 마우스 좌클릭으로 캠 위치 이동
-        if (Input.GetMouseButton(0))
+        if (!lightLibrary.activeSelf && Input.GetMouseButton(0))
             dir = (-mh * transform.right + -mv * transform.up) * 3;
         thirdCamPos.position += dir * speed * 5 * Time.deltaTime;
         // 마우스 우클릭으로 캠 각도 이동

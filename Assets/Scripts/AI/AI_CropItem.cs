@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+
+[Serializable]
+public class SimFurnit
+{
+    public int id;
+    public int distance;
+}
 
 public class AI_CropItem : MonoBehaviour
 {
@@ -22,7 +30,7 @@ public class AI_CropItem : MonoBehaviour
 
     void OnClick()
     {
-        StartCoroutine(OnClickPost("네트워크 서버"));
+        StartCoroutine(OnClickPost(UrlInfo.faissUrl + "find_sim_image"));
     }
 
     IEnumerator OnClickPost(string url)
@@ -41,6 +49,13 @@ public class AI_CropItem : MonoBehaviour
             }
             else
             {
+                SimFurnit[] sims = JsonHelper.FromJsons<SimFurnit>(www.downloadHandler.text);
+                List<int> list = new List<int>();
+                foreach (SimFurnit simFurnit in sims)
+                {
+                    list.Add(simFurnit.id);
+                }
+                Deco_UIManager.Instance.OnSimFurnit(list);
                 Debug.Log("Form upload complete!");
             }
         }

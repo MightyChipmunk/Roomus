@@ -11,6 +11,7 @@ public class CommentInfo
     public int commentNo;
     public string memberId;
     public string comment;
+    public bool delete;
 }
 
 public class JH_CommentManager : MonoBehaviour
@@ -63,7 +64,8 @@ public class JH_CommentManager : MonoBehaviour
 
                 foreach (CommentInfo info in infos)
                 {
-                    AddContent(info.commentNo, info.memberId, info.comment);
+                    if (!info.delete)
+                        AddContent(info.commentNo, info.memberId, info.comment);
                 }
 
                 Debug.Log("Comment Get complete!");
@@ -87,7 +89,7 @@ public class JH_CommentManager : MonoBehaviour
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(id.ToString() + www.error);
+                Debug.Log(www.error);
             }
             else
             {

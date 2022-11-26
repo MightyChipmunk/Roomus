@@ -11,6 +11,8 @@ public class Show_Json : MonoBehaviourPun
 {
     public static Show_Json Instance;
 
+    public GameObject lightPrefab;
+
     int id;
     public int ID { get { return id; } }
 
@@ -141,6 +143,39 @@ public class Show_Json : MonoBehaviourPun
         StartCoroutine(WaitForDownLoad(UrlInfo.url + "/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
     }
 
+    void LoadLight(LightInfo info)
+    {
+        GameObject go;
+        if (info.spot)
+        {
+            go = Instantiate(lightPrefab);
+            Light light = go.GetComponent<Light>();
+            light.type = LightType.Spot;
+            light.innerSpotAngle = info.innerAngle;
+            light.spotAngle = info.outerAngle;
+            light.color = info.lightColor;
+            light.intensity = info.intensity;
+            light.range = info.range;
+            go.transform.position = info.position;
+            go.transform.eulerAngles = info.eulerAngle;
+            go.transform.localScale = info.localScale;
+        }
+        else
+        {
+            go = Instantiate(lightPrefab);
+            Light light = go.GetComponent<Light>();
+            //light.innerSpotAngle = info.innerAngle;
+            //light.spotAngle = info.outerAngle;
+            light.type = LightType.Point;
+            light.color = info.lightColor;
+            light.intensity = info.intensity;
+            light.range = info.range;
+            go.transform.position = info.position;
+            go.transform.eulerAngles = info.eulerAngle;
+            go.transform.localScale = info.localScale;
+        }
+    }
+
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
     IEnumerator WaitForDownLoad(string uri, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room, int id = 0)
     {
@@ -263,6 +298,16 @@ public class Show_Json : MonoBehaviourPun
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
 
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
+
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
             infoUI.x = arrayJsonLoad.xsize;
@@ -286,6 +331,16 @@ public class Show_Json : MonoBehaviourPun
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
+
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            JM_FilterManager.instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
 
             newRoom.AddComponent<PhotonView>();
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();

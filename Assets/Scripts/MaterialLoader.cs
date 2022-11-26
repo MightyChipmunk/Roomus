@@ -206,7 +206,7 @@ public class MaterialLoader : MonoBehaviour
             byte[] img = null;
             if (dicImage.ContainsKey(guid))
                 img = File.ReadAllBytes(dicImage[guid]);
-            Debug.Log(dicImage[guid]);
+            //Debug.Log(dicImage[guid]);
             map = new Texture2D(2, 2, TextureFormat.RGB24, false);
             if (img != null)
             {

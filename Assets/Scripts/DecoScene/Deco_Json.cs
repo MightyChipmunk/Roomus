@@ -14,6 +14,7 @@ public static class UrlInfo
     public const string _url = "http://54.180.108.64:80/";
     public const string chatUrl = "http://34.64.60.123:5000/";
     public const string cropUrl = "http://34.64.70.4:5000/";
+    public const string faissUrl = "http://34.64.198.32:5000/";
     //public const string url = "http://192.168.0.243:8000/v1";
     //public const string _url = "http://192.168.0.243:8000/";
     //public const string url = "http://172.16.20.63:8000/v1";
@@ -37,13 +38,47 @@ public class AdvLightInfo
     public float saturation = 0;
     public float temp = 0;
     public float tint = 0;
+    public Color color;
+}
+
+[Serializable]
+public class AdvLightInfo_
+{
+    public Vector4 shadowVal = new Vector4();
+    public Vector4 midtoneVal = new Vector4();
+    public Vector4 highlightVal = new Vector4();
+    public float contrast = 0;
+    public float postExposure = 0;
+    public float hueShift = 0;
+    public float saturation = 0;
+    public float temp = 0;
+    public float tint = 0;
     public Color colorFilter;
 }
 
 [Serializable]
 public class LightInfo
 {
-    //
+    public bool spot;
+    public float innerAngle;
+    public float outerAngle;
+    public Color lightColor;
+    public float intensity;
+    public float range;
+    public Vector3 position;
+    public Vector3 eulerAngle;
+    public Vector3 localScale;
+}
+
+[Serializable]
+public class LightInfo_
+{
+    public bool spot;
+    public float innerAngle;
+    public float outerAngle;
+    public Color color;
+    public float intensity;
+    public float range;
     public Vector3 position;
     public Vector3 eulerAngle;
     public Vector3 localScale;
@@ -89,6 +124,7 @@ public class ArrayJson
     public int door = 0;
     public List<SaveJsonInfo> datas;
     public List<LightInfo> lights;
+    public AdvLightInfo roomFilter;
 }
 
 [Serializable]
@@ -127,6 +163,9 @@ public class Deco_Json : MonoBehaviour
     public InputField saveInputField;
     public InputField loadInputField;
 
+    public GameObject ptLight;
+    public GameObject sptLight;
+
     public static Deco_Json Instance { get; set; }
     ArrayJson arrayJson;
     ArrayJson arrayJsonLoad;
@@ -144,6 +183,7 @@ public class Deco_Json : MonoBehaviour
 
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
+        arrayJson.lights = new List<LightInfo>();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
         advLightInfo = new AdvLightInfo();
@@ -157,6 +197,9 @@ public class Deco_Json : MonoBehaviour
 
     private void Start()
     {
+        //LightInfo light = new LightInfo();
+        //string test = JsonUtility.ToJson(light, true);
+        //File.WriteAllText(Application.dataPath + "/test.txt", test);
         Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
     }
 
@@ -237,16 +280,9 @@ public class Deco_Json : MonoBehaviour
         }
     }
 
-    public void SaveLightJson(GameObject go)
+    public void SaveLightJson(LightInfo info)
     {
-        LightInfo info;
-
-        info = new LightInfo();
-        info.position = go.transform.position;
-        info.eulerAngle = go.transform.eulerAngles;
-        info.localScale = go.transform.localScale;
-
-        //ArrayJson 의 datas 에 하나씩 추가
+        //ArrayJson 의 lights 에 하나씩 추가
         arrayJson.lights.Add(info);
     }
 
@@ -323,9 +359,7 @@ public class Deco_Json : MonoBehaviour
                 }
                 else
                 {
-                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false, 0.5f, "Main");
                     Debug.Log("Room Put complete!");
-                    yield return new WaitForSeconds(1f);
                 }
             }
 
@@ -359,6 +393,48 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
+        LightInfo[] lights = arrayJson.lights.ToArray();
+        List<LightInfo_> lightsList = new List<LightInfo_>();
+        foreach (LightInfo light in lights) 
+        {
+            LightInfo_ light_ = new LightInfo_();
+            light_.spot = light.spot;
+            light_.position = light.position;
+            light_.eulerAngle = light.eulerAngle;
+            light_.localScale = light.localScale;
+            light_.innerAngle = light.innerAngle;
+            light_.outerAngle = light.outerAngle;
+            light_.intensity = light.intensity;
+            light_.range = light.range;
+            light_.color = light.lightColor;
+            lightsList.Add(light_);
+        }
+        string lightsString = JsonHelper.ToJsonl(lightsList.ToArray());
+        Debug.Log(lightsString);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(uri + "/" + id.ToString() + "/lightings", lightsString))
+        {
+            www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(lightsString);
+            www.uploadHandler = new UploadHandlerRaw(jsonToSend);
+            www.SetRequestHeader("Content-Type", "application/json");
+            {
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    Debug.Log("Lights Put complete!");
+                }
+            }
+
+            www.Dispose();
+        }
+
         WWWForm form = new WWWForm();
         form.AddBinaryData("screenShot", Deco_UIManager.Instance.ImageBytes);
 
@@ -382,8 +458,44 @@ public class Deco_Json : MonoBehaviour
             www.Dispose();
         }
 
-        string lightInfo = JsonUtility.ToJson(advLightInfo, true);
-        File.WriteAllText(Application.dataPath + "/lightText.txt", lightInfo);
+        AdvLightInfo_ advLightInfo_ = new AdvLightInfo_();
+        advLightInfo_.shadowVal = advLightInfo.shadowVal;
+        advLightInfo_.midtoneVal = advLightInfo.midtoneVal;
+        advLightInfo_.highlightVal = advLightInfo.highlightVal;
+        advLightInfo_.contrast = advLightInfo.contrast;
+        advLightInfo_.postExposure = advLightInfo.postExposure;
+        advLightInfo_.hueShift = advLightInfo.hueShift;
+        advLightInfo_.saturation = advLightInfo.saturation;
+        advLightInfo_.temp = advLightInfo.temp;
+        advLightInfo_.tint = advLightInfo.tint;
+        advLightInfo_.colorFilter = advLightInfo.color;
+        string filterinfo = JsonUtility.ToJson(advLightInfo_, true);
+        Debug.Log(filterinfo);
+
+        using (UnityWebRequest www = UnityWebRequest.Put(uri + "/" + id.ToString() + "/filter", filterinfo))
+        {
+            {
+                byte[] jsonSend = new System.Text.UTF8Encoding().GetBytes(filterinfo);
+                www.uploadHandler = new UploadHandlerRaw(jsonSend);
+                www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+                www.SetRequestHeader("Content-Type", "application/json");
+                www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
+
+                yield return www.SendWebRequest();
+
+                if (www.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.Log(www.error);
+                }
+                else
+                {
+                    JH_PopUpUI.Instance.SetUI("", "Room Upload Complete!", false, 0.5f, "Main");
+                    Debug.Log("Filter Put complete!");
+                }
+            }
+
+            www.Dispose();
+        }
     }
 
     public void PostFile(string roomName, bool access, int category, string desc)
@@ -474,6 +586,18 @@ public class Deco_Json : MonoBehaviour
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)
     {
         StartCoroutine(WaitForDownLoad(UrlInfo.url + "/products/" + id.ToString(), position, eulerAngle, localScale, room, id));
+    }
+
+    void LoadLight(LightInfo info)
+    {
+        if (info.spot)
+        {
+            JM_LightManager.instance.LoadSptLight(info);
+        }
+        else
+        {
+            JM_LightManager.instance.LoadPtLight(info);
+        }
     }
 
     // 서버에 가구 id를 요청해서 가구의 정보를 받아오고 생성하는 함수
@@ -589,6 +713,17 @@ public class Deco_Json : MonoBehaviour
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
+
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
+            arrayJson.roomFilter = filter;
         }
         // 도면을 선택했을 시, 도면에 맞는 방 생성
         else
@@ -604,6 +739,17 @@ public class Deco_Json : MonoBehaviour
                 SaveJsonInfo info = arrayJsonLoad.datas[i];
                 LoadObject(info.idx, info.position, info.eulerAngle, info.localScale, newRoom.transform);
             }
+
+            for (int i = 0; i < arrayJsonLoad.lights.Count; i++)
+            {
+                LightInfo info = arrayJsonLoad.lights[i];
+                LoadLight(info);
+            }
+
+            AdvLightInfo filter = arrayJsonLoad.roomFilter;
+            PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
+                filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
+            arrayJson.roomFilter = filter;
         }
         SaveRoomInfo(arrayJsonLoad.roomName, arrayJsonLoad.xsize, arrayJsonLoad.ysize, arrayJsonLoad.zsize, arrayJsonLoad.door);
     }

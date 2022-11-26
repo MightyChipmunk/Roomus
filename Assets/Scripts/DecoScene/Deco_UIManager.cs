@@ -176,6 +176,17 @@ public class Deco_UIManager : MonoBehaviour
         }
     }
 
+    public void OnSimFurnit(List<int> id)
+    {
+        for (int i = 0; i < trContent.transform.childCount; i++)
+        {
+            if (id.Contains(trContent.transform.GetChild(i).GetComponent<Deco_FurnitItem>().ID))
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+            else
+                trContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
     // 가구들의 리스트를 url을 통해 요청함
     IEnumerator OnGetJson(string uri)
     {

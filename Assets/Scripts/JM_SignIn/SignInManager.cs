@@ -1,9 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+
+[Serializable]
+public class MyInfo
+{
+    public string userName;
+    public int userNo;
+    public string userRole;
+    public string memberEmail;
+}
+
 
 public class SignInManager : MonoBehaviour
 {
@@ -94,7 +105,6 @@ public class SignInManager : MonoBehaviour
             }
             else
             {
-                Debug.Log(loginAPI.downloadHandler.text);
                 token = loginAPI.GetResponseHeader("Authorization");
                 Debug.Log(loginAPI.GetResponseHeader("Authorization"));
 
@@ -102,6 +112,8 @@ public class SignInManager : MonoBehaviour
                 //Debug.Log(ex);
                 //UserReturnInfo returnInfo = JsonUtility.FromJson<UserReturnInfo>(loginAPIs)
 
+                Debug.Log(loginAPI.downloadHandler.text);
+                TokenManager.Instance.MyInfo = JsonUtility.FromJson<MyInfo>(loginAPI.downloadHandler.text);
                 TokenManager.Instance.Token = token;
                 TokenManager.Instance.ID = id;
 

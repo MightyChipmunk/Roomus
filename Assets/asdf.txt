@@ -1,6 +1,6 @@
 {
-    "memberId": "kjhdx1",
-    "pwd": "wlgns0712!",
-    "memberName": "Jihoon Kim",
-    "memberEmail": "21qqq4@gmail.com"
+    "memberId": "wlgns123",
+    "pwd": "wlgns123123",
+    "memberName": "123123123",
+    "memberEmail": "21@naver.com"
 }

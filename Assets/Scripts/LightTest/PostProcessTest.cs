@@ -8,6 +8,8 @@ using System;
 
 public class PostProcessTest : MonoBehaviour
 {
+    public static PostProcessTest Instance;
+
     public GameObject go;
     Volume gameVolume;
     
@@ -78,6 +80,14 @@ public class PostProcessTest : MonoBehaviour
     float tint;
     Color colorFilter;
 
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(this.gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -117,6 +127,8 @@ public class PostProcessTest : MonoBehaviour
         // white balance
         temp = (float)wbe.temperature;
         tint = (float)wbe.tint;
+
+        //SetRoomFilter(shadowVal, midtoneVal, highlightVal, contrast, postExposure, hueShift, saturation, colorFilter, temp, tint);
     }
 
     // Update is called once per frame
@@ -141,7 +153,7 @@ public class PostProcessTest : MonoBehaviour
         Deco_Json.Instance.advLightInfo.saturation = saturation;
         Deco_Json.Instance.advLightInfo.temp = temp;
         Deco_Json.Instance.advLightInfo.tint = tint;
-        Deco_Json.Instance.advLightInfo.colorFilter = colorFilter;
+        Deco_Json.Instance.advLightInfo.color = colorFilter;
     }
 
     public void UpdateShadow()
@@ -248,5 +260,52 @@ public class PostProcessTest : MonoBehaviour
         tint = tintSlider.value;
         wbe.tint.Override(tint);
         tintTxt.GetComponent<Text>().text = tint.ToString();
+    }
+
+    public void SetRoomFilter(Vector4 shadow, Vector4 midtone, Vector4 highlight, float contrast,
+        float postExposure, float hue, float saturation, Color color, float temp, float tint)
+    {
+        // set shadows midtones highlights value
+        smh.shadows.Override(shadow);
+        smh.midtones.Override(midtone);
+        smh.highlights.Override(highlight);
+
+        // set color adjustment
+        ca.contrast.Override(contrast);
+        ca.postExposure.Override(postExposure);
+        ca.hueShift.Override(hue);
+        ca.saturation.Override(saturation);
+        ca.colorFilter.Override(color);
+
+        // set white balance
+        //wb.temperature.Override(temp);
+        //wb.tint.Override(tint);
+
+        shadowColorPickCode.selectColor.r = shadow.x;
+        shadowColorPickCode.selectColor.g = shadow.y;
+        shadowColorPickCode.selectColor.b = shadow.z;
+        shadowSlider.value = shadow.w;
+
+        midtonePickCode.selectColor.r = midtone.x;
+        midtonePickCode.selectColor.g = midtone.y;
+        midtonePickCode.selectColor.b = midtone.z;
+        midtoneSlider.value = midtone.w;
+
+        highlightPickCode.selectColor.r = highlight.x;
+        highlightPickCode.selectColor.g = highlight.y;
+        highlightPickCode.selectColor.b = highlight.z;
+        highlightSlider.value = highlight.w;
+
+        postExposureSlider.value = postExposure;
+        contrastSlider.value = contrast;
+        hueShiftSlider.value = hueShift;
+        saturationSlider.value = saturation;
+
+        colorFilter = color;
+        colorFilterBtn.GetComponent<Image>().color = colorFilter;
+        colorPicker.startingColor = colorFilter;
+
+        tempSlider.value = temp;
+        tintSlider.value = tint;
     }
 }
