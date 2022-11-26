@@ -26,7 +26,7 @@ public class ShopItem : MonoBehaviour
         itemMoreInfo = GameObject.Find("Canvas").transform.Find("MyRoomAnalysisBG").transform.Find("ItemMoreInfo").gameObject;
 
         transform.Find("Text").GetComponent<Text>().text = itemName;
-        // ¹Þ¾Æ¿Â ÀÌ¹ÌÁöÀÇ ¹ÙÀÌ³Ê¸® µ¥ÀÌÅÍ·Î ÀÚ½ÅÀÇ ÀÌ¹ÌÁö º¯°æ
+        // ï¿½Þ¾Æ¿ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì³Ê¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Texture2D tex = new Texture2D(2, 2);
         tex.LoadImage(imgBytes);
         Rect rect = new Rect(0, 0, tex.width, tex.height);
@@ -44,6 +44,9 @@ public class ShopItem : MonoBehaviour
     FBXJson fbxJson = new FBXJson();
     IEnumerator OnClickGet(string url)
     {
+        // ui
+        JM_ShoppingUIManager.instance.ShowInfo();
+
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
