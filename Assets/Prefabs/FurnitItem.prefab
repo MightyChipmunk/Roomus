@@ -215,13 +215,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d63250229da71742ab0e3a1db359139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fbxJson:
-    id: 0
-    furnitName: 
-    location: 0
-    category: 
-    information: 
-    xSize: 0
-    ySize: 0
-    zSize: 0
-    price: 0
+  category: 
