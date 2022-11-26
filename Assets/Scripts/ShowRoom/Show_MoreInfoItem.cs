@@ -66,7 +66,18 @@ public class Show_MoreInfoItem : MonoBehaviour
                 itemMoreInfo.transform.Find("DimensionContent").GetComponent<Text>().text =
                     (fbxJson.xsize * 100).ToString() + " x " + (fbxJson.zsize * 100).ToString() + " x " + (fbxJson.ysize * 100).ToString();
                 itemMoreInfo.transform.Find("Price").GetComponent<Text>().text = fbxJson.price.ToString();
-                itemMoreInfo.transform.Find("DescriptionContent").GetComponent<Text>().text = fbxJson.information;
+
+                string[] lines = fbxJson.information.Split("\n");
+
+                string information = "";
+                for (int i = 0; i < lines.Length - 1; i++)
+                {
+                    information += lines[i] + "\n";
+                }
+                string shotUrl = lines[lines.Length - 1];
+
+                itemMoreInfo.transform.Find("DescriptionContent").GetComponent<Text>().text = information;
+                itemMoreInfo.transform.Find("BuyBtn").GetComponent<BuyBtn>().url = shotUrl;
             }
         }
     }
