@@ -872,7 +872,7 @@ GameObject:
   - component: {fileID: 8493086610323462354}
   - component: {fileID: 8493086610323462355}
   - component: {fileID: 5226517091573287618}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Mesh3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

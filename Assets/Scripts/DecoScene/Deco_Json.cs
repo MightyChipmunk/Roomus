@@ -472,6 +472,8 @@ public class Deco_Json : MonoBehaviour
         advLightInfo_.temp = advLightInfo.temp;
         advLightInfo_.tint = advLightInfo.tint;
         advLightInfo_.colorFilter = advLightInfo.color;
+        if (advLightInfo_.colorFilter == new Color(0,0,0,0))
+            advLightInfo_.colorFilter = Color.white;
         string filterinfo = JsonUtility.ToJson(advLightInfo_, true);
         Debug.Log(filterinfo);
 
