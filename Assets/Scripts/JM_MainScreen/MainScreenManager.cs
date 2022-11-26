@@ -61,7 +61,7 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickTravel()
     {
-        SceneManager.LoadScene("PutDeleteTest");
+        SceneManager.LoadScene("Shopping");
     }
 
     public void OnClickLikes()

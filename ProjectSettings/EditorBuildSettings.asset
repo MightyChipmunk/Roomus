@@ -62,7 +62,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RoomDecoScene/LocalRoom.unity
     guid: d63413b5ed33a6b4988bd627a4770dc5
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Shopping.unity
     guid: 62a152229a699425588a47dbf0ffaec0
   - enabled: 1
