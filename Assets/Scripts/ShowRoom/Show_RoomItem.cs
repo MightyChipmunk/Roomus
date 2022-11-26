@@ -69,7 +69,6 @@ public class Show_RoomItem : MonoBehaviour
     {
         Show_LoadRoomList.Instance.RoomName = gameObject.name;
         Show_LoadRoomList.Instance.ID = ID;
-        Show_LoadRoomList.Instance.localTest = localTest;
         SceneManager.LoadScene("Test_Connect");
     }
 
@@ -95,6 +94,7 @@ public class Show_RoomItem : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("Unlike", "Like Complete", true, 0.3f);
                 Debug.Log("Room Like complete!");
             }
         }
@@ -114,9 +114,8 @@ public class Show_RoomItem : MonoBehaviour
             }
             else
             {
-                iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
-
-                Debug.Log("Furnit UnLike complete!");
+                JH_PopUpUI.Instance.SetUI("Unlike", "Unlike Complete", true, 0.3f);
+                Debug.Log("Room UnLike complete!");
             }
         }
     }

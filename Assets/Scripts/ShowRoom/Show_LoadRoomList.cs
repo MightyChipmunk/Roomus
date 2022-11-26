@@ -16,6 +16,7 @@ public class showRoomInfos
     public string screenShotUrl;
 }
 
+
 public class Show_LoadRoomList : MonoBehaviour
 {
     public static Show_LoadRoomList Instance;
@@ -26,19 +27,9 @@ public class Show_LoadRoomList : MonoBehaviour
     public int ID { get { return id; } set { id = value; } }
 
     string roomName;
-    public string RoomName
-    {
-        get
-        {
-            return roomName;
-        }
-        set
-        {
-            roomName = value;
-        }
-    }
+    public string RoomName { get { return roomName; } set { roomName = value; } }
 
-    public bool localTest = false;
+
 
     private void Awake()
     {
@@ -56,7 +47,18 @@ public class Show_LoadRoomList : MonoBehaviour
     void Start()
     {
         // 네트워크의 방 리스트를 가져옴
-        StartCoroutine(OnGetJson(UrlInfo.url + "/rooms"));
+        switch (TokenManager.Instance.roomTypeP)
+        {
+            case RoomType.All:
+                StartCoroutine(OnGetJson(UrlInfo.url + "/rooms"));
+                break;
+            case RoomType.Liked:
+                StartCoroutine(OnGetJson(UrlInfo.url + "/rooms/mylikes"));
+                break;
+            case RoomType.User:
+                StartCoroutine(OnGetJson(UrlInfo.url + "/rooms?criteria=memberNo&value=" + TokenManager.Instance.MemberNo.ToString()));
+                break;
+        }
 
         // 로컬의 방 리스트를 가져옴
         //DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/RoomInfo");

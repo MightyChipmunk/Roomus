@@ -15,7 +15,7 @@ public class JH_MyPageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(OnGetJson(UrlInfo.url + "/rooms"));
+        StartCoroutine(OnGetJson(UrlInfo.url + "/rooms/my"));
         StartCoroutine(OnGetLike(UrlInfo.url + "/products/myLikes"));
     }
 

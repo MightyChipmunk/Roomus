@@ -59,8 +59,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         print("OnJoinedRoom");
 
-        if (Show_LoadRoomList.Instance != null && Show_LoadRoomList.Instance.localTest)
-            PhotonNetwork.LoadLevel("ShowRoom");
+        if (Show_LoadRoomList.Instance != null /*&& Show_LoadRoomList.Instance.localTest*/)
+            PhotonNetwork.LoadLevel("JH_ShowRoom");
         else
             PhotonNetwork.LoadLevel("JH_ShowRoom");
     }

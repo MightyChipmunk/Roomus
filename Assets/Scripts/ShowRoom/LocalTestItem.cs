@@ -30,7 +30,7 @@ public class LocalTestItem : MonoBehaviour
 
     public void OnClicked()
     {
-        Show_LoadRoomList.Instance.localTest = localTest;
+        //Show_LoadRoomList.Instance.localTest = localTest;
         SceneManager.LoadScene("Test_Connect");
     }
 }

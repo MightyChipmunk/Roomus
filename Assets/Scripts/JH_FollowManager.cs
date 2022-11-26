@@ -26,7 +26,7 @@ public class JH_FollowManager : MonoBehaviour
     void Start()
     {
         followInput.onSubmit.AddListener(OnSubmit);
-        unfollowInput.onSubmit.AddListener(OnSubmitUn);
+        //unfollowInput.onSubmit.AddListener(OnSubmitUn);
 
         // 잘못쓴거 아님, 네트워크에서 이렇게 줌
         StartCoroutine(OnGetFollow(UrlInfo.url + "/followers"));
@@ -97,6 +97,7 @@ public class JH_FollowManager : MonoBehaviour
             else
             {
                 JH_PopUpUI.Instance.SetUI("", www.downloadHandler.text, false);
+                AddFollowContent(getinfo.memberNo, getinfo.memberEmail, getinfo.memberName);
                 Debug.Log("User Follow complete!");
             }
             www.Dispose();
@@ -171,12 +172,19 @@ public class JH_FollowManager : MonoBehaviour
             }
             else
             {
-                GetInfo[] getInfos = JsonHelper.FromJson<GetInfo>("{\"data\":" + www.downloadHandler.text + "}");
-                foreach (GetInfo info in getInfos)
+                try
                 {
-                    AddFollowContent(info.memberEmail, info.memberName);
+                    GetInfo[] getInfos = JsonHelper.FromJson<GetInfo>("{\"data\":" + www.downloadHandler.text + "}");
+                    foreach (GetInfo info in getInfos)
+                    {
+                        AddFollowContent(info.memberNo, info.memberEmail, info.memberName);
+                    }
+                    Debug.Log("Get FollowList complete!");
                 }
-                Debug.Log("Get FollowList complete!");
+                catch (ArgumentException ex)
+                {
+                    Debug.Log("No Follow");
+                }
             }
             www.Dispose();
         }
@@ -200,7 +208,7 @@ public class JH_FollowManager : MonoBehaviour
                 GetInfo[] getInfos = JsonHelper.FromJson<GetInfo>("{\"data\":" + www.downloadHandler.text + "}");
                 foreach (GetInfo info in getInfos)
                 {
-                    AddFollowerContent(info.memberEmail, info.memberName);
+                    AddFollowerContent(info.memberNo, info.memberEmail, info.memberName);
                 }
                 Debug.Log("Get FollowerList complete!");
             }
@@ -208,18 +216,20 @@ public class JH_FollowManager : MonoBehaviour
         }
     }
 
-    void AddFollowContent(string email, string nickName)
+    void AddFollowContent(int no, string email, string nickName)
     {
         GameObject obj = Instantiate(followItem, followContent);
         JH_FollowItem item = obj.GetComponent<JH_FollowItem>();
+        item.memberNo = no;
         item.Email = email;
         item.NickName = nickName;
     }
 
-    void AddFollowerContent(string email, string nickName)
+    void AddFollowerContent(int no, string email, string nickName)
     {
         GameObject obj = Instantiate(followItem, followerContent);
         JH_FollowItem item = obj.GetComponent<JH_FollowItem>();
+        item.memberNo = no;
         item.Email = email;
         item.NickName = nickName;
         item.Btn.gameObject.SetActive(false);
