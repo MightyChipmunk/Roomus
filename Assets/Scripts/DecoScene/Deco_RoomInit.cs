@@ -68,7 +68,7 @@ public class Deco_RoomInit : MonoBehaviour
         {
             GameObject go = Instantiate(Resources.Load<GameObject>("Room" + JH_RoomDecoManager.Instance.SelectedRoom.ToString()));
             Deco_Json.Instance.SaveRoomInfo(roomName, -1, -1, -1, JH_RoomDecoManager.Instance.SelectedRoom);
-            StartCoroutine(Deco_Json.Instance.FirstPost(UrlInfo.url + "/rooms", roomName, xSize, ySize, zSize, balcony));
+            StartCoroutine(Deco_Json.Instance.FirstPost(UrlInfo.url + "/rooms", roomName, xSize, ySize, zSize, JH_RoomDecoManager.Instance.SelectedRoom));
             go.name = "Room";
             Destroy(JH_RoomDecoManager.Instance.gameObject);
         }
