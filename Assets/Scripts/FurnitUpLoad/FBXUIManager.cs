@@ -10,7 +10,6 @@ using Ookii.Dialogs;
 using System.Windows.Forms;
 using Screen = UnityEngine.Screen;
 using UnityEngine.SceneManagement;
-using System.Text.RegularExpressions;
 
 [Serializable]
 public class FBXJson
@@ -257,17 +256,7 @@ public class FBXUIManager : MonoBehaviour
 
         // zip颇老肺 弓阑 颇老甸阑 历厘且 叼泛配府 积己
         string path = UnityEngine.Application.dataPath + "/Localserver/" + fbxJson.furnitName + "/";
-        path = Regex.Replace(path, @"[^a-zA-Z0-9啊-芌]", "", RegexOptions.Singleline);
-
-        try 
-        {
-            Directory.CreateDirectory(path);
-        }
-        catch (ArgumentException ex)
-        {
-            Debug.Log(path);
-            Debug.Log(ex.Message);
-        }
+        Directory.CreateDirectory(path);
 
         // 固府 积己等 fbx狼 zip颇老阑 颇捞歹府 单捞磐肺 佬澜
         byte[] zipData = File.ReadAllBytes(path + fbxJson.furnitName + ".zip");
