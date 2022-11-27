@@ -61,16 +61,18 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickTravel()
     {
-        SceneManager.LoadScene("PutDeleteTest");
+        SceneManager.LoadScene("Shopping");
     }
 
-    public void OnClickShop()
+    public void OnClickLikes()
     {
-
+        TokenManager.Instance.roomTypeP = RoomType.Liked;
+        SceneManager.LoadScene("ShowRoom_New");
     }
 
     public void OnClickRoom()
     {
+        TokenManager.Instance.roomTypeP = RoomType.All;
         SceneManager.LoadScene("ShowRoom_New");
     }
 }

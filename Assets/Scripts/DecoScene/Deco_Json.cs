@@ -184,8 +184,11 @@ public class Deco_Json : MonoBehaviour
         arrayJson = new ArrayJson();
         arrayJson.datas = new List<SaveJsonInfo>();
         arrayJson.lights = new List<LightInfo>();
+        arrayJson.roomFilter = new AdvLightInfo();
         arrayJsonLoad = new ArrayJson();
         arrayJsonLoad.datas = new List<SaveJsonInfo>();
+        arrayJsonLoad.lights = new List<LightInfo>();
+        arrayJsonLoad.roomFilter = new AdvLightInfo();
         advLightInfo = new AdvLightInfo();
 
         saveRoomNo = new SaveRoomNo();
@@ -469,6 +472,8 @@ public class Deco_Json : MonoBehaviour
         advLightInfo_.temp = advLightInfo.temp;
         advLightInfo_.tint = advLightInfo.tint;
         advLightInfo_.colorFilter = advLightInfo.color;
+        if (advLightInfo_.colorFilter == new Color(0,0,0,0))
+            advLightInfo_.colorFilter = Color.white;
         string filterinfo = JsonUtility.ToJson(advLightInfo_, true);
         Debug.Log(filterinfo);
 
@@ -580,7 +585,7 @@ public class Deco_Json : MonoBehaviour
     public void LoadFile(int id)
     {
         // 방 가구의 정보들을 서버에서 받아옴
-        StartCoroutine(LoadJson(UrlInfo.url + "/rooms/" + id.ToString()));
+        StartCoroutine(LoadJson(UrlInfo.url + "/rooms/my/" + id.ToString()));
     }
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class JH_FollowItem : MonoBehaviour
 {
+    public int memberNo;
     public string Email;
     public string NickName;
 
@@ -21,6 +23,7 @@ public class JH_FollowItem : MonoBehaviour
         nickName.text = NickName;
 
         Btn.onClick.AddListener(UnFollow);
+        GetComponent<Button>().onClick.AddListener(OnClick);
     }
 
     // Update is called once per frame
@@ -87,5 +90,12 @@ public class JH_FollowItem : MonoBehaviour
             }
             www.Dispose();
         }
+    }
+
+    void OnClick()
+    {
+        TokenManager.Instance.roomTypeP = RoomType.User;
+        TokenManager.Instance.MemberNo = memberNo;
+        SceneManager.LoadScene("ShowRoom_New");
     }
 }

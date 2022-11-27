@@ -135,7 +135,6 @@ public class Show_Json : MonoBehaviourPun
     {
         // 방 가구의 정보들을 서버에서 받아옴
         StartCoroutine(LoadJson(UrlInfo.url + "/rooms/" + id.ToString()));
-        
     }
 
     void LoadObject(int id, Vector3 position, Vector3 eulerAngle, Vector3 localScale, Transform room)

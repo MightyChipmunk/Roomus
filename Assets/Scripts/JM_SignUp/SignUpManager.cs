@@ -134,8 +134,8 @@ public class SignUpManager : MonoBehaviour
         File.WriteAllText(path, jsonInfo);
         */
 
-        signUp.SetActive(false);
-        signUpCompl.SetActive(true);
+        //signUp.SetActive(false);
+        //signUpCompl.SetActive(true);
 
         // screen dark --> bright
         screenCode.isDark = true;
