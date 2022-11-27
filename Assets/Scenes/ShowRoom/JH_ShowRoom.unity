@@ -6987,7 +6987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &669856078
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10984,9 +10984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34f628ba1d20c840a27c6e5eaa1dffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallMat: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
-  floorMat: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
-  cellingMat: {fileID: 2100000, guid: 203f0d6a41f2b3e45a4415f5bc3d7212, type: 2}
+  wallMat: {fileID: 2100000, guid: 786f6cb6544e72045a2e97fbbba1271f, type: 2}
+  floorMat: {fileID: 2100000, guid: ba156989ce9f3fe41b40d7d7defaff3a, type: 2}
+  cellingMat: {fileID: 2100000, guid: 786f6cb6544e72045a2e97fbbba1271f, type: 2}
 --- !u!1 &1257435833
 GameObject:
   m_ObjectHideFlags: 0
