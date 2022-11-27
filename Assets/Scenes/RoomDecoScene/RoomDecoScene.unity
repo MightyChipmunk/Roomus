@@ -292,11 +292,11 @@ RectTransform:
   m_Father: {fileID: 1059740219}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000045776367, y: 0.00021362305}
-  m_SizeDelta: {x: -183, y: 0}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -0.000064780834, y: 0.00024414062}
+  m_SizeDelta: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3142120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 2
+  m_VerticalFit: 0
 --- !u!114 &3142121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,21 +320,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 3142118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 20
-    m_Bottom: 20
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 44, y: 56}
-  m_Spacing: {x: 10, y: 10}
-  m_Constraint: 1
-  m_ConstraintCount: 3
+    m_Left: 0
+    m_Right: 0
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 1
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &8856112
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,11 +2582,11 @@ RectTransform:
   m_Father: {fileID: 876408877}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0.00021362305}
-  m_SizeDelta: {x: -183, y: 0}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0.000022888184, y: 0.000030517578}
+  m_SizeDelta: {x: 1, y: 20}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &96822080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2598,7 +2600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 2
+  m_VerticalFit: 0
 --- !u!114 &96822081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2608,21 +2610,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 96822078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
-    m_Right: 10
-    m_Top: 15
-    m_Bottom: 15
-  m_ChildAlignment: 0
-  m_StartCorner: 0
-  m_StartAxis: 0
-  m_CellSize: {x: 45, y: 56}
-  m_Spacing: {x: 10, y: 10}
-  m_Constraint: 1
-  m_ConstraintCount: 3
+    m_Left: 0
+    m_Right: 0
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 1
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 1
+  m_ChildScaleHeight: 1
+  m_ReverseArrangement: 0
 --- !u!1 &98631606
 GameObject:
   m_ObjectHideFlags: 0
@@ -8110,11 +8114,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeLight: {fileID: 0}
   sptLightContent: {fileID: 96822079}
-  sptLightBtn: {fileID: 8936965512777367135, guid: a4dc8f15c7d4045c1828eb1a53a00bd8,
+  sptLightBtn: {fileID: 5966626073479652758, guid: 8c91c40cf6270416e8c30852d6e015b1,
     type: 3}
   sptLightBtnList: []
   ptLightContent: {fileID: 3142119}
-  ptLightBtn: {fileID: 4656688867322471612, guid: 65f432bd32cd34c9ab6534538a6e9d78,
+  ptLightBtn: {fileID: 4212246910709588576, guid: 23dba210dbd9e43928dda00c9499bf37,
     type: 3}
   spotLightFactory: {fileID: 6892942645193297506, guid: 734bb46a093914cdf9edfcedba2ea51e,
     type: 3}
@@ -20367,8 +20371,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11611134}
   m_HandleRect: {fileID: 11611133}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.5156509
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -34983,7 +34987,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 822828165}
   m_Direction: 0
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.9997398
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

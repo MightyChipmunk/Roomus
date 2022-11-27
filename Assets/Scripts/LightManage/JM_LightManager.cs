@@ -148,6 +148,7 @@ public class JM_LightManager : MonoBehaviour
         gizmoManager.isMove = true;
 
         Button btn = Instantiate(sptLightBtn, sptLightContent);
+        btn.gameObject.transform.GetChild(2).GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Spotlight " + (spotLightList.Count + 1).ToString();
         sptLightBtnList.Add(btn);
 
         spotLightList.Add(newLight);
@@ -195,6 +196,7 @@ public class JM_LightManager : MonoBehaviour
         gizmoManager.isMove = true;
 
         Button btn = Instantiate(ptLightBtn, ptLightContent);
+        btn.gameObject.transform.GetChild(2).GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Pointlight " + (spotLightList.Count + 1).ToString();
         ptLightBtnList.Add(btn);
 
         pointLightList.Add(newLight);
