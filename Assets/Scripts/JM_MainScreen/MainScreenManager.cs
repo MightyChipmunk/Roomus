@@ -35,7 +35,10 @@ public class MainScreenManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     { 
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene("PutDeleteTest");
+        }
     }  
 
     public void OnClickMyPage()
