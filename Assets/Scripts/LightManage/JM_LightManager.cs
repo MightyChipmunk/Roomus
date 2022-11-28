@@ -64,9 +64,9 @@ public class JM_LightManager : MonoBehaviour
 
         innerAngSlider.maxValue = 180;
         outerAngSlider.maxValue = 180;
-        intensitySlider.maxValue = 50;
+        intensitySlider.maxValue = 5;
         rangeSlider.maxValue = 50;
-        ptIntensitySlider.maxValue = 50;
+        ptIntensitySlider.maxValue = 5;
         ptRangeSlider.maxValue = 50;
 
         sptColorPicker.onColorChange.AddListener(UpdateSptColor);
