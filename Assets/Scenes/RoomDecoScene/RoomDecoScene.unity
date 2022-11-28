@@ -294,7 +294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.00003741108, y: 0.00024414062}
+  m_AnchoredPosition: {x: 0.00022597093, y: 0.00024414062}
   m_SizeDelta: {x: 1, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3142120
@@ -2584,7 +2584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000016041393, y: 0}
+  m_AnchoredPosition: {x: 0.00019211083, y: 0.000030517578}
   m_SizeDelta: {x: 1, y: 20}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &96822080
@@ -3311,7 +3311,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 353258764}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9998309
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6866,6 +6866,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1747183524}
         m_TargetAssemblyTypeName: JM_LibraryManager, Assembly-CSharp
         m_MethodName: OnClickLibrary
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1747183524}
+        m_TargetAssemblyTypeName: JM_LibraryManager, Assembly-CSharp
+        m_MethodName: OnClickAIDown
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13878,7 +13890,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -13887,7 +13899,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.8
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -20372,7 +20384,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 11611133}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9979604
+  m_Size: 0.9999978
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -34988,7 +35000,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 822828165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99983054
+  m_Size: 0.9997899
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

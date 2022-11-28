@@ -5354,6 +5354,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 611615807754253751, guid: a3aff83f7e7334f00b5a83fc6f64c3c3,
+        type: 3}
+      propertyPath: screenManager
+      value: 
+      objectReference: {fileID: 1945577384}
     - target: {fileID: 5077376040923006752, guid: a3aff83f7e7334f00b5a83fc6f64c3c3,
         type: 3}
       propertyPath: m_Name

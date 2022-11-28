@@ -15,6 +15,7 @@ public class MainScreenManager : MonoBehaviour
     bool isRoomCustom;
     bool isUpload;
     bool isShowRoom;
+    bool isShopping;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +54,7 @@ public class MainScreenManager : MonoBehaviour
             if (isRoomCustom) SceneManager.LoadScene("RoomCustom_New");
             if (isUpload) SceneManager.LoadScene("FBXLoad");
             if (isShowRoom) SceneManager.LoadScene("ShowRoom_New");
+            if (isShopping) SceneManager.LoadScene("Shopping");
         }
     }  
 
@@ -86,7 +88,9 @@ public class MainScreenManager : MonoBehaviour
 
     public void OnClickTravel()
     {
-        SceneManager.LoadScene("Shopping");
+        screenCode.Darken();
+        isShopping = true;
+        // SceneManager.LoadScene("Shopping");
     }
 
     public void OnClickLikes()
