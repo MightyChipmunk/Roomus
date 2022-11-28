@@ -10,6 +10,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject screenManager;
     JM_ScreenManager screenCode;
 
+    bool called = false;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -22,9 +24,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (screenCode.isSceneChange)
+        if (screenCode.isSceneChange && called == false)
         {
             CreateRoom();
+            called = true;
         }
     }
 

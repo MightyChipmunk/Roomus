@@ -9,6 +9,10 @@ using UnityEngine.UI;
 public class Deco_FurnitItem : MonoBehaviour
 {
     //public FBXJson fbxJson;
+
+    string furnitName = "";
+    public string FurnitName { get { return furnitName; } set { furnitName = value; } }
+
     int id = 0;
     public int ID { get { return id; } set { id = value; } }
 

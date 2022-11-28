@@ -311,6 +311,7 @@ public class Show_Json : MonoBehaviourPun
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
             infoUI.x = arrayJsonLoad.xsize;
             infoUI.y = arrayJsonLoad.ysize;
+            infoUI.roomName = arrayJsonLoad.roomName;
             infoUI.category = arrayJsonLoad.category;
             infoUI.description = arrayJsonLoad.description;
         }
@@ -345,6 +346,7 @@ public class Show_Json : MonoBehaviourPun
             Show_InfoUI infoUI = newRoom.AddComponent<Show_InfoUI>();
             infoUI.x = arrayJsonLoad.xsize;
             infoUI.y = arrayJsonLoad.ysize;
+            infoUI.roomName = arrayJsonLoad.roomName;
             infoUI.category = arrayJsonLoad.category;
             infoUI.description = arrayJsonLoad.description;
         }

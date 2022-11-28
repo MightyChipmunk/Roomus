@@ -212,6 +212,7 @@ public class JM_RoomUIManager : MonoBehaviour
             }
             else
             {
+                JH_PopUpUI.Instance.SetUI("", "Like Complete!", true, 0.3f);
                 Debug.Log("Room Like complete!");
             }
         }
@@ -231,7 +232,8 @@ public class JM_RoomUIManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Furnit UnLike complete!");
+                JH_PopUpUI.Instance.SetUI("", "UnLike Complete!", true, 0.3f);
+                Debug.Log("Room UnLike complete!");
             }
         }
     }
