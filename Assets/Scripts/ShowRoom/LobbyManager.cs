@@ -7,6 +7,8 @@ using Photon.Realtime;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public bool gender;
+    public GameObject screenManager;
+    JM_ScreenManager screenCode;
 
     private void Awake()
     {
@@ -15,31 +17,39 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
     }
 
-    //¹æ »ý¼º
+    private void Update()
+    {
+        if (screenCode.isSceneChange)
+        {
+            CreateRoom();
+        }
+    }
+
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void CreateRoom()
     {
-        // ¹æ ¿É¼ÇÀ» ¼³Á¤
+        // ï¿½ï¿½ ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         RoomOptions roomOptions = new RoomOptions();
-        // ÃÖ´ë ÀÎ¿ø (0ÀÌ¸é ÃÖ´ëÀÎ¿ø)
+        // ï¿½Ö´ï¿½ ï¿½Î¿ï¿½ (0ï¿½Ì¸ï¿½ ï¿½Ö´ï¿½ï¿½Î¿ï¿½)
         roomOptions.MaxPlayers = 0;
-        // ·ë ¸®½ºÆ®¿¡ º¸ÀÌÁö ¾Ê°Ô? º¸ÀÌ°Ô?
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½? ï¿½ï¿½ï¿½Ì°ï¿½?
         roomOptions.IsVisible = true;
 
-        // ¹æ »ý¼º ¿äÃ» (ÇØ´ç ¿É¼ÇÀ» ÀÌ¿ëÇØ¼­)
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» (ï¿½Ø´ï¿½ ï¿½É¼ï¿½ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ø¼ï¿½)
         PhotonNetwork.CreateRoom("Room" + Show_LoadRoomList.Instance.ID.ToString(), roomOptions);
     }
 
-    //¹æÀÌ »ý¼ºµÇ¸é È£Ãâ µÇ´Â ÇÔ¼ö
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ È£ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
         print("OnCreatedRoom");
     }
 
-    //¹æ »ý¼ºÀÌ ½ÇÆÐ µÉ¶§ È£Ãâ µÇ´Â ÇÔ¼ö
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½É¶ï¿½ È£ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         base.OnCreateRoomFailed(returnCode, message);
@@ -47,13 +57,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         JoinRoom();
     }
 
-    //¹æ Âü°¡ ¿äÃ»
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
     public void JoinRoom()
     {
         PhotonNetwork.JoinRoom("Room" + Show_LoadRoomList.Instance.ID.ToString());
     }
 
-    //¹æ Âü°¡°¡ ¿Ï·á µÇ¾úÀ» ¶§ È£Ãâ µÇ´Â ÇÔ¼ö
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
@@ -65,7 +75,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("JH_ShowRoom");
     }
 
-    //¹æ Âü°¡°¡ ½ÇÆÐ µÇ¾úÀ» ¶§ È£Ãâ µÇ´Â ÇÔ¼ö
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ ï¿½ï¿½ È£ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
@@ -75,12 +85,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void OnClickMan()
     {
         gender = true;
-        CreateRoom();
+        screenCode.Darken();
+        //CreateRoom();
     }
 
     public void OnClickWoman()
     {
         gender = false;
-        CreateRoom();
+        screenCode.Darken();
+        //CreateRoom();
     }
 }

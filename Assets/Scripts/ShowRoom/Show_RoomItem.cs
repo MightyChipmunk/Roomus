@@ -30,6 +30,9 @@ public class Show_RoomItem : MonoBehaviour
     public Transform commentContent;
     public GameObject commentUI;
 
+    public GameObject screenManager;
+    JM_ScreenManager screenCode;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,13 +47,19 @@ public class Show_RoomItem : MonoBehaviour
         likeButton.onClick.AddListener(OnClickLike);
         commentInput.onSubmit.AddListener(SubmitComment);
 
+        screenManager = GameObject.Find("Screen").transform.Find("ScreenManager").gameObject;
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
+
         StartCoroutine(OnGetComment(UrlInfo.url + "/rooms/" + ID.ToString() + "/comments"));
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (screenCode.isSceneChange)
+        {
+            SceneManager.LoadScene("Test_Connect");
+        }
     }
 
     void SubmitComment(string input)
@@ -69,7 +78,9 @@ public class Show_RoomItem : MonoBehaviour
     {
         Show_LoadRoomList.Instance.RoomName = gameObject.name;
         Show_LoadRoomList.Instance.ID = ID;
-        SceneManager.LoadScene("Test_Connect");
+        screenCode.Darken();
+
+        //SceneManager.LoadScene("Test_Connect");
     }
 
     public void OnClickLike()
