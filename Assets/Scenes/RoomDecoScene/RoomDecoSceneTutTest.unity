@@ -294,7 +294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.000017553803, y: 0.00024414062}
+  m_AnchoredPosition: {x: 0.00035641523, y: 0.00024414062}
   m_SizeDelta: {x: 1, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3142120
@@ -3249,7 +3249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000000566009, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0.00033352704, y: 0.0025024414}
   m_SizeDelta: {x: 1, y: 20}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &96822080
@@ -3976,7 +3976,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 353258764}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99992865
+  m_Size: 0.9997465
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12795,6 +12795,7 @@ MonoBehaviour:
   category: {fileID: 2009121432}
   descriptField: {fileID: 261387844}
   screenShotImage: {fileID: 48902942}
+  searchInput: {fileID: 0}
   furnitItem: {fileID: 8869866084814353947, guid: ff997d7e7241daa46b24e64b01c02ca9,
     type: 3}
 --- !u!1 &614761334
@@ -15208,7 +15209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 1816, y: 674.15}
+  m_AnchoredPosition: {x: 2353, y: 674.15}
   m_SizeDelta: {x: 511.2664, y: 215.3}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &738557208
@@ -23930,7 +23931,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 11611133}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99958855
+  m_Size: 0.9969428
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -38960,6 +38961,7 @@ RectTransform:
   - {fileID: 475478307}
   - {fileID: 2089680187}
   - {fileID: 211905952}
+  - {fileID: 1790038035}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -40007,19 +40009,12 @@ MonoBehaviour:
   tut3HidePos: {fileID: 211905952}
   tut3ShowPos: {fileID: 2089680187}
   tutorialMain: {fileID: 1352603451}
-  general: {fileID: 1639191187}
-  library: {fileID: 783183154}
-  furniture: {fileID: 1899201760}
-  genLight: {fileID: 1023911223}
-  floor: {fileID: 1042938230}
-  advLight: {fileID: 454670448}
-  imgSearch: {fileID: 286773632}
-  save: {fileID: 230387053}
-  post: {fileID: 738557206}
-  screenShot: {fileID: 1425543566}
+  isTut2Reset: 0
+  isTut3Reset: 0
   tut2TargetGo: {fileID: 0}
   tut2ShowGo: {fileID: 0}
-  tut2BackGOList: []
+  tut3TargetGo: {fileID: 0}
+  tut3ShowGo: {fileID: 0}
   tut2List:
   - {fileID: 1639191187}
   - {fileID: 783183154}
@@ -40051,13 +40046,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790038033}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2392.7273, y: 793.45044, z: -4.980006}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1432.7273, y: 253.45044, z: -4.980006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_Father: {fileID: 1746287334}
+  m_RootOrder: 51
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1791668201
 GameObject:
@@ -42491,7 +42486,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 822828165}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99992865
+  m_Size: 0.9997465
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
