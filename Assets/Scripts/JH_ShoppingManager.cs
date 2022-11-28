@@ -21,6 +21,27 @@ public class JH_ShoppingManager : MonoBehaviour
         
     }
 
+    public void OnClickCategory(string s)
+    {
+        if (s == "")
+        {
+            for (int i = 0; i < content.transform.childCount; i++)
+            {
+                content.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            return;
+        }
+
+        for (int i = 0; i < content.transform.childCount; i++)
+        {
+            if (content.transform.GetChild(i).GetComponent<ShopItem>().Category != s)
+                content.transform.GetChild(i).gameObject.SetActive(false);
+            else
+                content.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+
     IEnumerator OnGetJson(string uri)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(uri))

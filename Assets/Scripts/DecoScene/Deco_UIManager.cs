@@ -182,6 +182,15 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnClickCategory(string s)
     {
+        if (s == "")
+        {
+            for (int i = 0; i < trContent.transform.childCount; i++)
+            {
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            return;
+        }
+
         for (int i = 0; i < trContent.transform.childCount; i++)
         {
             if (trContent.transform.GetChild(i).GetComponent<Deco_FurnitItem>().Category != s)
