@@ -94,47 +94,71 @@ public class JM_LightManager : MonoBehaviour
 
     public void OnInnerAngValueChanged()
     {
+        if (activeLight == null)
+            return;
+        
         spotLightCode.innerAngle = innerAngSlider.value;
-        innerAngContent.GetComponent<Text>().text = innerAngSlider.value.ToString();
+        innerAngContent.GetComponent<Text>().text = innerAngSlider.value.ToString();        
     }
 
     public void OnOuterAngValueChanged()
     {
+        if (activeLight == null)
+            return;
+
         spotLightCode.outerAngle = outerAngSlider.value;
         outerAngContent.GetComponent<Text>().text = outerAngSlider.value.ToString();
     }
 
     public void UpdateSptColor(Color c)
     {
+        if (activeLight == null)
+            return;
+
         spotLightCode.color = c;
     }
 
     public void OnIntensityValueChanged()
     {
+        if (activeLight == null)
+            return;
+
         spotLightCode.intensity = intensitySlider.value;
         intensityContent.GetComponent<Text>().text = intensitySlider.value.ToString();
     }
 
     public void OnRangeValueChanged()
     {
+        if (activeLight == null)
+            return;
+
         spotLightCode.range = rangeSlider.value;
         rangeContent.GetComponent<Text>().text = rangeSlider.value.ToString();
     }
 
     public void OnPtIntensityValueChanged()
     {
+        if (activeLight == null)
+            return;
+
         pointLightCode.intensity = ptIntensitySlider.value;
         ptIntensityContent.GetComponent<Text>().text = ptIntensitySlider.value.ToString();
     }
 
     public void OnPtRangeValueChanged()
     {
+        if (activeLight == null)
+            return;
+
         pointLightCode.range = ptRangeSlider.value;
         ptRangeContent.GetComponent<Text>().text = ptRangeSlider.value.ToString();
     }
 
     public void UpdatePtColor(Color c)
     {
+        if (activeLight == null)
+            return;
+
         pointLightCode.color = c;
     }
 
@@ -243,6 +267,7 @@ public class JM_LightManager : MonoBehaviour
         GameObject newLight = Instantiate(spotLightFactory);
         activeLight = newLight;
         Button btn = Instantiate(sptLightBtn, sptLightContent);
+        btn.gameObject.transform.GetChild(2).GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Spotlight " + (spotLightList.Count + 1).ToString();
         sptLightBtnList.Add(btn);
 
         spotLightList.Add(newLight);
@@ -265,6 +290,7 @@ public class JM_LightManager : MonoBehaviour
         GameObject newLight = Instantiate(pointLightFactory);
         activeLight = newLight;
         Button btn = Instantiate(ptLightBtn, ptLightContent);
+        btn.gameObject.transform.GetChild(2).GetComponent<InputField>().placeholder.GetComponent<Text>().text = "Spotlight " + (spotLightList.Count + 1).ToString();
         ptLightBtnList.Add(btn);
 
         pointLightList.Add(newLight);

@@ -13,14 +13,15 @@ public class JM_ScreenManager : MonoBehaviour
     Color screenColor;
 
     public GameObject toolBar;
-    
+    JM_ToolBar toolBarCode;
+    public bool isSceneChange;
 
     // Start is called before the first frame update
     void Start()
     {
         isDark = true;
         isStart = true;
-        alpha = 1;
+        alpha = 1;       
     }
 
     // Update is called once per frame
@@ -30,6 +31,7 @@ public class JM_ScreenManager : MonoBehaviour
         if (isStart)
         {
             toolBar.SetActive(false);
+            screen.SetActive(true);
 
             if (isDark)
             {
@@ -39,28 +41,25 @@ public class JM_ScreenManager : MonoBehaviour
                 screen.GetComponent<Image>().color = screenColor;
                 if (alpha <= 0)
                 {
-                    isDark = false;
                     isStart = false;
                     screen.SetActive(false);
                     toolBar.SetActive(true);
                 }
             }
-            /*
-            else
+
+            if (!isDark)
             {
                 alpha += Time.deltaTime;
                 alpha = Mathf.Clamp(alpha, 0, 1);
                 screenColor.a = alpha;
                 screen.GetComponent<Image>().color = screenColor;
-                if (alpha >= 1)
+                if (1 - alpha < 0.1f)
                 {
-                    isDark = true;
-                    //screen.SetActive(false);
+                    screen.GetComponent<Image>().color = new Color(0, 0, 0, 1);
+                    isStart = false;
+                    isSceneChange = true;
                 }
-
-
             }
-            */
         }
         
         
@@ -69,6 +68,7 @@ public class JM_ScreenManager : MonoBehaviour
     public void Darken()
     {
         isStart = true;
+        isDark = false;
         screen.SetActive(true);
     }
 
