@@ -726,6 +726,10 @@ public class Deco_Json : MonoBehaviour
             }
 
             AdvLightInfo filter = arrayJsonLoad.roomFilter;
+
+            if (filter.color == new Color(0, 0, 0, 0))
+                    filter.color = Color.white;
+
             PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
                 filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
             arrayJson.roomFilter = filter;
@@ -752,6 +756,10 @@ public class Deco_Json : MonoBehaviour
             }
 
             AdvLightInfo filter = arrayJsonLoad.roomFilter;
+
+            if (filter.color == new Color(0, 0, 0, 0))
+                filter.color = Color.white;
+
             PostProcessTest.Instance.SetRoomFilter(filter.shadowVal, filter.midtoneVal, filter.highlightVal,
                 filter.contrast, filter.postExposure, filter.hueShift, filter.saturation, filter.color, filter.temp, filter.tint);
             arrayJson.roomFilter = filter;
