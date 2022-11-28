@@ -72,6 +72,7 @@ public class JM_RoomUIManager : MonoBehaviour
                     moreInfo.transform.position = infoOriginPos.position;
                     isInfoMove = false;
                     moreInfo.SetActive(false);
+                    JM_FurnInfoManager.instance.Reset();
                 }
             }
         }

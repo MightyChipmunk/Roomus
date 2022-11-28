@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 public class JM_ToolBar : MonoBehaviour
 {
     public GameObject toolBar;
-
+    public GameObject screenManager;
+    JM_ScreenManager screenCode;
     bool isHome;
 
     // Start is called before the first frame update
     void Start()
     {
-       
+        screenCode = screenManager.GetComponent<JM_ScreenManager>();
     }
 
     // Update is called once per frame
@@ -26,6 +27,15 @@ public class JM_ToolBar : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Slash))
         {
             DeactivateToolBar();
+        }
+
+        if (screenCode.isSceneChange)
+        {
+            if (isHome)
+            {
+                GoHome();
+            }
+
         }
     }
 
@@ -41,6 +51,13 @@ public class JM_ToolBar : MonoBehaviour
     }
 
     public void OnClickHome()
+    {
+        //screenCode.Darken();
+        //isHome = true;
+        SceneManager.LoadScene("Main");
+    }
+
+    void GoHome()
     {
         SceneManager.LoadScene("Main");
     }
