@@ -84,11 +84,17 @@ public class Deco_Camera : MonoBehaviour
         // 마우스 좌클릭으로 캠 위치 이동
         if (!lightLibrary.activeSelf && Input.GetMouseButton(0))
             dir = (-mh * transform.right + -mv * transform.up) * 3;
-        thirdCamPos.position += dir * speed * 5 * Time.deltaTime;
+        thirdCamPos.position += dir * speed * 3.5f * Time.deltaTime;
         // 마우스 우클릭으로 캠 각도 이동
-        Vector3 rotDir = new Vector3(-mv, mh, 0);
+        //Vector3 rotDir = new Vector3(-mv, mh, 0);
         if (Input.GetMouseButton(1))
-            thirdCamPos.eulerAngles += rotDir * rotSpeed * 5 * Time.deltaTime;
+        {
+            mx += mh * rotSpeed * 2 * Time.deltaTime;
+            my += mv * rotSpeed * 2 * Time.deltaTime;
+            my = Mathf.Clamp(my, -60, 60);
+            thirdCamPos.eulerAngles = new Vector3(-my, mx, 0);
+        }
+        //thirdCamPos.eulerAngles += rotDir * rotSpeed * 2 * Time.deltaTime;
         // 스크롤로 확대
         thirdCamPos.position += scrollWheel * thirdCamPos.forward * speed * 50 * Time.deltaTime;
 

@@ -18,6 +18,7 @@ public class TokenManager : MonoBehaviour
     string id;
     public string ID { get { return id; } set { id = value; } }
 
+    [SerializeField]
     RoomType roomType = RoomType.All;
     public RoomType roomTypeP { get { return roomType; } set { roomType = value; } }
 
