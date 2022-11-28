@@ -5207,9 +5207,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Welcome Back,
+  m_Text: 'Welcome Back
 
-    Jaemin!'
+    to RoomUs!
+
+'
 --- !u!222 &2088245007
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5338,7 +5340,7 @@ PrefabInstance:
     - target: {fileID: 4909364702281252871, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4909364703720408367, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}

@@ -13,7 +13,9 @@ public class JM_ScreenManager : MonoBehaviour
     Color screenColor;
 
     public GameObject toolBar;
-    
+
+    public bool isSceneChange;
+    public bool isTabChange;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,8 @@ public class JM_ScreenManager : MonoBehaviour
         isStart = true;
         alpha = 1;
     }
+
+    float currentTime;
 
     // Update is called once per frame
     void Update()
@@ -39,12 +43,41 @@ public class JM_ScreenManager : MonoBehaviour
                 screen.GetComponent<Image>().color = screenColor;
                 if (alpha <= 0)
                 {
-                    isDark = false;
+                    //isDark = false;
                     isStart = false;
                     screen.SetActive(false);
                     toolBar.SetActive(true);
                 }
             }
+            else if (!isDark)
+            {
+                alpha += Time.deltaTime;
+                alpha = Mathf.Clamp(alpha, 0, 1);
+                screenColor.a = alpha;
+                screen.GetComponent<Image>().color = screenColor;
+                if (alpha >= 1)
+                {
+                    if (isTabChange)
+                    {
+                        Deco_UIManager.Instance.ChangeTabToPost();
+                        currentTime += Time.deltaTime;
+                        if (currentTime >= 1)
+                        {
+                            isDark = true;
+                            currentTime = 0;
+                            isTabChange = false;
+                        }
+                    }
+                    else
+                    {
+                        isStart = false;
+                        isSceneChange = true;
+                    }
+
+                    //isTabChange = true;
+                }
+            }
+           
             /*
             else
             {
@@ -61,14 +94,13 @@ public class JM_ScreenManager : MonoBehaviour
 
             }
             */
-        }
-        
-        
+        }                       
     }
 
     public void Darken()
     {
         isStart = true;
+        isDark = false;
         screen.SetActive(true);
     }
 
@@ -77,4 +109,10 @@ public class JM_ScreenManager : MonoBehaviour
         isStart = true;
         screen.SetActive(true);
     }
+
+    public void TabChange()
+    {
+        isTabChange = true;
+    }
+
 }

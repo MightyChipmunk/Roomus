@@ -30,9 +30,9 @@ public class Deco_RoomItem : MonoBehaviour
         thumb.sprite = Sprite.Create(tex, rect, new Vector2(0.3f, 0.3f));
         accessContent = transform.Find("Bool").GetComponent<Text>();
         if (access)
-            accessContent.text = "Y";
+            accessContent.text = "Public";
         else
-            accessContent.text = "N";
+            accessContent.text = "Private";
         roomNameContent = transform.Find("RoomName").GetComponent<Text>();
         roomNameContent.text = roomName;
 

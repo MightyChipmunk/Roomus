@@ -10,6 +10,13 @@ public class MainScreenManager : MonoBehaviour
     public GameObject screenManager;
     JM_ScreenManager screenCode;
 
+    bool isMyPage;
+    bool isMessage;
+    bool isRoomCustom;
+    bool isUpload;
+    bool isShowRoom;
+    bool isShopping;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,43 +46,67 @@ public class MainScreenManager : MonoBehaviour
         {
             SceneManager.LoadScene("PutDeleteTest");
         }
+        if (screenCode.isSceneChange)
+        {
+            if (isMyPage) SceneManager.LoadScene("MyPage");
+            if (isMessage) SceneManager.LoadScene("Message");
+            if (isRoomCustom) SceneManager.LoadScene("RoomCustom_New");
+            if (isUpload) SceneManager.LoadScene("FBXLoad");
+            if (isShowRoom) SceneManager.LoadScene("ShowRoom_New");
+            if (isShopping) SceneManager.LoadScene("Shopping");
+        }
     }  
 
     public void OnClickMyPage()
     {
-        SceneManager.LoadScene("MyPage");
+        screenCode.Darken();
+        isMyPage = true;
+        //SceneManager.LoadScene("MyPage");
+        //SceneManager.LoadScene("MyPage");
     }
 
     public void OnClickMessage()
     {
-        SceneManager.LoadScene("Message");
+        screenCode.Darken();
+        isMessage = true;
+        //SceneManager.LoadScene("Message");
     }
 
     public void OnClickRoomCustom()
     {
-        SceneManager.LoadScene("RoomCustom_New");
+        screenCode.Darken();
+        isRoomCustom = true;
+        //SceneManager.LoadScene("RoomCustom_New");
 
     }
 
     public void OnClickUpload()
     {
-        SceneManager.LoadScene("FBXLoad");
+        screenCode.Darken();
+        isUpload = true;
+        //SceneManager.LoadScene("FBXLoad");
     }
 
     public void OnClickTravel()
     {
-        SceneManager.LoadScene("Shopping");
+        screenCode.Darken();
+        isShopping = true;
+        //SceneManager.LoadScene("Shopping");
     }
 
     public void OnClickLikes()
     {
+        screenCode.Darken();
+        isShowRoom = true;
         TokenManager.Instance.roomTypeP = RoomType.Liked;
-        SceneManager.LoadScene("ShowRoom_New");
+        //SceneManager.LoadScene("ShowRoom_New");
     }
 
     public void OnClickRoom()
     {
+        screenCode.Darken();
+        isShowRoom = true;
         TokenManager.Instance.roomTypeP = RoomType.All;
-        SceneManager.LoadScene("ShowRoom_New");
+        //SceneManager.LoadScene("ShowRoom_New");
     }
 }
