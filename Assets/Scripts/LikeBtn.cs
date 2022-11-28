@@ -4,43 +4,25 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class Show_FurnitInfo : MonoBehaviour
+public class LikeBtn : MonoBehaviour
 {
-    //public string furnitName;
-    //public int price;
-    //public string category;
-
-    public Deco_Idx furnitInfo;
-
-    Button likeButton;
-    Image likeImage;
-
+    int id;
+    public int ID { get { return id; } set { id = value; } }
     // Start is called before the first frame update
     void Start()
     {
-
-
-        likeButton = transform.Find("Like").GetComponent<Button>();
-        likeImage = transform.Find("Like").GetComponent<Image>();
-        //likeButton.onClick.AddListener(OnClickLike);
+        GetComponent<Button>().onClick.AddListener(OnClickLike);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (furnitInfo == null)
-            return;
-        else
-        {
-            transform.Find("FurnitName").GetComponent<Text>().text = furnitInfo.Name;
-            transform.Find("Price").GetComponent<Text>().text = furnitInfo.Price.ToString();
-            transform.Find("Category").GetComponent<Text>().text = furnitInfo.Category;
-        }
+        Debug.Log(id);
     }
 
     public void OnClickLike()
     {
-        StartCoroutine(Like(UrlInfo.url + "/products/" + furnitInfo.Id.ToString() + "/likes", furnitInfo.Id));
+        Debug.Log(id);
+        StartCoroutine(Like(UrlInfo.url + "/products/" + id.ToString() + "/likes", id));
     }
 
     IEnumerator Like(string url, int id)

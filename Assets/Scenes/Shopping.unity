@@ -1550,6 +1550,7 @@ MonoBehaviour:
   shopItem: {fileID: 8869866084814353947, guid: 7d3931f059382c04094de954afbe29b6,
     type: 3}
   content: {fileID: 1418314036}
+  searchInput: {fileID: 37120435}
 --- !u!114 &590943398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3595,7 +3596,7 @@ PrefabInstance:
     - target: {fileID: 4909364702281252871, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4909364703720408367, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}

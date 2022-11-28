@@ -28,6 +28,7 @@ public class Deco_UIManager : MonoBehaviour
     public Dropdown category;
     public InputField descriptField;
     public Image screenShotImage;
+    public InputField searchInput;
 
     string roomName;
     public string RoomName { get { return roomName; } set { roomName = value; } }
@@ -63,6 +64,8 @@ public class Deco_UIManager : MonoBehaviour
         publicToggle.onValueChanged.AddListener(OnPublicChanged);
         privateToggle.onValueChanged.AddListener(OnPrivateChanged);
 
+        searchInput.onSubmit.AddListener(OnSubmitSearch);
+
         // Screen (Jaemin)
         screenCode = screenManager.GetComponent<JM_ScreenManager>();
     }
@@ -93,12 +96,13 @@ public class Deco_UIManager : MonoBehaviour
             library.transform.parent.gameObject.SetActive(true);
     }
 
-    void AddContent(string category, int id = 0, byte[] imgBytes = null)
+    void AddContent(string furnitName, string category, int id = 0, byte[] imgBytes = null)
     {
         GameObject item = Instantiate(furnitItem, trContent);
         item.name = id.ToString();
         //item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
         item.GetComponent<Deco_FurnitItem>().ID = id;
+        item.GetComponent<Deco_FurnitItem>().FurnitName = furnitName;
         if (category != null)
             item.GetComponent<Deco_FurnitItem>().Category = category;
         item.GetComponent<Deco_FurnitItem>().ImageBytes = imgBytes;
@@ -200,6 +204,26 @@ public class Deco_UIManager : MonoBehaviour
         }
     }
 
+    public void OnSubmitSearch(string s)
+    {
+        if (s == "")
+        {
+            for (int i = 0; i < trContent.transform.childCount; i++)
+            {
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+            }
+            return;
+        }
+
+        for (int i = 0; i < trContent.transform.childCount; i++)
+        {
+            if (trContent.transform.GetChild(i).GetComponent<Deco_FurnitItem>().FurnitName.ToLower().Contains(s.ToLower()))
+                trContent.transform.GetChild(i).gameObject.SetActive(true);
+            else
+                trContent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
     public void OnSimFurnit(List<int> id)
     {
         for (int i = 0; i < trContent.transform.childCount; i++)
@@ -255,7 +279,7 @@ public class Deco_UIManager : MonoBehaviour
             {
                 // 받아온 스크린샷과 미리 받은 정보를 이용해 라이브러리에 추가
                 // Deco_FurnitItem
-                AddContent(info.category, info.no, www.downloadHandler.data);
+                AddContent(info.furnitName, info.category, info.no, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }

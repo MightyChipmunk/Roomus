@@ -233,7 +233,7 @@ public class JM_RoomUIManager : MonoBehaviour
             else
             {
                 JH_PopUpUI.Instance.SetUI("", "UnLike Complete!", true, 0.3f);
-                Debug.Log("Furnit UnLike complete!");
+                Debug.Log("Room UnLike complete!");
             }
         }
     }

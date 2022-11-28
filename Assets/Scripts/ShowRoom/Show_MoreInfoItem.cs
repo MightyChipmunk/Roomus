@@ -105,6 +105,8 @@ public class Show_MoreInfoItem : MonoBehaviour
 
                 itemMoreInfo1.transform.Find("DescriptionContent").GetComponent<Text>().text = information;
                 itemMoreInfo1.transform.Find("BuyBtn").GetComponent<BuyBtn>().url = shotUrl;
+                itemMoreInfo1.transform.Find("LikeBtn").GetComponent<LikeBtn>().ID = fbxJson.no;
+                Debug.Log(itemMoreInfo2.transform.Find("LikeBtn").GetComponent<LikeBtn>().ID);
             }
         }
     }
@@ -148,6 +150,8 @@ public class Show_MoreInfoItem : MonoBehaviour
 
                 itemMoreInfo2.transform.Find("DescriptionContent").GetComponent<Text>().text = information;
                 itemMoreInfo2.transform.Find("BuyBtn").GetComponent<BuyBtn>().url = shotUrl;
+                itemMoreInfo2.transform.Find("LikeBtn").GetComponent<LikeBtn>().ID = fbxJson.no;
+                Debug.Log(itemMoreInfo2.transform.Find("LikeBtn").GetComponent<LikeBtn>().ID);
             }
         }
     }
