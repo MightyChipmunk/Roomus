@@ -103,6 +103,12 @@ public class JM_LibraryManager : MonoBehaviour
         isAIMove = true;
     }
 
+    public void OnClickAIDown()
+    {
+        if (aiUI.transform.position == showPos.position) isAIShow = false;
+        isAIMove = true;
+    }
+
     public void OnScreenShot()
     {
         isLibraryMove = true;
