@@ -55,8 +55,8 @@ public class Show_FurnitInfo : MonoBehaviour
             }
             else
             {
-                iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1.2f, "y", 1.2f, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
-
+                //iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1.2f, "y", 1.2f, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
+                JH_PopUpUI.Instance.SetUI("", "Like Complete!", true, 0.3f);
                 Debug.Log("Furnit Like complete!");
             }
         }
@@ -76,8 +76,8 @@ public class Show_FurnitInfo : MonoBehaviour
             }
             else
             {
-                iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
-
+                //iTween.ScaleTo(likeButton.gameObject, iTween.Hash("x", 1, "y", 1, "time", 0.3f, "easetype", iTween.EaseType.easeOutQuint));
+                JH_PopUpUI.Instance.SetUI("", "UnLike Complete!", true, 0.3f);
                 Debug.Log("Furnit UnLike complete!");
             }
         }

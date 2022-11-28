@@ -481,8 +481,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -847,8 +847,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -1796,8 +1796,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -2001,12 +2001,12 @@ RectTransform:
   m_Children:
   - {fileID: 600434810}
   - {fileID: 1509699582}
-  - {fileID: 1491183079}
+  - {fileID: 999619835}
   - {fileID: 695047076}
   - {fileID: 1325724860}
   - {fileID: 49834555}
   - {fileID: 151513388}
-  - {fileID: 999619835}
+  - {fileID: 1491183079}
   - {fileID: 2059487440}
   m_Father: {fileID: 1234214699}
   m_RootOrder: 2
@@ -2100,8 +2100,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -2384,7 +2384,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Desk
+  m_Text: Deco
 --- !u!222 &807943799
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2613,11 +2613,11 @@ RectTransform:
   m_Children:
   - {fileID: 1455962621}
   m_Father: {fileID: 685138217}
-  m_RootOrder: 7
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.6673584, y: -24}
+  m_AnchoredPosition: {x: -683.4166, y: -24}
   m_SizeDelta: {x: 101.39905, y: 50.07361}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &999619836
@@ -2664,8 +2664,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -3084,8 +3084,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -3595,7 +3595,7 @@ PrefabInstance:
     - target: {fileID: 4909364702281252871, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4909364703720408367, guid: 0635a58f3714746e8af83d70311ffb83,
         type: 3}
@@ -3623,7 +3623,7 @@ GameObject:
   - component: {fileID: 1491183081}
   - component: {fileID: 1491183080}
   m_Layer: 5
-  m_Name: Desk
+  m_Name: Deco
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3643,11 +3643,11 @@ RectTransform:
   m_Children:
   - {fileID: 807943797}
   m_Father: {fileID: 685138217}
-  m_RootOrder: 2
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -683.4166, y: -24}
+  m_AnchoredPosition: {x: -3.6673584, y: -24}
   m_SizeDelta: {x: 101.39905, y: 50.07361}
   m_Pivot: {x: 0.99999976, y: 1}
 --- !u!114 &1491183080
@@ -3694,8 +3694,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -3703,7 +3703,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Desk
+          m_StringArgument: Dest
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1491183081
@@ -3828,8 +3828,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
@@ -5119,8 +5119,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Deco_UIManager, Assembly-CSharp
+      - m_Target: {fileID: 590943397}
+        m_TargetAssemblyTypeName: JH_ShoppingManager, Assembly-CSharp
         m_MethodName: OnClickCategory
         m_Mode: 5
         m_Arguments:
