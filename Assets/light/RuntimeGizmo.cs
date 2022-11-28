@@ -12,7 +12,6 @@ namespace RTG
         public GameObject targetObject;
         public bool isMove;
         bool isRotate;
-        public bool isActive;
         //GameObject RTGApp;
 
         private void Awake()
@@ -43,7 +42,7 @@ namespace RTG
             objectTransformGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
             //GameObject targetObject = GameObject.FindWithTag("Light");
             objectTransformGizmo.SetTargetObject(targetObject);
-            isActive = true;
+
             //rotationGizmo = objectTransformGizmo.Gizmo.RotationGizmo;
             //moveGizmo.SetVertexSnapTargetObjects(new List<GameObject> { targetObject });
 
@@ -58,7 +57,7 @@ namespace RTG
             objectTransformGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
             //GameObject targetObject = GameObject.FindWithTag("Light");
             objectTransformGizmo.SetTargetObject(targetObject);
-            isActive = true;
+
             //moveGizmo = objectTransformGizmo.Gizmo.MoveGizmo;
 
             //moveGizmo.SetVertexSnapTargetObjects(new List<GameObject> { targetObject });
@@ -69,7 +68,6 @@ namespace RTG
         public void GizmoOff()
         {
             objectTransformGizmo.Gizmo.SetEnabled(false);
-            isActive = false;
             //RTGApp.SetActive(false);
         }
     }
