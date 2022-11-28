@@ -98,7 +98,7 @@ public class JM_LibraryManager : MonoBehaviour
 
     public void OnClickAI()
     {
-        if (aiUI.transform.position == showPos.position) isAIShow = false;
+        //if (aiUI.transform.position == showPos.position) isAIShow = false;
         if (aiUI.transform.position == originPos.position) isAIShow = true;
         isAIMove = true;
     }
