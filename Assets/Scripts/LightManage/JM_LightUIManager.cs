@@ -229,6 +229,11 @@ public class JM_LightUIManager : MonoBehaviour
         isSptLibUIShow = false;
         JM_LibraryManager.instance.isLibraryMove = true;
         JM_LibraryManager.instance.isLibShow = true;
+
+        if (JM_LightManager.instance.activeLight != null)
+        {
+            JM_LightManager.instance.gizmoManager.GizmoOff();
+        }
     }
 
     public void OnClickPtDone()
@@ -241,5 +246,10 @@ public class JM_LightUIManager : MonoBehaviour
         isPtLibUIShow = false;
         JM_LibraryManager.instance.isLibraryMove = true;
         JM_LibraryManager.instance.isLibShow = true;
+
+        if (JM_LightManager.instance.activeLight != null)
+        {
+            JM_LightManager.instance.gizmoManager.GizmoOff();
+        }
     }
 }

@@ -221,7 +221,10 @@ public class JH_FollowManager : MonoBehaviour
         GameObject obj = Instantiate(followItem, followContent);
         JH_FollowItem item = obj.GetComponent<JH_FollowItem>();
         item.memberNo = no;
-        item.Email = email;
+        if (email == null)
+            item.Email = "21qqq@naver.com";
+        else
+            item.Email = email;
         item.NickName = nickName;
     }
 

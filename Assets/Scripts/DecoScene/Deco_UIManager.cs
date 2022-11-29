@@ -111,15 +111,15 @@ public class Deco_UIManager : MonoBehaviour
 
     public void OnPostClicked()
     {
-        screenCode.Darken();
-        screenCode.isTabChange = true;
-        //if (posting.activeSelf)
-        //    posting.SetActive(false);
-        //else
-        //{
-        //    posting.SetActive(true);
+        //screenCode.Darken();
+        //screenCode.isTabChange = true;
+        if (posting.activeSelf)
+            posting.SetActive(false);
+        else
+        {
+            posting.SetActive(true);
             //StartCoroutine(Deco_Json.Instance.WaitForScreenShot());
-        //}
+        }
     }
 
     public void ChangeTabToPost()
