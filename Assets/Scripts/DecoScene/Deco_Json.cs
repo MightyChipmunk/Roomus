@@ -206,6 +206,14 @@ public class Deco_Json : MonoBehaviour
         Directory.CreateDirectory(Application.dataPath + "/RoomInfo");
     }
 
+    private void Update()
+    {
+        if (count > 0)
+            JH_PopUpUI.Instance.LoadingUIUp();
+        else
+            JH_PopUpUI.Instance.LoadingUIDown();
+    }
+
     // 현재 작업중인 방의 정보를 저장
     public void SaveRoomInfo(string roomName, float x, float y, float z, int bal)
     {
@@ -532,6 +540,7 @@ public class Deco_Json : MonoBehaviour
         SaveNewFile(roomName);
     }
 
+    int count = 0;
     //로컬로 방 불러오기
     public void LoadFile(string roomName)
     {
@@ -541,6 +550,7 @@ public class Deco_Json : MonoBehaviour
         string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(jsonData);
+        count = arrayJsonLoad.datas.Count;
         //ArrayJson의 데이터로 방 생성
         if (arrayJsonLoad.xsize > 0)
         {
@@ -692,6 +702,7 @@ public class Deco_Json : MonoBehaviour
             {
                 ArrayJsonWrapper wrapper = JsonUtility.FromJson<ArrayJsonWrapper>(www.downloadHandler.text);
                 arrayJsonLoad = wrapper.data;
+                count = arrayJsonLoad.datas.Count;
                 Debug.Log("ArrayJson Download complete!");
             }
             www.Dispose();
@@ -831,7 +842,7 @@ public class Deco_Json : MonoBehaviour
         SaveJson(obj, fbxJson.no);
 
         MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
-
+        count--;
         Destroy(assetLoaderContext.WrapperGameObject);
     }
 

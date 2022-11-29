@@ -427,6 +427,7 @@ public class Deco_PutObject : MonoBehaviour
             }
         }
 
+        JH_PopUpUI.Instance.PutLoadingUIUp();
         StartCoroutine(GetFBXFromUrl(fbxJson));
     }
 
@@ -459,6 +460,7 @@ public class Deco_PutObject : MonoBehaviour
                 if (!Directory.Exists(Application.dataPath + "/LocalServer/" + fbxJson.no + "/"))
                     Directory.CreateDirectory(Application.dataPath + "/LocalServer/" + fbxJson.no + "/");
                 ZipManager.UnZipFiles(path, Application.dataPath + "/LocalServer/" + fbxJson.no + "/", "", false);
+
 
                 var assetLoaderOptions = AssetLoader.CreateDefaultLoaderOptions();
                 AssetLoaderZip.LoadModelFromZipFile(path, OnLoad, OnMaterialsLoad, OnProgress, OnError, null, assetLoaderOptions);
@@ -535,7 +537,7 @@ public class Deco_PutObject : MonoBehaviour
         obj.SetActive(false);
 
 
-        JH_PopUpUI.Instance.SetUI("", "Furniture Download Complete!", true, 0.5f);
+        JH_PopUpUI.Instance.PutLoadingUIDown();
     }
 
     /// <summary>

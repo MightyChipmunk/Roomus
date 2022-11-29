@@ -10,6 +10,12 @@ public class JH_PopUpUI : MonoBehaviour
     Text desc;
     Button button;
 
+    GameObject loadingImage;
+    GameObject rotateImage;
+
+    GameObject putLoadingImage;
+    GameObject putRotateImage;
+
     string sceneName;
 
     public static JH_PopUpUI Instance { get; private set; }
@@ -27,15 +33,45 @@ public class JH_PopUpUI : MonoBehaviour
         desc = transform.Find("PopUpUI").transform.Find("Description").GetComponent<Text>();
         button = transform.Find("PopUpUI").transform.Find("Button").GetComponent<Button>();
 
+        loadingImage = transform.Find("Loading").gameObject;
+        rotateImage = transform.Find("Loading").transform.Find("RotateImage").gameObject;
+
+        putLoadingImage = transform.Find("PutLoading").gameObject;
+        putRotateImage = transform.Find("PutLoading").transform.Find("RotateImage").gameObject;
+
         button.onClick.AddListener(OnClick);
 
         transform.Find("PopUpUI").transform.localScale = Vector3.zero;
+
+        loadingImage.SetActive(false);
+        putLoadingImage.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        rotateImage.transform.Rotate(0, 0, 15 * Time.deltaTime);
+        putRotateImage.transform.Rotate(0, 0, 15 * Time.deltaTime);
+    }
+
+    public void PutLoadingUIUp()
+    {
+        putLoadingImage.SetActive(true);
+    }
+
+    public void PutLoadingUIDown()
+    {
+        putLoadingImage.SetActive(false);
+    }
+
+    public void LoadingUIUp()
+    {
+        loadingImage.SetActive(true);
+    }
+
+    public void LoadingUIDown()
+    {
+        loadingImage.SetActive(false);
     }
 
     public void SetUI(string title, string desc, bool auto = true, float time = 0.5f, string sceneName = "")
