@@ -37,6 +37,11 @@ public class AI_SendImage : MonoBehaviour
 
     public void OnFBXButtonOpenFile() // 버튼에 추가할 메서드
     {
+        foreach (Transform tr in content)
+        {
+            Destroy(tr.gameObject);
+        }
+
         SetOpenFBXFileDialog();
         m_FilePaths = FileOpen(m_OpenFileDialog);
 
