@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class JM_ScreenManager : MonoBehaviour
 {
+    public static JM_ScreenManager instance;
+
     public GameObject screen;
     public bool isDark;
     public bool isStart;
@@ -16,6 +18,14 @@ public class JM_ScreenManager : MonoBehaviour
 
     public bool isSceneChange;
     public bool isTabChange;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     // Start is called before the first frame update
     void Start()
