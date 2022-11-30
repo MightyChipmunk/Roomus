@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PutDeleteTest : MonoBehaviour
 {
@@ -110,15 +111,17 @@ public class PutDeleteTest : MonoBehaviour
             {
                 // ?????? ????????? id?? ????‚ö???? ???? ???
                 // Deco_FurnitItem
-                AddContent(info.no, www.downloadHandler.data);
+                AddContent(info.furnitName, info.no, www.downloadHandler.data);
                 Debug.Log("ScreenShot Download complete!");
             }
         }
     }
 
-    void AddContent(int id = 0, byte[] imgBytes = null)
+    void AddContent(string text, int id = 0, byte[] imgBytes = null)
     {
         GameObject item = Instantiate(prefab, trContent);
+        GameObject txt = item.transform.GetChild(0).gameObject;
+        txt.GetComponent<Text>().text = text;
         item.name = id.ToString();
         //item.GetComponent<Deco_FurnitItem>().fbxJson = fbxJson;
         item.GetComponent<DeleteItem>().ID = id;
