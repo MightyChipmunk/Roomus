@@ -29,7 +29,10 @@ public class JH_FollowItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (JM_ScreenManager.instance.isSceneChange)
+        {
+            SceneManager.LoadScene("ShowRoom_New");
+        }
     }
 
     void UnFollow()
@@ -42,7 +45,7 @@ public class JH_FollowItem : MonoBehaviour
         GetInfo getinfo = new GetInfo();
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
-            // ÅäÅ«À» Çì´õ¿¡ ¼³Á¤
+            // ï¿½ï¿½Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
@@ -73,7 +76,7 @@ public class JH_FollowItem : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(UrlInfo._url + "Relations/unfollow", form))
         {
-            // ÅäÅ«À» Çì´õ¿¡ ¼³Á¤
+            // ï¿½ï¿½Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             www.SetRequestHeader("Authorization", TokenManager.Instance.Token);
 
             yield return www.SendWebRequest();
@@ -96,6 +99,8 @@ public class JH_FollowItem : MonoBehaviour
     {
         TokenManager.Instance.roomTypeP = RoomType.User;
         TokenManager.Instance.MemberNo = memberNo;
-        SceneManager.LoadScene("ShowRoom_New");
+
+        JM_ScreenManager.instance.Darken();
+        //SceneManager.LoadScene("ShowRoom_New");
     }
 }
