@@ -30,8 +30,8 @@ RectTransform:
   m_Children:
   - {fileID: 4805530360382204042}
   - {fileID: 4047087251095614512}
-  - {fileID: 199351514343654361}
   - {fileID: 2944246605645286300}
+  - {fileID: 199351514343654361}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -71,12 +71,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3470273398191220873}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.5784, y: -9.3}
-  m_SizeDelta: {x: 200, y: 70}
+  m_AnchoredPosition: {x: 19.878, y: -9.7742}
+  m_SizeDelta: {x: 181.8033, y: 31.8516}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8399787269758785470
 CanvasRenderer:
@@ -109,16 +109,16 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 10
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.5
+    m_LineSpacing: 1.25
   m_Text: This costs to much for my room. I  want to get this quality furnitures
     with better price
 --- !u!1 &3259938508084707121
@@ -152,12 +152,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3470273398191220873}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.5784, y: 26}
-  m_SizeDelta: {x: 200, y: 70}
+  m_AnchoredPosition: {x: 25.181, y: 21.9}
+  m_SizeDelta: {x: 192.41, y: 22.6238}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3400294961755396339
 CanvasRenderer:
@@ -228,7 +228,7 @@ RectTransform:
   m_GameObject: {fileID: 3358494475794635395}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3470273398191220873}
@@ -236,7 +236,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -108.9, y: 2.7}
+  m_AnchoredPosition: {x: -109.4, y: 5.1}
   m_SizeDelta: {x: 69.93, y: 61.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4878622381504125585
@@ -304,7 +304,7 @@ RectTransform:
   m_GameObject: {fileID: 5233353698626627711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3470273398191220873}
@@ -312,8 +312,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 80}
+  m_AnchoredPosition: {x: -2.7756, y: 1.705}
+  m_SizeDelta: {x: 404.5411, y: 103.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &49630199439673485
 CanvasRenderer:
@@ -344,7 +344,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 618897fe807bc420597dddff69a57ea9, type: 3}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
