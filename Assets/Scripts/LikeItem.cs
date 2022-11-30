@@ -23,7 +23,7 @@ public class LikeItem : MonoBehaviour
         val = Mathf.Lerp(val, likes, Time.deltaTime * 4);
         if (likes - val < 0.1f)
             val = likes;
-        transform.Find("Likes").GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, val * 30);
+        transform.Find("Likes").GetComponent<RectTransform>().sizeDelta = new Vector2(GetComponent<RectTransform>().sizeDelta.x, val * 15);
     }
 
     //().sizeDelta = new Vector2(first.GetComponent<RectTransform>().sizeDelta.x, valList[i]);
