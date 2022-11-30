@@ -65,6 +65,15 @@ public class Show_Json : MonoBehaviourPun
         Destroy(Show_LoadRoomList.Instance.gameObject);
     }
 
+    private void Update()
+    {
+        if (count > 0)
+            JH_PopUpUI.Instance.LoadingUIUp();
+        else
+            JH_PopUpUI.Instance.LoadingUIDown();
+    }
+
+    int count = 0;
     //로컬로 방 불러오기
     public void LoadFile(string roomName)
     {
@@ -74,6 +83,7 @@ public class Show_Json : MonoBehaviourPun
         string jsonData = File.ReadAllText(Application.dataPath + "/RoomInfo" + "/" + roomName + ".txt");
         //ArrayJson 형태로 Json을 변환
         arrayJsonLoad = JsonUtility.FromJson<ArrayJson>(jsonData);
+        count = arrayJsonLoad.datas.Count;
         JH_MoreInfoManager.Instance.arrayJson = arrayJsonLoad;
         if (arrayJsonLoad.xsize > 0)
         {
@@ -271,6 +281,7 @@ public class Show_Json : MonoBehaviourPun
             {
                 ArrayJsonWrapper wrapper = JsonUtility.FromJson<ArrayJsonWrapper>(www.downloadHandler.text);
                 arrayJsonLoad = wrapper.data;
+                count = arrayJsonLoad.datas.Count;
                 JH_MoreInfoManager.Instance.arrayJson = arrayJsonLoad;
                 Debug.Log("ArrayJson Download complete!");
             }
@@ -422,7 +433,7 @@ public class Show_Json : MonoBehaviourPun
         decoIdx.Category = fbxJson.category;
 
         MaterialLoader.Instance.ChangeMat(go.transform, Application.dataPath + "/LocalServer/" + fbxJson.no.ToString());
-
+        count--;
         Destroy(assetLoaderContext.WrapperGameObject);
     }
 
