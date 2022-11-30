@@ -12,16 +12,11 @@ public class JH_PopUpUI : MonoBehaviour
 
     GameObject loadingImage;
     GameObject rotateImage;
-    GameObject loadingTxt;
 
     GameObject putLoadingImage;
     GameObject putRotateImage;
 
     string sceneName;
-    bool isLoadChange;
-    [SerializeField]
-    bool isLoadOff;
-    float loadAlpha;
 
     public static JH_PopUpUI Instance { get; private set; }
     // Start is called before the first frame update
@@ -40,7 +35,6 @@ public class JH_PopUpUI : MonoBehaviour
 
         loadingImage = transform.Find("Loading").gameObject;
         rotateImage = transform.Find("Loading").transform.Find("RotateImage").gameObject;
-        loadingTxt = transform.Find("Loading").transform.Find("LoadingTxt").gameObject;
 
         putLoadingImage = transform.Find("PutLoading").gameObject;
         putRotateImage = transform.Find("PutLoading").transform.Find("RotateImage").gameObject;
@@ -55,8 +49,7 @@ public class JH_PopUpUI : MonoBehaviour
 
     private void Start()
     {
-        isLoadOff = false;
-        loadAlpha = 1;
+
     }
 
     float currentTime;
@@ -64,35 +57,7 @@ public class JH_PopUpUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        rotateImage.transform.Rotate(0, 0, 15 * Time.deltaTime);
-        putRotateImage.transform.Rotate(0, 0, 15 * Time.deltaTime);
-        */
-        /*
-        print(loadAlpha);
-        loadAlpha = Mathf.Clamp(loadAlpha, 1, 0);
-        if (loadingImage.activeSelf == false)
-        {
-            loadAlpha = 1;
-        }
-
-        if (isLoadOff)
-        {
-            //print("loadoff wow amazing");
-            currentTime += Time.deltaTime * 0.1f;
-            loadAlpha -= currentTime;
-            if (loadAlpha <= 0.5f)
-            {
-                //loadAlpha = 0;
-                loadingImage.SetActive(false);
-                isLoadOff = false;
-            }
-        }
-        else if (!isLoadOff) currentTime = 0;
-        loadingImage.GetComponent<Image>().color = new Color(0, 0, 0, loadAlpha);
-        rotateImage.GetComponent<Image>().color = new Color(1, 1, 1, loadAlpha);
-        loadingTxt.GetComponent<Text>().color = new Color(81, 81, 81, loadAlpha);
-        */
+        
     }
 
     public void PutLoadingUIUp()
@@ -102,8 +67,6 @@ public class JH_PopUpUI : MonoBehaviour
 
     public void PutLoadingUIDown()
     {
-        //isLoadChange = true;
-        //isLoadOff = true;
         putLoadingImage.SetActive(false);
     }
 
@@ -114,10 +77,18 @@ public class JH_PopUpUI : MonoBehaviour
 
     public void LoadingUIDown()
     {
-        //isLoadChange = true;
-        //isLoadOff = true;
-        //print("123123");
+        if (canDown)
+            StartCoroutine(OnDownUI(2f));
+    }
+
+    bool canDown = true;
+    IEnumerator OnDownUI(float time)
+    {
+        canDown = false;
+        yield return new WaitForSeconds(time);
+
         loadingImage.SetActive(false);
+        canDown = true;
     }
 
     public void SetUI(string title, string desc, bool auto = true, float time = 0.5f, string sceneName = "")
