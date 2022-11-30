@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviourPun
         player = GameObject.Find(PhotonNetwork.NickName);
         if (!photonView.IsMine)
         {
-            transform.GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(0).parent.gameObject.SetActive(false);
         }
         infoUI = GameObject.Find("Canvas").transform.Find("FurnitInfo").gameObject;
 
